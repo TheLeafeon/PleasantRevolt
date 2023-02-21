@@ -4,28 +4,38 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "TestDoor.generated.h"
+#include "TestDoor.h"
+#include "TestDoorOpenBox.generated.h"
 
 UCLASS()
-class CHARMOVETEST_API ATestDoor : public AActor
+class CHARMOVETEST_API ATestDoorOpenBox : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATestDoor();
+	ATestDoorOpenBox();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool OpenableDoor ;
+
+	//bool AlreadyOpenDoor;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void TryOpenDoor();
 
-	
+	UFUNCTION(BlueprintImplementableEvent)
+	void OpenDoorAction();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void OpenDoor();
+
+	UPROPERTY(BlueprintReadWrite)
+		ATestDoor* LinkDoor;
+
 };

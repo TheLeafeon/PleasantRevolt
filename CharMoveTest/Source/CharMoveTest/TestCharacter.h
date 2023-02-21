@@ -42,6 +42,7 @@ protected:
 
 	void MoveRight(float Value);
 
+	void TryInteraction();
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 

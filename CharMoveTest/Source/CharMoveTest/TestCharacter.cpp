@@ -2,7 +2,11 @@
 
 
 #include "TestCharacter.h"
+#include "TestDoorOpenBox.h"
+
 #include "Camera/CameraComponent.h"
+
+#include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
@@ -53,7 +57,7 @@ void ATestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATestCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATestCharacter::MoveRight);
-
+	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ATestCharacter::TryInteraction);
 
 }
 
@@ -83,4 +87,39 @@ void ATestCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void ATestCharacter::TryInteraction()
+{
+	FHitResult HitResult;
+	const TArray<AActor*> IgnoreActors = { this };
+	const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = { UEngineTypes::ConvertToObjectType(ECC_WorldStatic),
+		UEngineTypes::ConvertToObjectType(ECC_WorldDynamic) };
+
+	const FVector StartLocation = GetActorLocation();
+	const FVector EndLocation = StartLocation + GetActorForwardVector() * 150.0f;
+
+	bool bHit = UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), StartLocation, EndLocation,
+		30.0f, ObjectTypes, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true);
+
+	if (bHit && HitResult.bBlockingHit)
+	{
+		if (HitResult.GetActor() != nullptr)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Interaction"));
+
+			if (HitResult.GetActor()->IsA(ATestDoorOpenBox::StaticClass()))
+			{
+				ATestDoorOpenBox* HitBox = Cast<ATestDoorOpenBox>(HitResult.GetActor());
+
+				if (HitBox == nullptr) return;
+
+				HitBox->TryOpenDoor();
+
+				
+			}
+
+		}
+	}
+
 }
