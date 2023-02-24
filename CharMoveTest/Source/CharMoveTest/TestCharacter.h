@@ -30,9 +30,12 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = Camera)
 	class UCameraComponent* FollowCamera;
 
+	//문 열리면 카메라 이동, 이동 지점
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MoveCamera(FVector TargetPoint);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,6 +48,11 @@ protected:
 	void TryInteraction();
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool CharMoveAllow=true;
 
-
+	UPROPERTY(BlueprintReadWrite)
+	FVector AttachmentCameraLocation;
+	
+	
 };

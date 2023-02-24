@@ -28,4 +28,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OpenDoor();
+
+	/*UPROPERTY(EditAnywhere)
+	AActor* DoorCamera;*/
+
 };

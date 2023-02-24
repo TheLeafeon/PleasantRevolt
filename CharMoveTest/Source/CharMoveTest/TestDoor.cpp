@@ -2,6 +2,7 @@
 
 
 #include "TestDoor.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATestDoor::ATestDoor()

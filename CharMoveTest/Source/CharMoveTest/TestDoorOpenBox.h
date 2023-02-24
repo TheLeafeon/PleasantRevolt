@@ -34,8 +34,13 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OpenDoorAction();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ShowOpenDoor(UCameraComponent* CharCamera);
 
 	UPROPERTY(BlueprintReadWrite)
 		ATestDoor* LinkDoor;
 
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	FVector LinkDoorCameraLocation;
+	
 };

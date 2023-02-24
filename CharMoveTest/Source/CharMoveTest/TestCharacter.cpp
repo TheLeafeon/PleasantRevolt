@@ -41,7 +41,7 @@ ATestCharacter::ATestCharacter()
 void ATestCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -63,7 +63,7 @@ void ATestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ATestCharacter::MoveForward(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && (CharMoveAllow == true))
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -76,7 +76,7 @@ void ATestCharacter::MoveForward(float Value)
 }
 void ATestCharacter::MoveRight(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && (CharMoveAllow == true))
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -114,12 +114,20 @@ void ATestCharacter::TryInteraction()
 
 				if (HitBox == nullptr) return;
 
-				HitBox->TryOpenDoor();
+				MoveCamera(HitBox->LinkDoorCameraLocation);
 
 				
+				//HitBox->ShowOpenDoor(FollowCamera);
+				HitBox->TryOpenDoor();
+				
+
+				//CharMoveAllow = false;
 			}
 
 		}
 	}
 
 }
+
+
+
