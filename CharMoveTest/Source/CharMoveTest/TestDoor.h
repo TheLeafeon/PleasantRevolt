@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OpenDoor();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void CloseDoor();
+
 	/*UPROPERTY(EditAnywhere)
 	AActor* DoorCamera;*/
 
