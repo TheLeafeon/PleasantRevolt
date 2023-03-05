@@ -109,7 +109,8 @@ private :
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee();
 	void Attack_Melee_End();
-
+	UFUNCTION(BlueprintCallable)
+		void Attack_Shooting();
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

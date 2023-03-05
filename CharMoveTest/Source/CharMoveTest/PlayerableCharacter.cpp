@@ -63,6 +63,8 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Rolling", IE_Released, this, &APlayerableCharacter::Rolling);
+	PlayerInputComponent->BindAction("MeleeAttack", IE_Released, this, &APlayerableCharacter::Attack_Melee);
+	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerableCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerableCharacter::MoveRight);
@@ -238,6 +240,11 @@ void APlayerableCharacter::Attack_Melee()
 void APlayerableCharacter::Attack_Melee_End()
 {
 	isAttack = false;
+}
+
+void APlayerableCharacter::Attack_Shooting()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Shooting"));
 }
 
 //=============== Player Roll =============== //
