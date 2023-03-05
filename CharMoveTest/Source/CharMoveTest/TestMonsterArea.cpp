@@ -47,10 +47,7 @@ void ATestMonsterArea::Tick(float DeltaTime)
 
 	/*if (bSpawn)
 	{
-		currentTime = currentTime + 1 * DeltaTime;
-
-		if (currentTime > 2.0f)
-		{
+		
 			FActorSpawnParameters spawnParams;
 			spawnParams.Owner = this;
 			spawnParams.Instigator = GetInstigator();
@@ -61,9 +58,6 @@ void ATestMonsterArea::Tick(float DeltaTime)
 			FRotator rotation = GetActorRotation();
 
 			ATestMonster* myNewBot = WRLD->SpawnActor<ATestMonster>(myBot[0], location, rotation);
-
-			currentTime = 0.0f;
-		}
 
 	}*/
 
@@ -77,8 +71,22 @@ void ATestMonsterArea::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActo
 
 	if (!firstIn)
 	{
-		LinkDoor->CloseDoor();
 		firstIn = true;
+		InLinkDoor->CloseDoor();
+
+		if (AreaSpawnMonsterArray.Num() == 0)
+		{
+			return;
+		}
+		for (int ArrayCount = 0; ArrayCount < AreaSpawnMonsterArray.Num(); ArrayCount++)
+		{
+			AreaSpawnMonsterArray[ArrayCount]->MonsterSpawn();
+		}
+		
+
+		//OutLinkDoor->OpenDoor();
+
+		
 	}
 
 	/*if (OtherActor->IsA(ATestCharacter::StaticClass()))

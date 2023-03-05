@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "TestDoor.h"
+#include "MonsterSpawner.h"
 #include "TestMonsterArea.generated.h"
 
 UCLASS()
@@ -42,8 +43,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "MyBot")
 		TArray<TSubclassOf<AActor>>myBot;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	ATestDoor* LinkDoor;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="LinkDoor")
+	ATestDoor* InLinkDoor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LinkDoor")
+	ATestDoor* OutLinkDoor;
+
+
+	UPROPERTY(EditAnywhere,Category="SpawnMonster")
+	TArray<AMonsterSpawner*> AreaSpawnMonsterArray;
 
 private:
 

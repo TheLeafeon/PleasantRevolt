@@ -38,7 +38,7 @@ public:
 	void ShowOpenDoor(UCameraComponent* CharCamera);
 
 	UPROPERTY(BlueprintReadWrite)
-		ATestDoor* LinkDoor;
+	ATestDoor* LinkDoor;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 	FVector LinkDoorCameraLocation;
