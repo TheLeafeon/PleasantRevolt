@@ -2,6 +2,7 @@
 
 
 #include "PlayerableCharacter.h"
+#include "Kismet/GameplayStatics.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -42,6 +43,13 @@ APlayerableCharacter::APlayerableCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	// Player Rolling Curve
+	static ConstructorHelpers::FObjectFinder<UCurveFloat> RollCurveObj(TEXT("/Game/PlayerTest/Player/Curves/RollingCurve"));
+	if (RollCurveObj.Succeeded())
+	{
+		RollCurve = RollCurveObj.Object;
+	}
+
 	// Player Status
 	Player_HP = 4.0f;
 	Player_Speed = 0.0f;
@@ -52,6 +60,12 @@ APlayerableCharacter::APlayerableCharacter()
 
 	// Player Melee
 	isAttack = false;
+
+	// Interaction System
+	InteractionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Interaction box"));
+	InteractionBox->SetupAttachment(RootComponent);
+
+	Interface = nullptr;
 }
 
 // Called to bind functionality to input
@@ -60,20 +74,25 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	//Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
+
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("Rolling", IE_Released, this, &APlayerableCharacter::Rolling);
-	PlayerInputComponent->BindAction("MeleeAttack", IE_Released, this, &APlayerableCharacter::Attack_Melee);
-	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerableCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerableCharacter::MoveRight);
 
+	PlayerInputComponent->BindAction("Rolling", IE_Released, this, &APlayerableCharacter::Rolling);
+
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &APlayerableCharacter::OnInteract);
+
+	PlayerInputComponent->BindAction("MeleeAttack", IE_Released, this, &APlayerableCharacter::Attack_Melee);
+	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
+
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &APlayerableCharacter::TurnAtRate);
+	//PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	//PlayerInputComponent->BindAxis("TurnRate", this, &APlayerableCharacter::TurnAtRate);
 	//PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	//PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerableCharacter::LookUpAtRate);
 }
@@ -122,6 +141,16 @@ void APlayerableCharacter::MoveRight(float Value)
 
 void APlayerableCharacter::TimelineProgress(float Value)
 {
+	// Interpolate between the start and end rotations based on the current value of the timeline
+	FRotator NewRotation = FMath::Lerp(StartRotation, EndRotation, Value);
+
+	if (Value >= 1.0f)
+	{
+		bIsRolling = false;
+	}
+
+	// Set the rotation of your character to the interpolated value
+	SetActorRotation(NewRotation);
 
 }
 
@@ -129,9 +158,34 @@ void APlayerableCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->bShowMouseCursor = true;
+
 	AnimInstance = Cast<UPlayerAnimInstnce>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
 		return;
+	
+	// initialize the timeline and the curve float
+	RollTimeline.SetLooping(false);
+	RollTimeline.SetTimelineLength(RollAnimationLength);
+	RollTimeline.SetTimelineLengthMode(ETimelineLengthMode::TL_LastKeyFrame);
+
+	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &APlayerableCharacter::OnBoxBeginOverlap);
+	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &APlayerableCharacter::OnBoxEndOverlap);
+}
+
+void APlayerableCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetWorld()->GetTimerManager().IsTimerActive(TimerHandle))
+	{
+		float RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(TimerHandle);
+		if (RemainingTime <= 0.0f)
+		{
+			EnableInputAfterRoll();
+		}
+	}
 }
 
 //=============== Test Player HP =============== //
@@ -144,11 +198,6 @@ float APlayerableCharacter::Get_Player_HP()
 void APlayerableCharacter::Increase_Player_HP(float val)
 {
 	Player_HP += val;
-}
-
-void APlayerableCharacter::Decrease_Player_HP(float val)
-{
-	Player_HP -= val;
 }
 
 //=============== Melee Attack =============== //
@@ -217,7 +266,6 @@ void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEv
 
 	float DeathAnimDuration = PlayAnimMontage(AnimInstance->Death_AnimMontage);
 
-	FTimerHandle TimerHandle;
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
 }
 
@@ -248,28 +296,101 @@ void APlayerableCharacter::Attack_Shooting()
 }
 
 //=============== Player Roll =============== //
+// 추후 문제 시 수정
+float APlayerableCharacter::UpdateRollCurve(float Value)
+{
+	FRotator RollRotation = FRotator{ 0.0f, 0.0f, Value * 360.0f };
+	SetActorRotation(RollRotation);
+
+	if (Value >= 1.0f)
+	{
+		bIsRolling = false;
+	}
+
+	return RollRotation.NormalizeAxis(0.0f);
+}
+
+void APlayerableCharacter::EnableInputAfterRoll()
+{
+	GetCharacterMovement()->StopMovementImmediately();
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	/*
+	PlayerController->InputComponent->ClearBindingValues();
+	PlayerController->InputComponent->ClearActionBindings();
+	PlayerController->InputComponent->AxisBindings.Empty();
+*/
+	GetCharacterMovement()->Velocity = FVector::ZeroVector;
+	// Re-enable input after rolling
+	PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->EnableInput(PlayerController);
+	PlayerController->FlushPressedKeys();
+	bIsRolling = false;
+}
 
 void APlayerableCharacter::Rolling()
 {
-	AnimInstance->PlaySampleMontage();
-
-	if (CurveFloat)
+	if (bIsRolling || (GetCharacterMovement()->IsFalling()))
 	{
-		FOnTimelineFloat TimelineProgress;
-		TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
-		CurveTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
-		CurveTimeline.SetLooping(false);
-
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT(" Screen"));
+		return;
 	}
 
-	CurveTimeline.PlayFromStart();
+	bIsRolling = true;
 
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->SetInputMode(FInputModeUIOnly());
+	//PlayerController->bShowMouseCursor = true;
+	PlayerController->DisableInput(PlayerController);
 
-	//FVector sample = GetActorForwardVector() * CurveTimeline.GetTimelineLength() * GetCharacterMovement()->GetMaxSpeed() * 2.0f;
+	AnimInstance->PlaySampleMontage();
+
+	RollTimeline = FTimeline{};
+	FOnTimelineFloat RollCurveUpdate;
+
+	// Bind the timeline to the function that will be called when it is updated
+	//RollTimeline.AddInterpFloat(RollCurve, FOnTimelineFloat::CreateUObject(this, &APlayerableCharacter::TimelineProgress));
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %f"), CurveTimeline.GetTimelineLength()));
-	FVector sample = GetActorForwardVector() * (CurveTimeline.GetTimelineLength() * Player_Roll_Test);
+	RollCurveUpdate.BindUFunction(this, "TimelineProgress");
+	RollTimeline.AddInterpFloat(RollCurve, RollCurveUpdate);
+
+	// Set the start and end rotations for the roll animation
+	StartRotation = GetActorRotation();
+	EndRotation = GetActorRotation() + FRotator(0.0f, 90.0f, 0.0f);
+
+	RollCurveUpdate.BindUFunction(this, "UpdateRollCurve");
+	RollTimeline.AddInterpFloat(RollCurve, RollCurveUpdate);
+
+	FVector RollDirection = GetActorForwardVector().RotateAngleAxis(UpdateRollCurve(RollTimeline.GetPlaybackPosition()), FVector{ 0.0f, 0.0f, 1.0f });
 	
-	GetCharacterMovement()->Velocity = sample;
+	GetCharacterMovement()->Velocity = RollDirection;
+
+	RollTimeline.PlayFromStart();
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, RollTimeline.GetTimelineLength(), false);
+}
+
+void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Interface = Cast<IInteractionInterface>(OtherActor);
+
+	if (Interface)
+	{
+		Interface->ShowInteractionWidget();
+	}
+}
+
+void APlayerableCharacter::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (Interface)
+	{
+		Interface->HideInteractionWidget();
+		Interface = nullptr;
+	}
+}
+
+void APlayerableCharacter::OnInteract()
+{
+	if (Interface)
+	{
+		Interface->InteractWithMe();
+	}
 }
