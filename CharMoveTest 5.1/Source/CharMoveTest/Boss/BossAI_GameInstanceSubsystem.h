@@ -20,4 +20,6 @@ private:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Detect_BTService")
 	float Control_DetectRadius; //범위 반지름
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float BearDoll_RushSpeed;
 };

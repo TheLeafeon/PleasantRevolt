@@ -14,7 +14,8 @@ EBTNodeResult::Type USetControlKey_BTTaskNode::ExecuteTask(UBehaviorTreeComponen
 
 	//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	BossAIGISS = UGameInstance::GetSubsystem<UBossAI_GameInstanceSubsystem>(GetWorld()->GetGameInstance());
-	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey::detectRadius, BossAIGISS->Control_DetectRadius/*Numericalcontrol->Control_DetectRadius*/ /*600.0f*/);
+	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey::detectRadius, BossAIGISS->Control_DetectRadius);
+	//OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey::rushSpeed, BossAIGISS->BearDoll_RushSpeed);
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::setting, true);
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::keyTrue, true);
 

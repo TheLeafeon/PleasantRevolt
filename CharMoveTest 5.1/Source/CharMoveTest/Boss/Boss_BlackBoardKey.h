@@ -12,5 +12,6 @@ namespace bossKey
 	TCHAR const* const inRange = TEXT("InRange"); 
 	TCHAR const* const detectRadius = TEXT("DetectRadius");
 	TCHAR const* const setting = TEXT("Setting");
-	TCHAR const* const keyTrue = TEXT("True");
+	TCHAR const* const keyTrue = TEXT("True"); 
+	//TCHAR const* const rushSpeed = TEXT("RushSpeed");
 }
