@@ -2,7 +2,6 @@
 
 
 #include "TestMonsterArea.h"
-
 #include "TestMonster.h"
 #include "TestCharacter.h"
 #include "Components/SphereComponent.h"
@@ -67,8 +66,6 @@ void ATestMonsterArea::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActo
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlap"));
 
-	//LinkDoor->CloseDoor();
-
 	if (!firstIn)
 	{
 		firstIn = true;
@@ -82,20 +79,11 @@ void ATestMonsterArea::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActo
 		{
 			AreaSpawnMonsterArray[ArrayCount]->MonsterSpawn();
 		}
-		
-
-		//OutLinkDoor->OpenDoor();
-
+	
 		
 	}
 
-	/*if (OtherActor->IsA(ATestCharacter::StaticClass()))
-	{
-		if (!bSpawn)
-		{
-			bSpawn = true;
-		}
-	}*/
+
 }
 
 
