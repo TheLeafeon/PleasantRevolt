@@ -22,4 +22,6 @@ public:
 	float Control_DetectRadius; //범위 반지름
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float BearDoll_RushSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float RotationSpeed;
 };

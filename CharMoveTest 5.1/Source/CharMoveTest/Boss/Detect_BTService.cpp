@@ -43,7 +43,7 @@ void UDetect_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	DetectRadius = OwnerComp.GetBlackboardComponent()->GetValueAsFloat(bossKey::detectRadius);
 
 	//오브젝트가 감지가 되면, 그 오브젝트가 캐릭터인지 검사
-	if (bResult)
+	if (bResult) //범위 밖으로 나가면 바로 inRange가 false가 되었으면 좋을텐데
 	{
 		for (FOverlapResult OverlapResult : OverlapResults)
 		{
@@ -63,9 +63,9 @@ void UDetect_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	}
 	else
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey::enemyActor, nullptr); //없으면 null
+		//OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey::enemyActor, nullptr); //없으면 null
 	}
-
+	
 	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange, false); //범위 안에 없으면 false
 }

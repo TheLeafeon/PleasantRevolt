@@ -25,9 +25,6 @@ private:
 
 	UPROPERTY()
 	float DetectRadius; //범위 반지름
-	//블랙보드로 받아야겠음...
-
-	//ABossAI_NumericalControl* Numericalcontrol;
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;

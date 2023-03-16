@@ -36,3 +36,24 @@ void ABossAIController::OnPossess(APawn* InPawn)
 		}
 	}
 }
+
+void ABossAIController::PauseBehaviorTree()
+{
+	SetActorTickEnabled(false); //비헤이비어 트리를 중지
+}
+
+void ABossAIController::ResumeBehaviorTree()
+{
+	SetActorTickEnabled(true); //비헤이비어 트리를 다시 실행
+}
+
+void ABossAIController::SetEnemy(AActor* enemy)
+{
+	BlackboardComp->SetValueAsObject(bossKey::enemyActor, enemy);
+}
+
+void ABossAIController::SetStop(bool stop)
+{
+	BlackboardComp->SetValueAsBool(bossKey::keyStop, stop);
+	BlackboardComp->SetValueAsBool(bossKey::see, false);
+}
