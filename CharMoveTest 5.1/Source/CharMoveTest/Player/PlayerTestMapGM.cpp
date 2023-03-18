@@ -2,7 +2,6 @@
 
 
 #include "PlayerTestMapGM.h"
-#include "CharMoveTestCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 APlayerTestMapGM::APlayerTestMapGM()

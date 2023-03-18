@@ -6,7 +6,7 @@
 #include "BehaviorTree/BTService.h"
 #include "CharMoveTest/Boss/BossAIController.h"
 //#include "CharMoveTest/TestCharacter.h" //플레이어를 감지하기 위해서 필요, Test인 것 같으니 플레이어로 사용할 파일로 바꿔줄 필요 있음
-#include "CharMoveTest/PlayerableCharacter.h"
+#include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h" //디버그용
