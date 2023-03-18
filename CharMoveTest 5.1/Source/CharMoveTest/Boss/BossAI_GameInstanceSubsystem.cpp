@@ -1,0 +1,9 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "CharMoveTest/Boss/BossAI_GameInstanceSubsystem.h"
+
+UBossAI_GameInstanceSubsystem::UBossAI_GameInstanceSubsystem() : Control_DetectRadius(800.0f), BearDoll_RushSpeed(1000.0f), RotationSpeed(2.0f)
+{
+
+}
