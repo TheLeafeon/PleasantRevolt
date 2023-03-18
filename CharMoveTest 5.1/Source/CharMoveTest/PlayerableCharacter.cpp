@@ -85,7 +85,11 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &APlayerableCharacter::OnInteract);
 
+	// 근거리 관련 입력
+	PlayerInputComponent->BindAction("FirstMeleeWeapon", IE_Released, this, &APlayerableCharacter::FirstMeleeWeapon);
+	PlayerInputComponent->BindAction("SecondMeleeWeapon", IE_Released, this, &APlayerableCharacter::SecondMeleeWeapon);
 	PlayerInputComponent->BindAction("MeleeAttack", IE_Released, this, &APlayerableCharacter::Attack_Melee);
+	
 	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
@@ -165,11 +169,27 @@ void APlayerableCharacter::BeginPlay()
 	if (nullptr == AnimInstance)
 		return;
 	
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(FirstWeapon, SpawnParams);
+	if (CurrentWeapon)
+	{
+		MeleeWeaponsArray.Add(CurrentWeapon);
+		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
+	}
+	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SecondWeapon, SpawnParams))
+	{
+		Weapon->GetWeponMesh()->SetHiddenInGame(true);
+		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
+		MeleeWeaponsArray.Add(Weapon);
+	}
+
 	// initialize the timeline and the curve float
 	RollTimeline.SetLooping(false);
 	RollTimeline.SetTimelineLength(RollAnimationLength);
 	RollTimeline.SetTimelineLengthMode(ETimelineLengthMode::TL_LastKeyFrame);
-
+	// 상호작용용 박스관련 Dynamic에 추가
 	InteractionBox->OnComponentBeginOverlap.AddDynamic(this, &APlayerableCharacter::OnBoxBeginOverlap);
 	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &APlayerableCharacter::OnBoxEndOverlap);
 }
@@ -275,13 +295,40 @@ void APlayerableCharacter::DeathEnd()
 	SetLifeSpan(0.1f);
 }
 
+void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
+{
+	if (CurrentWeapon)
+	{
+		if (MeleeWeaponsArray[WeaponIndex] == NULL)
+			return;
+		
+		AWeaponBase* NextWeapon = MeleeWeaponsArray[WeaponIndex];
+
+		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(true);
+		CurrentWeapon = NextWeapon;
+		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
+	}
+}
+
+void APlayerableCharacter::FirstMeleeWeapon()
+{
+	SwitchWeapon(FIRST_WEAPON);
+}
+
+void APlayerableCharacter::SecondMeleeWeapon()
+{
+	SwitchWeapon(1);
+}
+
 void APlayerableCharacter::Attack_Melee()
 {
 	if (!isAttack)
 	{
 		AnimInstance->PlayMeleeAttackMontage();
-
-		//isAttack = true;
+		if (WeaponInterface)
+		{
+			WeaponInterface->Attack();
+		}
 	}
 }
 

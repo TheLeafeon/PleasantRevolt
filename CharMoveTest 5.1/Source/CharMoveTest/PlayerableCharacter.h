@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "PlayerAnimInstnce.h"
 #include "InteractionInterface.h"
+#include "WeaponInterface.h"
+#include "WeaponBase.h"
+#include "NearWeapon1.h"
 #include "Components/BoxComponent.h"
 #include "Components/TimeLineComponent.h"
 #include "GameFramework/Character.h"
@@ -135,13 +138,38 @@ public :
 
 /* Player Attack 관련 */
 private :
+	// Weapon관련 interface
+	IWeaponInterface* WeaponInterface;
+
+	// Weapon 객체 보관 배열
+	UPROPERTY(EditAnywhere, Category = "Weapons")
+		TArray<AWeaponBase*> MeleeWeaponsArray;
+
+	const int32 FIRST_WEAPON = 0;
+	const int32 SECOND_WEAPON = 1;
+
+	// Weapon 1, 2, 3
+	UPROPERTY(EditAnywhere, Category = "Weapons")
+		TSubclassOf<class AWeaponBase> FirstWeapon;
+	UPROPERTY(EditAnywhere, Category = "Weapons")
+		TSubclassOf<class AWeaponBase> SecondWeapon;
+
+	// 현재 장착중인 무기 확인용
+	UPROPERTY(VisibleAnywhere, Category = "Weapons")
+		class AWeaponBase* CurrentWeapon;
+
 	bool isAttack;
+
+	void SwitchWeapon(int32 WeaponIndex);
+	void FirstMeleeWeapon();
+	void SecondMeleeWeapon();
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee();
 	void Attack_Melee_End();
 	UFUNCTION(BlueprintCallable)
 		void Attack_Shooting();
+
 
 /* Interaction System 관련 */
 private :

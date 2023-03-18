@@ -11,11 +11,11 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 		Sample = SAMPLE_MONTAGE.Object;
 	}
 
-	//static ConstructorHelpers::FObjectFinder<UAnimMontage> MELEEATTACK_MONTAGE(TEXT("));
-	//if (MELEEATTACK_MONTAGE.Succeeded())
-	//{
-	//	Attack_AnimMontage = MELEEATTACK_MONTAGE.Object;
-	//}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> MELEEATTACK_MONTAGE(TEXT("/Game/PlayerTest/Samples/RetargetAnimation/Standing_Melee_Attack_Montage.Standing_Melee_Attack_Montage"));
+	if (MELEEATTACK_MONTAGE.Succeeded())
+	{
+		Attack_AnimMontage = MELEEATTACK_MONTAGE.Object;
+	}
 
 	//static ConstructorHelpers::FObjectFinder<UAnimMontage> BEHIT_MONTAGE(TEXT("));
 	//if (BEHIT_MONTAGE.Succeeded())
@@ -37,8 +37,7 @@ void UPlayerAnimInstnce::PlaySampleMontage()
 
 void UPlayerAnimInstnce::PlayMeleeAttackMontage()
 {
-	//Montage_Play(Attack_AnimMontage, 1.0f);
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Attack"));
+	Montage_Play(Attack_AnimMontage, 1.0f);
 }
 
 void UPlayerAnimInstnce::PlayBeHitMontage()
