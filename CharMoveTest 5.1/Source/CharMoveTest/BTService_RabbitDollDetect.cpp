@@ -3,7 +3,7 @@
 
 #include "BTService_RabbitDollDetect.h"
 #include "RabbitDollAIController.h"
-#include "PlayerableCharacter.h"
+#include "Player/PlayerableCharacter.h"
 #include "TestCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"

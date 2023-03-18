@@ -3,7 +3,7 @@
 
 #include "BTService_DragonDollDetect.h"
 #include "DragonDollAIController.h"
-#include "PlayerableCharacter.h"
+#include "Player/PlayerableCharacter.h"
 #include "Components/SphereComponent.h"
 #include "TestCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"

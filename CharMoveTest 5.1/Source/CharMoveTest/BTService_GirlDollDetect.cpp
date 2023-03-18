@@ -3,7 +3,7 @@
 
 #include "BTService_GirlDollDetect.h"
 #include "GirlDollAIController.h"
-#include "PlayerableCharacter.h"
+#include "Player/PlayerableCharacter.h"
 #include "TestCharacter.h"
 #include "Components/SphereComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
