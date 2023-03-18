@@ -47,7 +47,7 @@ void UDetect_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	{
 		for (FOverlapResult OverlapResult : OverlapResults)
 		{
-			ATestCharacter* PlayerCharacter = Cast<ATestCharacter>(OverlapResult.GetActor()); //플레이어 파일 바뀌면 바꿔줄 필요 있음
+			APlayerableCharacter* PlayerCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor()); //플레이어 파일 바뀌면 바꿔줄 필요 있음
 
 			if (PlayerCharacter && PlayerCharacter->GetController()->IsPlayerController()) //플레이어 캐릭터라면?
 			{

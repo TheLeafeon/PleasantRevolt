@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "CharMoveTest/Boss/BossAIController.h"
-#include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
 #include "FindPlayer_BTTaskNode.generated.h"
