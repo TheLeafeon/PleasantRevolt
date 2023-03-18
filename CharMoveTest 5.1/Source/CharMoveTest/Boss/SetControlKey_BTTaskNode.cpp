@@ -17,6 +17,8 @@ EBTNodeResult::Type USetControlKey_BTTaskNode::ExecuteTask(UBehaviorTreeComponen
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::setting, false);
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::keyTrue, true);
 	//OwnerComp.GetBlackboardComponent()->SetValueAsRotator(bossKey::x360, FRotator(350, 0, 0));
+	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange, false);
+	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::isRotate, false);
 
 	return EBTNodeResult::Succeeded;
 }

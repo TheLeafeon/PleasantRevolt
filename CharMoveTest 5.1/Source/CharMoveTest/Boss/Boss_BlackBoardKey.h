@@ -17,4 +17,5 @@ namespace bossKey
 	TCHAR const* const keyStop = TEXT("Stop"); 
 	TCHAR const* const preRotation = TEXT("PreRotation");
 	TCHAR const* const setRotation = TEXT("SetRotation");
+	TCHAR const* const isRotate = TEXT("IsRotate");
 }
