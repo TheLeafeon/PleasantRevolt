@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MonsterBase.h"
-#include "TestMonsterArea.h"
-#include "GirlDollAIController.h"
+#include "CharMoveTest/FieldMonster/MonsterBase.h"
+#include "CharMoveTest/TestMonsterArea.h"
+#include "CharMoveTest/FieldMonster/GirlDollAIController.h"
 #include "GirlDoll.generated.h"
 
 /**

@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_GirlDollFindPatrolPos.h"
-#include "GirlDollAIController.h"
+#include "CharMoveTest/FieldMonster/BTTask_GirlDollFindPatrolPos.h"
+#include "CharMoveTest/FieldMonster/GirlDollAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
 

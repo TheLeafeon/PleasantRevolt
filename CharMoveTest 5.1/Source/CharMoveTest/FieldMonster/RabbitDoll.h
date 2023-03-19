@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MonsterBase.h"
-#include "RabbitDollAIController.h"
+#include "CharMoveTest/FieldMonster/MonsterBase.h"
+#include "CharMoveTest/FieldMonster/RabbitDollAIController.h"
 #include "RabbitDoll.generated.h"
 
 /**

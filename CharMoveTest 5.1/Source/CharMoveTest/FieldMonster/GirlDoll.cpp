@@ -1,7 +1,7 @@
 
 #include "GirlDoll.h"
 #include "Components/BoxComponent.h"
-#include "TestCharacter.h"
+#include "CharMoveTest/TestCharacter.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
 #include "Engine.h"

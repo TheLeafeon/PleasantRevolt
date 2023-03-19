@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_GirlDollAttack.h"
-#include "GirlDollAIController.h"
-#include "GirlDoll.h"
+#include "CharMoveTest/FieldMonster/BTTask_GirlDollAttack.h"
+#include "CharMoveTest/FieldMonster/GirlDollAIController.h"
+#include "CharMoveTest/FieldMonster/GirlDoll.h"
 
 
 UBTTask_GirlDollAttack::UBTTask_GirlDollAttack()

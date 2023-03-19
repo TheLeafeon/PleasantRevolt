@@ -1,21 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTService_DragonDollDetect.h"
-#include "DragonDollAIController.h"
-#include "Player/PlayerableCharacter.h"
-#include "Components/SphereComponent.h"
-#include "TestCharacter.h"
+#include "CharMoveTest/FieldMonster/BTService_RabbitDollDetect.h"
+#include "CharMoveTest/FieldMonster/RabbitDollAIController.h"
+#include "CharMoveTest/Player/PlayerableCharacter.h"
+#include "CharMoveTest/TestCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 
-UBTService_DragonDollDetect::UBTService_DragonDollDetect()
+
+UBTService_RabbitDollDetect::UBTService_RabbitDollDetect()
 {
 	NodeName = TEXT("Detect");
 	Interval = 1.0f;
+
 }
 
-void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UBTService_RabbitDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
@@ -23,11 +24,11 @@ void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	if (nullptr == ControllingPawn) return;
 
 	UWorld* World = ControllingPawn->GetWorld();
-	FVector Center = DragonDollArea->GetActorLocation();
-	
-	float DetectRadius = 600.0f;
+	FVector Center = ControllingPawn->GetActorLocation();
 
-	float AreaSize = DragonDollArea->CollisionSphere->GetScaledSphereRadius();
+
+	//DectectRadius //교체필요
+	float DetectRadius = 600.0f;
 
 	if (nullptr == World) return;
 	TArray<FOverlapResult> OverlapResults;
@@ -37,7 +38,7 @@ void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 		Center,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(AreaSize),
+		FCollisionShape::MakeSphere(DetectRadius),
 		CollisionQueryParam
 	);
 
@@ -48,7 +49,7 @@ void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 			ATestCharacter* PlayerableCharacter = Cast<ATestCharacter>(OverlapResult.GetActor());
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ADragonDollAIController::TargetKey, PlayerableCharacter);
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ARabbitDollAIController::TargetKey, PlayerableCharacter);
 				//DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
 
 				//DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
@@ -58,6 +59,7 @@ void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 		}
 	}
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsObject(ADragonDollAIController::TargetKey, nullptr);
+	OwnerComp.GetBlackboardComponent()->SetValueAsObject(ARabbitDollAIController::TargetKey, nullptr);
 	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
+
 }

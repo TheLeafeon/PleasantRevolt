@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTService_GirlDollDetect.h"
-#include "GirlDollAIController.h"
-#include "Player/PlayerableCharacter.h"
-#include "TestCharacter.h"
+#include "CharMoveTest/FieldMonster/BTService_GirlDollDetect.h"
+#include "CharMoveTest/FieldMonster/GirlDollAIController.h"
+#include "CharMoveTest/Player/PlayerableCharacter.h"
+#include "CharMoveTest/TestCharacter.h"
 #include "Components/SphereComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"

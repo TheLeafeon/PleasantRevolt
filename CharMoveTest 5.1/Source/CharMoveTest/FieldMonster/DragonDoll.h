@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MonsterBase.h"
+#include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "Camera/CameraComponent.h"
-#include "FPSProjectile.h"
+#include "CharMoveTest/FieldMonster/FPSProjectile.h"
 #include "DragonDoll.generated.h"
 
 /**
