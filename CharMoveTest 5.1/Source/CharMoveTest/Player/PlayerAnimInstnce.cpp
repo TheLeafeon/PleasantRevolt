@@ -11,7 +11,7 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 		Sample = SAMPLE_MONTAGE.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> MELEEATTACK_MONTAGE(TEXT("/Game/PlayerTest/Samples/RetargetAnimation/Standing_Melee_Attack_Montage.Standing_Melee_Attack_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> MELEEATTACK_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/ComboAttack1.ComboAttack1"));
 	if (MELEEATTACK_MONTAGE.Succeeded())
 	{
 		Attack_AnimMontage = MELEEATTACK_MONTAGE.Object;
@@ -38,6 +38,7 @@ void UPlayerAnimInstnce::PlaySampleMontage()
 void UPlayerAnimInstnce::PlayMeleeAttackMontage()
 {
 	Montage_Play(Attack_AnimMontage, 1.0f);
+	
 }
 
 void UPlayerAnimInstnce::PlayBeHitMontage()

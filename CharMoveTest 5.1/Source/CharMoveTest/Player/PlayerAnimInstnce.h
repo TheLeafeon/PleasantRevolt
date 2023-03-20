@@ -26,11 +26,11 @@ private :
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Sample", Meta = (AllowPrivateAccess = true))
 		UAnimMontage* Sample;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-		UAnimMontage* Attack_AnimMontage;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* BeHit_AnimMontage;
 
 public :
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* Attack_AnimMontage;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* Death_AnimMontage;
 };
