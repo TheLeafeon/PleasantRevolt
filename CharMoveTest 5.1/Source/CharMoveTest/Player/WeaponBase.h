@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "WeaponInterface.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
@@ -28,18 +29,30 @@ protected :
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
 		float PlayerAttackPower;
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
-		float WeaponMaxCombo;
+		int32 WeaponMaxCombo;
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
 		float WeaponAttackNearDistance;
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
 		float WeaponAttackTime;
 
+	bool isAttacking;
+
+	void StartAttack();
+	void StopAttack();
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	class APlayerableCharacter* MyPawn;
+private :
 	UPROPERTY(EditAnywhere)
 		USceneComponent* _RootComponent;
-
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* NearWeaponMesh;
+	UPROPERTY(EditAnywhere)
+		class UBoxComponent* WeaponCollision;
+
 
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }
+	int32 GetMaxCombo() { return WeaponMaxCombo; }
 };

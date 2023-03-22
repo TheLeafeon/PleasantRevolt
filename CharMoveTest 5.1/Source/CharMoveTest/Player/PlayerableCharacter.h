@@ -7,7 +7,7 @@
 #include "InteractionInterface.h"
 #include "WeaponInterface.h"
 #include "WeaponBase.h"
-#include "NearWeapon1.h"
+//#include "NearWeapon1.h"
 #include "Components/BoxComponent.h"
 #include "Components/TimeLineComponent.h"
 #include "GameFramework/Character.h"
@@ -129,14 +129,20 @@ public :
 	// 히트 판정
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 	// Get Damage
-	UFUNCTION(BlueprintCallable)
-		virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	// 플레이어 사망
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	// 플레이어 사망 애니메이션 종료 시 발생하는 함수
 	void DeathEnd();
 
 /* Player Attack 관련 */
+public :
+	bool bisAttack;
+
+	UFUNCTION(BlueprintCallable)
+		void Attack_Melee_End();
+
+	UAnimMontage* Get_Attack_AnimMontage();
 private :
 	// Weapon관련 interface
 	IWeaponInterface* WeaponInterface;
@@ -158,18 +164,24 @@ private :
 	UPROPERTY(VisibleAnywhere, Category = "Weapons")
 		class AWeaponBase* CurrentWeapon;
 
-	bool isAttack;
-
 	void SwitchWeapon(int32 WeaponIndex);
 	void FirstMeleeWeapon();
 	void SecondMeleeWeapon();
 
+	bool bLMBDown;
+	bool bIsAttackWhenAttacking;
+	int32 currentCombo;
+	int32 maxCombo;
+
+	void LMBDown();
+	FORCEINLINE void LMBUp() { bLMBDown = false; }
+
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee();
-	void Attack_Melee_End();
+	UFUNCTION(BlueprintCallable)
+		void Attack_Input_Checking();
 	UFUNCTION(BlueprintCallable)
 		void Attack_Shooting();
-
 
 /* Interaction System 관련 */
 private :
