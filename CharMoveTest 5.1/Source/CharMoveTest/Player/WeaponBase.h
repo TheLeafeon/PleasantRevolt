@@ -35,10 +35,8 @@ protected :
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
 		float WeaponAttackTime;
 
+	FString WeaponName;
 	bool isAttacking;
-
-	void StartAttack();
-	void StopAttack();
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
@@ -55,4 +53,8 @@ private :
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }
 	int32 GetMaxCombo() { return WeaponMaxCombo; }
+	FString GetWeaponName() { return WeaponName; }
+
+	void StartAttack();
+	void StopAttack();
 };

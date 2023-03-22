@@ -92,8 +92,7 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	// 근거리 관련 입력
 	PlayerInputComponent->BindAction("FirstMeleeWeapon", IE_Released, this, &APlayerableCharacter::FirstMeleeWeapon);
 	PlayerInputComponent->BindAction("SecondMeleeWeapon", IE_Released, this, &APlayerableCharacter::SecondMeleeWeapon);
-	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &APlayerableCharacter::LMBDown);
-	PlayerInputComponent->BindAction("MeleeAttack", IE_Released, this, &APlayerableCharacter::LMBUp);
+	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &APlayerableCharacter::Attack_Melee);
 	
 	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
 
@@ -178,6 +177,7 @@ void APlayerableCharacter::BeginPlay()
 	SpawnParams.Owner = this;
 
 	CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(FirstWeapon, SpawnParams);
+	CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
 	if (CurrentWeapon)
 	{
 		MeleeWeaponsArray.Add(CurrentWeapon);
@@ -312,6 +312,18 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(true);
 		CurrentWeapon = NextWeapon;
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), WeaponIndex));
+
+
+		if (WeaponIndex == FIRST_WEAPON)
+		{
+			CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
+		}
+		else if (WeaponIndex == SECOND_WEAPON)
+		{
+			CurrentWeaponComboAnim = AnimInstance->NearWeapon2_AnimMontage;
+		}
 	}
 }
 
@@ -341,51 +353,27 @@ void APlayerableCharacter::LMBDown()
 
 void APlayerableCharacter::Attack_Melee()
 {
-	//if (!bisAttack)
+	if (!bisAttack)
 	{
 		maxCombo = CurrentWeapon->GetMaxCombo();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), maxCombo));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), currentCombo));
 
-		if (currentCombo < maxCombo)
+		if (currentCombo <= maxCombo)
 		{
 			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
-			PlayAnimMontage(AnimInstance->Attack_AnimMontage, 1.0f, FName(*PlayerSection));
+			PlayAnimMontage(CurrentWeaponComboAnim, 1.0f, FName(*PlayerSection));
 			currentCombo++;
-			//AnimInstance->Montage_Play(AnimInstance->Attack_AnimMontage);
+			bisAttack = true;
 		}
 		else
 		{
 			currentCombo = 0;
 		}
-		/*
-		if (!(AnimInstance->Montage_IsPlaying(AnimInstance->Attack_AnimMontage)))
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("1111"));
-
-			bisAttack = true;
-			AnimInstance->Montage_Play(AnimInstance->Attack_AnimMontage);
-		}
-		//else if (AnimInstance->Montage_IsPlaying(AnimInstance->Attack_AnimMontage))
-		else
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("2222"));
-
-			AnimInstance->Montage_Play(AnimInstance->Attack_AnimMontage);
-			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
-			AnimInstance->Montage_JumpToSection(FName(*PlayerSection), AnimInstance->Attack_AnimMontage);
-		}
-		//if (WeaponInterface)
-		{
-		//	WeaponInterface->Attack();
-		}
-		*/
 	}
 }
 
 void APlayerableCharacter::Attack_Melee_End()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("End"));
-
 	bisAttack = false;
 }
 
@@ -398,7 +386,7 @@ void APlayerableCharacter::Attack_Input_Checking()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("End"));
 
-	if (currentCombo >= maxCombo)
+	if (currentCombo > maxCombo)
 	{
 		currentCombo = 0;
 		bIsAttackWhenAttacking = false;

@@ -138,6 +138,7 @@ public :
 /* Player Attack 관련 */
 public :
 	bool bisAttack;
+	int32 currentCombo;
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee_End();
@@ -163,6 +164,7 @@ private :
 	// 현재 장착중인 무기 확인용
 	UPROPERTY(VisibleAnywhere, Category = "Weapons")
 		class AWeaponBase* CurrentWeapon;
+	class UAnimMontage* CurrentWeaponComboAnim;
 
 	void SwitchWeapon(int32 WeaponIndex);
 	void FirstMeleeWeapon();
@@ -170,7 +172,6 @@ private :
 
 	bool bLMBDown;
 	bool bIsAttackWhenAttacking;
-	int32 currentCombo;
 	int32 maxCombo;
 
 	void LMBDown();

@@ -25,6 +25,7 @@ AWeaponBase::AWeaponBase()
 	WeaponMaxCombo = 0;
 	WeaponAttackNearDistance = 0.0f;
 	WeaponAttackTime = 0;
+	WeaponName = "";
 
 	MyPawn = Cast<APlayerableCharacter>(StaticClass());
 	isAttacking = false;
@@ -65,7 +66,6 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 
 	APlayerableCharacter* MyPlayer = Cast<APlayerableCharacter>(StaticClass());
-
 
 	if (OtherActor->IsA(AActor::StaticClass()) && !OtherActor->IsA(APlayerableCharacter::StaticClass())/*&& isAttacking == true*/)
 	{
