@@ -18,10 +18,23 @@ private:
 	UBossAI_GameInstanceSubsystem();
 
 public:
+	//BearDoll AI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Detect_BTService")
 	float Control_DetectRadius; //범위 반지름
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float BearDoll_RushSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float RotationSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Rush_Delay;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Rotation_Delay;
+
+	//BearDoll FallObj
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Fall_Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Fall_Acceleration; //가속도
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Fall_time; //충돌 오브젝트가 생성되는 주기
 };

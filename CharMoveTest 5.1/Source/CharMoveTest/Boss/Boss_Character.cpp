@@ -81,28 +81,6 @@ void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, 
 
 void ABoss_Character::HPHalf()
 {
-	//이거 실행하면 맵에 설치 되어있는 스폰기들을 작동시키는 쪽으로 할까
-	//아니면 주변에 랜덤 좌표 받아와서... 흠
-	
-	//충돌체는 만약 바닥 장판과 맞닿으면 폭발하는걸로 하면 맞닿을 때 충돌...처리 되게끔...
-
-	//https://bigflash0913.tistory.com/22
-	//데칼
-	/*
-	FVector NewSize = FVector(64.0f, 80.0f, 64.0f);
-	float BoxSize = AttackRangeBox->GetScaledBoxExtent().Y;
-	FVector NewLocation = GetActorLocation() + GetActorForwardVector() * BoxSize;
-
-	AttackRangeBox->SetBoxExtent(NewSize);
-	AttackRangeBox->SetWorldLocation(NewLocation);
-
-	//Draw RangeDecal
-	NewSize.Z = 100.0f;
-	FRotator NewRotator = AttackRangeBox->GetComponentRotation();
-	auto RangeDecal = UGameplayStatics::SpawnDecalAtLocation(this, RangeDecalMaterial, NewSize, NewLocation, NewRotator, 0.0f);
-	RangeDecal->SetFadeOut(0.0f, 1.0f);
-	*/
-
 	//충돌체 스폰기 스폰
 	if (FallObj_Spawn_Blueprint)
 	{
