@@ -4,7 +4,7 @@
 #include "CharMoveTest/Boss/Boss_Character.h"
 
 // Sets default values
-ABoss_Character::ABoss_Character() : BossHP(20.0f), MaxBossHP(20.0f)
+ABoss_Character::ABoss_Character() : BossHP(20.0f), MaxBossHP(20.0f), isSpawn(false)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -71,6 +71,12 @@ void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, 
 	{
 		//데미지 받고 뒤로 밀림
 		ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
+
+		if ((BossHP <= MaxBossHP / 2) && isSpawn == false)
+		{
+			HPHalf();
+			isSpawn = true;
+		}
 	}
 }
 

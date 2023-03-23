@@ -26,12 +26,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-//private:
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Status")
-	float BossHP;
-
 private:
+	UPROPERTY(EditAnywhere, Category = "Status")
+	float BossHP;
 	UPROPERTY(EditAnywhere, Category = "Status")
 	float MaxBossHP;
 
@@ -43,10 +40,9 @@ private:
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 
-public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void HPHalf();
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	TSubclassOf<class AActor> FallObj_Spawn_Blueprint;
+	bool isSpawn;
 };

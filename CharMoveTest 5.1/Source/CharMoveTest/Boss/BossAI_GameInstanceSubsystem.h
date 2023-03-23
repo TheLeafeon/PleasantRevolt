@@ -36,5 +36,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Fall_Acceleration; //가속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Fall_time; //충돌 오브젝트가 생성되는 주기
+	float Fall_time; //충돌 오브젝트 공격 범위가 생성되는 주기
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Fall_Delay; //충돌 오브젝트가 생성되기까지 딜레이
 };
