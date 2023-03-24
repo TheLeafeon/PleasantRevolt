@@ -67,7 +67,8 @@ protected:
 private :
 	// 플레이어의 애니메이션을 저장해둔 것
 	UPlayerAnimInstnce* AnimInstance;
-
+	// Timer남은시간
+	float RemainingTime;
 /* Player Rolling */
 protected :
 	// Player Roll Function
@@ -93,7 +94,7 @@ protected :
 	float RollAnimationLength = 1.0f;
 
 	// 타이머 설정을 위한 TimerHandle
-	FTimerHandle TimerHandle;
+	FTimerHandle RollTimerHandle;
 	
 	float UpdateRollCurve(float Value);
 	// 구르는 상태인지 확인
@@ -117,6 +118,15 @@ private :
 	UPROPERTY(EditAnywhere, Category = "Status")
 		float Player_Attack_Far_Distance;
 
+/* Player Dodge */
+	UPROPERTY(EditAnywhere, Category = "Status")
+		float Player_Dodge_Time;
+
+	FTimerHandle DodgeTimerHandle;
+
+	void DodgeStart(const float& time);
+	void DodgeEnd();
+	bool isDodge;
 /* Player Get Damage & Die 관련 */
 public :
 	// 플레이어의 체력을 밖으로 보내기 위위해서 작성
@@ -134,6 +144,8 @@ public :
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	// 플레이어 사망 애니메이션 종료 시 발생하는 함수
 	void DeathEnd();
+
+	FTimerHandle DeathTimerHandle;
 
 /* Player Attack 관련 */
 public :

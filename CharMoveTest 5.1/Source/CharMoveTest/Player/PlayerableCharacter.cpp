@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "PlayerableCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
@@ -50,6 +49,9 @@ APlayerableCharacter::APlayerableCharacter()
 		RollCurve = RollCurveObj.Object;
 	}
 
+	// Timer 남은 시간 확인용
+	RemainingTime = 0.0f;
+
 	// Player Status
 	Player_HP = 4.0f;
 	Player_Speed = 0.0f;
@@ -57,6 +59,10 @@ APlayerableCharacter::APlayerableCharacter()
 	Player_Attack_Power = 0.0f;
 	Player_Attack_Near_Distance = 0.0f;
 	Player_Attack_Far_Distance = 0.0f;
+
+	// Player Dodge
+	Player_Dodge_Time = 1.0f;
+	isDodge = false;
 
 	// Player Melee
 	bLMBDown = false;
@@ -203,12 +209,28 @@ void APlayerableCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (GetWorld()->GetTimerManager().IsTimerActive(TimerHandle))
+	if (GetWorld()->GetTimerManager().IsTimerActive(RollTimerHandle))
 	{
-		float RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(TimerHandle);
+		RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(RollTimerHandle);
 		if (RemainingTime <= 0.0f)
 		{
 			EnableInputAfterRoll();
+		}
+	}
+	if (GetWorld()->GetTimerManager().IsTimerActive(DodgeTimerHandle))
+	{
+		RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(DodgeTimerHandle);
+		if (RemainingTime <= 0.0f)
+		{
+			DodgeEnd();
+		}
+	}
+	if (GetWorld()->GetTimerManager().IsTimerActive(DeathTimerHandle))
+	{
+		RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(DeathTimerHandle);
+		if (RemainingTime <= 0.0f)
+		{
+			DeathEnd();
 		}
 	}
 }
@@ -223,6 +245,22 @@ float APlayerableCharacter::Get_Player_HP()
 void APlayerableCharacter::Increase_Player_HP(float val)
 {
 	Player_HP += val;
+}
+
+//===============  Player Dodge =============== //
+void APlayerableCharacter::DodgeStart(const float& time)
+{
+	if (!isDodge)
+	{
+		isDodge = true;
+
+		GetWorld()->GetTimerManager().SetTimer(DodgeTimerHandle, this, &APlayerableCharacter::DodgeEnd, time, false);
+	}
+}
+
+void APlayerableCharacter::DodgeEnd()
+{
+	isDodge = false;
 }
 
 //=============== Melee Attack =============== //
@@ -241,21 +279,25 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 {
 	const float getDamage = Super::TakeDamage(Damage, DamgaeEvent, EventInstigator, DamageCauser);
 
-	if (Player_HP <= 0.0f)
-		return 0.0f;
+	if (!isDodge)
+	{
+		if (Player_HP <= 0.0f)
+			return 0.0f;
 
-	if (getDamage > 0.f)
-	{
-		Player_HP -= getDamage;
-	}
+		if (getDamage > 0.f)
+		{
+			Player_HP -= getDamage;
+		}
 
-	if (Player_HP <= 0)
-	{
-		Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
-	}
-	else
-	{
-		OnHit(getDamage, DamgaeEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
+		if (Player_HP <= 0)
+		{
+			Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
+			DodgeStart(Player_Dodge_Time);
+		}
+		else
+		{
+			OnHit(getDamage, DamgaeEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
+		}
 	}
 
 	return getDamage;
@@ -291,7 +333,7 @@ void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEv
 
 	float DeathAnimDuration = PlayAnimMontage(AnimInstance->Death_AnimMontage);
 
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
+	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
 }
 
 void APlayerableCharacter::DeathEnd()
@@ -313,7 +355,7 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		CurrentWeapon = NextWeapon;
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), WeaponIndex));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Change to NearWeapon %d"), WeaponIndex));
 
 
 		if (WeaponIndex == FIRST_WEAPON)
@@ -324,6 +366,8 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		{
 			CurrentWeaponComboAnim = AnimInstance->NearWeapon2_AnimMontage;
 		}
+
+		maxCombo = CurrentWeapon->GetMaxCombo();
 	}
 }
 
@@ -355,10 +399,9 @@ void APlayerableCharacter::Attack_Melee()
 {
 	if (!bisAttack)
 	{
-		maxCombo = CurrentWeapon->GetMaxCombo();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), currentCombo));
 
-		if (currentCombo <= maxCombo)
+		if (currentCombo < maxCombo)
 		{
 			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
 			PlayAnimMontage(CurrentWeaponComboAnim, 1.0f, FName(*PlayerSection));
@@ -384,8 +427,6 @@ UAnimMontage* APlayerableCharacter::Get_Attack_AnimMontage()
 
 void APlayerableCharacter::Attack_Input_Checking()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("End"));
-
 	if (currentCombo > maxCombo)
 	{
 		currentCombo = 0;
@@ -473,7 +514,9 @@ void APlayerableCharacter::Rolling()
 
 	RollTimeline.PlayFromStart();
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, RollTimeline.GetTimelineLength(), false);
+	DodgeStart(RollTimeline.GetTimelineLength());
+
+	GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, RollTimeline.GetTimelineLength(), false);
 }
 
 void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
