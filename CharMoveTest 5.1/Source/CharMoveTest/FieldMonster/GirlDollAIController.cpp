@@ -1,15 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "CharMoveTest/FieldMonster/GirlDollAIController.h"
 #include "NavigationSystem.h"
+#include "CharMoveTest/FieldMonster/GirlDoll.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 const FName AGirlDollAIController::HomePosKey(TEXT("HomePos"));
-const FName AGirlDollAIController::PatrolPosKey(TEXT("PatrolPos"));
 const FName AGirlDollAIController::TargetKey(TEXT("Target"));
+const FName AGirlDollAIController::AreaPosKey(TEXT("AreaPos"));
+const FName AGirlDollAIController::AreaSizeKey(TEXT("AreaSize"));
+
 
 AGirlDollAIController::AGirlDollAIController()
 {
@@ -29,10 +35,47 @@ AGirlDollAIController::AGirlDollAIController()
 void AGirlDollAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	UBlackboardComponent* BlackboardComp = Blackboard.Get();
+	/*UBlackboardComponent* BlackboardComp = Blackboard.Get();
 	if (UseBlackboard(BBGirlDoll, BlackboardComp))
 	{
 		BlackboardComp->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
+		if (!RunBehaviorTree(BTGirlDoll))
+		{
+
+		}
+	}*/
+	FTimerHandle TimerHandleGirlDoll;
+
+	FTimerDelegate TimerDelegateGirlDoll = FTimerDelegate::CreateUObject(this, &AGirlDollAIController::OnPossessDelayed, InPawn);
+	GetWorldTimerManager().SetTimer(TimerHandleGirlDoll, TimerDelegateGirlDoll, 0.2f, false);
+
+}
+
+void AGirlDollAIController::OnPossessDelayed(APawn* InPawn)
+{
+	if (InPawn == nullptr)
+	{
+		return;
+	}
+
+
+	MyGirlDoll = Cast<AGirlDoll>(InPawn);
+
+	if (MyGirlDoll == nullptr)
+	{
+		return;
+	}
+
+	UBlackboardComponent* BlackboardComp = Blackboard.Get();
+	if (UseBlackboard(BBGirlDoll, BlackboardComp) && MyGirlDoll != nullptr)
+	{
+		BlackboardComp->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
+		BlackboardComp->SetValueAsVector(AreaPosKey, MyGirlDoll->MyAreaLocation);
+		BlackboardComp->SetValueAsFloat(AreaSizeKey, MyGirlDoll->MyAreaSize);
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Object name is: %f"), MyGirlDoll->MyAreaSize));
+
+
 		if (!RunBehaviorTree(BTGirlDoll))
 		{
 

@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "CharMoveTest/TestMonsterArea.h"
-#include "CharMoveTest/FieldMonster/GirlDollAIController.h"
+#include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "GirlDoll.generated.h"
 
 /**
+ * 
  * 
  */
 
@@ -18,38 +18,45 @@ UCLASS()
 class CHARMOVETEST_API AGirlDoll : public AMonsterBase
 {
 	GENERATED_BODY()
+
 public:
 	AGirlDoll();
-	
 
-	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)override;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UBoxComponent* AttackRange;
+	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class USphereComponent* CollisionSphere;
+	class UBoxComponent* AttackRangeBox;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector AttackRangeBoxSize;
 
-	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
-
 
 	void Attack_Ready();
+
 	void Attack_Melee();
-	void Attack_Melee_End();
+	FOnAttackEndDelegate OnAttackEnd;
 
-	bool isReadyAttack;
-	bool isDuringAttack;
+	void AttackCheck();
+	
+	
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 
+	bool isAttackDuring;
+	bool isAttackReady;
+	
+	ATestMonsterArea* FindClosestMonsterArea();
+
+	ATestMonsterArea* MyArea;
+	FVector MyAreaLocation;
+	float MyAreaSize;
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-
-
 	
-
-
+private:
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float AttackRange;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	float AttackRadius;
 };

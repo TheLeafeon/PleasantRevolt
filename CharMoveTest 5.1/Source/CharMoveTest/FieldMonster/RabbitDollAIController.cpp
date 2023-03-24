@@ -3,7 +3,10 @@
 
 #include "CharMoveTest/FieldMonster/RabbitDollAIController.h"
 #include "NavigationSystem.h"
+#include "CharMoveTest/FieldMonster/RabbitDoll.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -11,6 +14,8 @@
 const FName ARabbitDollAIController::HomePosKey(TEXT("HomePos"));
 const FName ARabbitDollAIController::PatrolPosKey(TEXT("PatrolPos"));
 const FName ARabbitDollAIController::TargetKey(TEXT("Target"));
+const FName ARabbitDollAIController::AreaPosKey(TEXT("AreaPos"));
+const FName ARabbitDollAIController::AreaSizeKey(TEXT("AreaSize"));
 
 
 ARabbitDollAIController::ARabbitDollAIController()
@@ -32,13 +37,44 @@ ARabbitDollAIController::ARabbitDollAIController()
 void ARabbitDollAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+	
+	FTimerHandle TimerHandleRabbitDoll;
+
+	FTimerDelegate TimerDelegateRabbitDoll = FTimerDelegate::CreateUObject(this, &ARabbitDollAIController::OnPossessDelayed, InPawn);
+	GetWorldTimerManager().SetTimer(TimerHandleRabbitDoll, TimerDelegateRabbitDoll, 0.5f, false);
+
+}
+
+void ARabbitDollAIController::OnPossessDelayed(APawn* InPawn)
+{
+	if (InPawn == nullptr)
+	{
+		return;
+	}
+
+
+	MyRabbitDoll = Cast<ARabbitDoll>(InPawn);
+
+	if (MyRabbitDoll == nullptr)
+	{
+		return;
+	}
+
 	UBlackboardComponent* BlackboardComp = Blackboard.Get();
-	if (UseBlackboard(BBRabbitDoll, BlackboardComp))
+	if (UseBlackboard(BBRabbitDoll, BlackboardComp) && MyRabbitDoll != nullptr)
 	{
 		BlackboardComp->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
+		BlackboardComp->SetValueAsVector(AreaPosKey, MyRabbitDoll->MyAreaLocation);
+		BlackboardComp->SetValueAsFloat(AreaSizeKey, MyRabbitDoll->MyAreaSize);
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Object name is: %f"), MyRabbitDoll->MyAreaSize));
+
+
+		
 		if (!RunBehaviorTree(BTRabbitDoll))
 		{
 
 		}
 	}
 }
+

@@ -13,8 +13,6 @@ UCLASS()
 class CHARMOVETEST_API UBTTask_GirlDollAttack : public UBTTaskNode
 {
 	GENERATED_BODY()
-
-
 public:
 	UBTTask_GirlDollAttack();
 
@@ -24,6 +22,6 @@ protected:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSecondes) override;
 
 private:
-	bool isDuringAttack = false;
+	bool IsAttacking = false;
 	
 };

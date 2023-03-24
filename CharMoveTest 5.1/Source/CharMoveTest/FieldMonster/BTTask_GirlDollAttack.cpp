@@ -9,8 +9,9 @@
 UBTTask_GirlDollAttack::UBTTask_GirlDollAttack()
 {
 	bNotifyTick = true;
-	isDuringAttack = false;
+	IsAttacking = false;
 }
+
 EBTNodeResult::Type UBTTask_GirlDollAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
@@ -19,21 +20,27 @@ EBTNodeResult::Type UBTTask_GirlDollAttack::ExecuteTask(UBehaviorTreeComponent& 
 	if (nullptr == GirlDoll)
 		return EBTNodeResult::Failed;
 
-	isDuringAttack = true;
-
 	GirlDoll->Attack_Melee();
+	IsAttacking = true;
+	GirlDoll->OnAttackEnd.AddLambda([this]() -> void {
+		IsAttacking = false;
+	});
 	
-	
-	//isDuringAttack = false;
 
-
-	return EBTNodeResult::InProgress;
+		return EBTNodeResult::InProgress;
+	//return EBTNodeResult::Type();
 }
-void UBTTask_GirlDollAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+
+void UBTTask_GirlDollAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSecondes)
 {
-	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-	if (!isDuringAttack)
+	Super::TickTask(OwnerComp, NodeMemory, DeltaSecondes);
+
+	if (!IsAttacking)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
+
+
+	//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	
 }

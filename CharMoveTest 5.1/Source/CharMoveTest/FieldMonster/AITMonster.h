@@ -4,31 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
-#include "CharMoveTest/TestMonsterArea.h"
-#include "RabbitDoll.generated.h"
+#include "AITMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-
-class CHARMOVETEST_API ARabbitDoll : public AMonsterBase
+class CHARMOVETEST_API AAITMonster : public AMonsterBase
 {
 	GENERATED_BODY()
-
 public:
-
-	ARabbitDoll();
+	AAITMonster();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class USphereComponent* CollisionSphere;
-
-	virtual void BeginPlay() override;
-
-	ATestMonsterArea* FindClosestMonsterArea();
-
-	ATestMonsterArea* MyArea;
-	FVector MyAreaLocation;
-	float MyAreaSize;
-
+	
 };

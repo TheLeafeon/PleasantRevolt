@@ -4,11 +4,8 @@
 #include "CharMoveTest/FieldMonster/BTService_GirlDollDetect.h"
 #include "CharMoveTest/FieldMonster/GirlDollAIController.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
-#include "CharMoveTest/TestCharacter.h"
-#include "Components/SphereComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
-
 
 
 UBTService_GirlDollDetect::UBTService_GirlDollDetect()
@@ -16,21 +13,21 @@ UBTService_GirlDollDetect::UBTService_GirlDollDetect()
 	NodeName = TEXT("Detect");
 	Interval = 1.0f;
 }
-
 void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	
 	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
+	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
+	//AGirlDoll* ControllingGirlDoll = OwnerComp.GetPawn();
 	if (nullptr == ControllingPawn) return;
 
 	UWorld* World = ControllingPawn->GetWorld();
-	FVector Center = ControllingPawn->GetActorLocation();
+	FVector Center = BlackboardComp->GetValueAsVector("AreaPos");
 	//FVector Center = ControllingPawn->GetActorLocation();
-	//float DetectRadius = MyGirlDoll->GetMonsterAreaSize();
 
-	float DetectRadius = 600.0f;
+	float DetectRadius = BlackboardComp->GetValueAsFloat("AreaSize");;
+	//float DetectRadius = 600.0f;
 
 	if (nullptr == World) return;
 	TArray<FOverlapResult> OverlapResults;
@@ -48,14 +45,14 @@ void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	{
 		for (auto const& OverlapResult : OverlapResults)
 		{
-			ATestCharacter* PlayerableCharacter = Cast<ATestCharacter>(OverlapResult.GetActor());
+			APlayerableCharacter* PlayerableCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor());
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AGirlDollAIController::TargetKey, PlayerableCharacter);
-				//DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
+				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
 
-				//DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				//DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
+				DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
+				DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
 				return;
 			}
 		}
@@ -63,5 +60,4 @@ void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(AGirlDollAIController::TargetKey, nullptr);
 	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
-
 }
