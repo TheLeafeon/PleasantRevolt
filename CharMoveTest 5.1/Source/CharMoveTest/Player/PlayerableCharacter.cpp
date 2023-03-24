@@ -59,7 +59,11 @@ APlayerableCharacter::APlayerableCharacter()
 	Player_Attack_Far_Distance = 0.0f;
 
 	// Player Melee
-	isAttack = false;
+	bLMBDown = false;
+	bisAttack = false;
+	bIsAttackWhenAttacking = false;
+	currentCombo = 0;
+	maxCombo = 0;
 
 	// Interaction System
 	InteractionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Interaction box"));
@@ -88,7 +92,8 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	// 근거리 관련 입력
 	PlayerInputComponent->BindAction("FirstMeleeWeapon", IE_Released, this, &APlayerableCharacter::FirstMeleeWeapon);
 	PlayerInputComponent->BindAction("SecondMeleeWeapon", IE_Released, this, &APlayerableCharacter::SecondMeleeWeapon);
-	PlayerInputComponent->BindAction("MeleeAttack", IE_Released, this, &APlayerableCharacter::Attack_Melee);
+	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &APlayerableCharacter::LMBDown);
+	PlayerInputComponent->BindAction("MeleeAttack", IE_Released, this, &APlayerableCharacter::LMBUp);
 	
 	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
 
@@ -317,24 +322,92 @@ void APlayerableCharacter::FirstMeleeWeapon()
 
 void APlayerableCharacter::SecondMeleeWeapon()
 {
-	SwitchWeapon(1);
+	SwitchWeapon(SECOND_WEAPON);
+}
+
+void APlayerableCharacter::LMBDown()
+{
+	bLMBDown = true;
+
+	if (bisAttack == false)
+	{
+		Attack_Melee();
+	}
+	else if (bisAttack == true)
+	{
+		bIsAttackWhenAttacking = true;
+	}
 }
 
 void APlayerableCharacter::Attack_Melee()
 {
-	if (!isAttack)
+	//if (!bisAttack)
 	{
-		AnimInstance->PlayMeleeAttackMontage();
-		if (WeaponInterface)
+		maxCombo = CurrentWeapon->GetMaxCombo();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), maxCombo));
+
+		if (currentCombo < maxCombo)
 		{
-			WeaponInterface->Attack();
+			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
+			PlayAnimMontage(AnimInstance->Attack_AnimMontage, 1.0f, FName(*PlayerSection));
+			currentCombo++;
+			//AnimInstance->Montage_Play(AnimInstance->Attack_AnimMontage);
 		}
+		else
+		{
+			currentCombo = 0;
+		}
+		/*
+		if (!(AnimInstance->Montage_IsPlaying(AnimInstance->Attack_AnimMontage)))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("1111"));
+
+			bisAttack = true;
+			AnimInstance->Montage_Play(AnimInstance->Attack_AnimMontage);
+		}
+		//else if (AnimInstance->Montage_IsPlaying(AnimInstance->Attack_AnimMontage))
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("2222"));
+
+			AnimInstance->Montage_Play(AnimInstance->Attack_AnimMontage);
+			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
+			AnimInstance->Montage_JumpToSection(FName(*PlayerSection), AnimInstance->Attack_AnimMontage);
+		}
+		//if (WeaponInterface)
+		{
+		//	WeaponInterface->Attack();
+		}
+		*/
 	}
 }
 
 void APlayerableCharacter::Attack_Melee_End()
 {
-	isAttack = false;
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("End"));
+
+	bisAttack = false;
+}
+
+UAnimMontage* APlayerableCharacter::Get_Attack_AnimMontage()
+{
+	return AnimInstance->Attack_AnimMontage;
+}
+
+void APlayerableCharacter::Attack_Input_Checking()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("End"));
+
+	if (currentCombo >= maxCombo)
+	{
+		currentCombo = 0;
+		bIsAttackWhenAttacking = false;
+	}
+	if (bIsAttackWhenAttacking == true)
+	{
+		currentCombo++;
+		Attack_Melee();
+	}
 }
 
 void APlayerableCharacter::Attack_Shooting()
