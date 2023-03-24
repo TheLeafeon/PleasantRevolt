@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MonsterBase.h"
+#include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "Kismet/GameplayStatics.h"
-#include "TestMonsterArea.h"
+#include "CharMoveTest/TestMonsterArea.h"
 
 // Sets default values
 AMonsterBase::AMonsterBase()

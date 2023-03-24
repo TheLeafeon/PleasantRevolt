@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTService.h"
-#include "TestMonsterArea.h"
+#include "CharMoveTest/TestMonsterArea.h"
 #include "BTService_DragonDollDetect.generated.h"
 
 /**

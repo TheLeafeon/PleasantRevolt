@@ -4,20 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-
-#include "BTTask_GirlDollFindPatrolPos.generated.h"
+#include "BTTask_GirlDollAttack.generated.h"
 
 /**
- *
+ * 
  */
 UCLASS()
-class CHARMOVETEST_API UBTTask_GirlDollFindPatrolPos : public UBTTaskNode
+class CHARMOVETEST_API UBTTask_GirlDollAttack : public UBTTaskNode
 {
 	GENERATED_BODY()
 public:
-	UBTTask_GirlDollFindPatrolPos();
+	UBTTask_GirlDollAttack();
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
+protected:
+	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSecondes) override;
 
+private:
+	bool IsAttacking = false;
+	
 };

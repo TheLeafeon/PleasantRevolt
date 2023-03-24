@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MonsterBase.h"
-#include "RabbitDollAIController.h"
+#include "CharMoveTest/FieldMonster/MonsterBase.h"
+#include "CharMoveTest/TestMonsterArea.h"
 #include "RabbitDoll.generated.h"
 
 /**
  * 
  */
 UCLASS()
+
 class CHARMOVETEST_API ARabbitDoll : public AMonsterBase
 {
 	GENERATED_BODY()
@@ -21,5 +22,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class USphereComponent* CollisionSphere;
+
+	virtual void BeginPlay() override;
+
+	ATestMonsterArea* FindClosestMonsterArea();
+
+	ATestMonsterArea* MyArea;
+	FVector MyAreaLocation;
+	float MyAreaSize;
 
 };

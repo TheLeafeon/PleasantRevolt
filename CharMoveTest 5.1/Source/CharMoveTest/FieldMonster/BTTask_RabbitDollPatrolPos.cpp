@@ -1,17 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_GirlDollFindPatrolPos.h"
-#include "GirlDollAIController.h"
+#include "CharMoveTest/FieldMonster/BTTask_RabbitDollPatrolPos.h"
+#include "CharMoveTest/FieldMonster/RabbitDollAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "NavigationSystem.h"
 
 
-UBTTask_GirlDollFindPatrolPos::UBTTask_GirlDollFindPatrolPos()
+UBTTask_RabbitDollPatrolPos::UBTTask_RabbitDollPatrolPos()
 {
 	NodeName = TEXT("FindPatrolPos");
 }
-EBTNodeResult::Type UBTTask_GirlDollFindPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+
+
+EBTNodeResult::Type UBTTask_RabbitDollPatrolPos::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
@@ -24,15 +26,14 @@ EBTNodeResult::Type UBTTask_GirlDollFindPatrolPos::ExecuteTask(UBehaviorTreeComp
 	if (nullptr == NavSystem)
 		return EBTNodeResult::Failed;
 
-	FVector Origin = OwnerComp.GetBlackboardComponent()->GetValueAsVector(AGirlDollAIController::HomePosKey);
+	FVector Origin = OwnerComp.GetBlackboardComponent()->GetValueAsVector(ARabbitDollAIController::HomePosKey);
 	FNavLocation NextPatrol;
 
-	if (NavSystem->GetRandomPointInNavigableRadius(Origin, 500.0f, NextPatrol))
+	if (NavSystem->GetRandomPointInNavigableRadius(Origin, 200.0f, NextPatrol))
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(AGirlDollAIController::PatrolPosKey, NextPatrol.Location);
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(ARabbitDollAIController::PatrolPosKey, NextPatrol.Location);
 		return EBTNodeResult::Succeeded;
 	}
 
 	return EBTNodeResult::Failed;
 }
-

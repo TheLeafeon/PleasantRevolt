@@ -4,32 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "GirlDollAIController.generated.h"
+#include "AITMonsterAIController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CHARMOVETEST_API AGirlDollAIController : public AAIController
+class CHARMOVETEST_API AAITMonsterAIController : public AAIController
 {
 	GENERATED_BODY()
-
 public:
-	AGirlDollAIController();
+	AAITMonsterAIController();
 
-
-	virtual void OnPossess(APawn* InPawn) override;
+	virtual void OnPossess(APawn* InPawn)override;
 
 	static const FName HomePosKey;
-	static const FName PatrolPosKey;
 	static const FName TargetKey;
-
-
 private:
 	UPROPERTY()
-		class UBehaviorTree* BTGirlDoll;
-
+		class UBehaviorTree* BTAITMonster;
 	UPROPERTY()
-		class UBlackboardData* BBGirlDoll;
+		class UBlackboardData* BBAITMonster;
 
+	
 };

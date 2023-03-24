@@ -1,34 +1,27 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTService_GirlDollDetect.h"
-#include "GirlDollAIController.h"
-#include "Player/PlayerableCharacter.h"
-#include "TestCharacter.h"
-#include "Components/SphereComponent.h"
+#include "CharMoveTest/FieldMonster/BTService_AITMonsterDetect.h"
+#include "CharMoveTest/FieldMonster/AITMonsterAIController.h"
+#include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 
-
-
-UBTService_GirlDollDetect::UBTService_GirlDollDetect()
+UBTService_AITMonsterDetect::UBTService_AITMonsterDetect()
 {
 	NodeName = TEXT("Detect");
 	Interval = 1.0f;
 }
 
-void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UBTService_AITMonsterDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	
 	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (nullptr == ControllingPawn) return;
 
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = ControllingPawn->GetActorLocation();
-	//FVector Center = ControllingPawn->GetActorLocation();
-	//float DetectRadius = MyGirlDoll->GetMonsterAreaSize();
 
 	float DetectRadius = 600.0f;
 
@@ -48,20 +41,16 @@ void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	{
 		for (auto const& OverlapResult : OverlapResults)
 		{
-			ATestCharacter* PlayerableCharacter = Cast<ATestCharacter>(OverlapResult.GetActor());
+			APlayerableCharacter* PlayerableCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor());
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AGirlDollAIController::TargetKey, PlayerableCharacter);
-				//DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
-
-				//DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				//DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AAITMonsterAIController::TargetKey, PlayerableCharacter);
 				return;
 			}
 		}
 	}
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsObject(AGirlDollAIController::TargetKey, nullptr);
+	OwnerComp.GetBlackboardComponent()->SetValueAsObject(AAITMonsterAIController::TargetKey, nullptr);
 	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
 
 }
