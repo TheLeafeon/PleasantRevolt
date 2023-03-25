@@ -46,7 +46,7 @@ float ASampleEnemy::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, AC
 		hp -= getDamage;
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Debug %d"), hp));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Debug %d"), hp));
 
 	return 0.0f;
 }

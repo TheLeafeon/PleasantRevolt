@@ -17,6 +17,16 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 		Attack_AnimMontage = MELEEATTACK_MONTAGE.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON1_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/ComboAttack1.ComboAttack1"));
+	if (NEARWEAPON1_MONTGE.Succeeded())
+	{
+		NearWeapon1_AnimMontage = NEARWEAPON1_MONTGE.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON2_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/ComboAttack2.ComboAttack2"));
+	if (NEARWEAPON2_MONTGE.Succeeded())
+	{
+		NearWeapon2_AnimMontage = NEARWEAPON2_MONTGE.Object;
+	}
 	//static ConstructorHelpers::FObjectFinder<UAnimMontage> BEHIT_MONTAGE(TEXT("));
 	//if (BEHIT_MONTAGE.Succeeded())
 	//{

@@ -32,5 +32,9 @@ public :
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* Attack_AnimMontage;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* NearWeapon1_AnimMontage;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* NearWeapon2_AnimMontage;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* Death_AnimMontage;
 };
