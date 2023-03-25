@@ -28,7 +28,6 @@ AWeaponBase::AWeaponBase()
 	WeaponName = "";
 
 	MyPawn = Cast<APlayerableCharacter>(StaticClass());
-	isAttacking = false;
 }
 
 // Called when the game starts or when spawned
@@ -43,22 +42,6 @@ void AWeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void AWeaponBase::StartAttack()
-{
-	float AttackAnimDurtion = MyPawn->PlayAnimMontage(MyPawn->Get_Attack_AnimMontage());
-
-	isAttacking = true;
-
-	FTimerHandle TimerHandle_StopAttack;
-	GetWorldTimerManager().SetTimer(TimerHandle_StopAttack, this, &AWeaponBase::StopAttack, AttackAnimDurtion, false);
-}
-
-void AWeaponBase::StopAttack()
-{
-	MyPawn->StopAnimMontage(MyPawn->Get_Attack_AnimMontage());
-	isAttacking = false;
 }
 
 void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)

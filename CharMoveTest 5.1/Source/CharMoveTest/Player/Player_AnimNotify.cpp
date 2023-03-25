@@ -11,8 +11,8 @@ void UPlayer_AnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequ
 		if (Player != NULL)
 		{
 			Player->bisAttack = false;
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("CanNextCombo"));
-			Player->Attack_Melee_End();
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("NotifyBegin"));
+
 		}
 	}
 }
@@ -24,8 +24,7 @@ void UPlayer_AnimNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequen
 		APlayerableCharacter* Player = Cast<APlayerableCharacter>(MeshComp->GetOwner());
 		if (Player != NULL)
 		{
-			Player->Attack_Melee_End();
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("EndAttack"));
+			//Player->Attack_Melee_End();
 		}
 	}
 }

@@ -54,20 +54,14 @@ APlayerableCharacter::APlayerableCharacter()
 
 	// Player Status
 	Player_HP = 4.0f;
-	Player_Speed = 0.0f;
-	Player_Roll_Test = 600.0f;
-	Player_Attack_Power = 0.0f;
-	Player_Attack_Near_Distance = 0.0f;
-	Player_Attack_Far_Distance = 0.0f;
+	Player_Roll_Time = 600.0f;
 
 	// Player Dodge
 	Player_Dodge_Time = 1.0f;
 	isDodge = false;
 
 	// Player Melee
-	bLMBDown = false;
 	bisAttack = false;
-	bIsAttackWhenAttacking = false;
 	currentCombo = 0;
 	maxCombo = 0;
 
@@ -122,7 +116,6 @@ void APlayerableCharacter::LookUpAtRate(float Rate)
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
-
 
 void APlayerableCharacter::MoveForward(float Value)
 {
@@ -188,6 +181,7 @@ void APlayerableCharacter::BeginPlay()
 	{
 		MeleeWeaponsArray.Add(CurrentWeapon);
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
+		maxCombo = CurrentWeapon->GetMaxCombo();
 	}
 	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SecondWeapon, SpawnParams))
 	{
@@ -236,7 +230,6 @@ void APlayerableCharacter::Tick(float DeltaTime)
 }
 
 //=============== Test Player HP =============== //
-
 float APlayerableCharacter::Get_Player_HP()
 {
 	return Player_HP;
@@ -263,7 +256,7 @@ void APlayerableCharacter::DodgeEnd()
 	isDodge = false;
 }
 
-//=============== Melee Attack =============== //
+//=============== player get Damage =============== //
 
 void APlayerableCharacter::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APawn* PawnInstigator, AActor* DamageCauser)
 {
@@ -342,6 +335,8 @@ void APlayerableCharacter::DeathEnd()
 	SetLifeSpan(0.1f);
 }
 
+//=============== Weapon & Switching System =============== //
+
 void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 {
 	if (CurrentWeapon)
@@ -368,6 +363,7 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		}
 
 		maxCombo = CurrentWeapon->GetMaxCombo();
+		currentCombo = 0;
 	}
 }
 
@@ -381,19 +377,7 @@ void APlayerableCharacter::SecondMeleeWeapon()
 	SwitchWeapon(SECOND_WEAPON);
 }
 
-void APlayerableCharacter::LMBDown()
-{
-	bLMBDown = true;
-
-	if (bisAttack == false)
-	{
-		Attack_Melee();
-	}
-	else if (bisAttack == true)
-	{
-		bIsAttackWhenAttacking = true;
-	}
-}
+//===============  Player Melee Attack =============== //
 
 void APlayerableCharacter::Attack_Melee()
 {
@@ -410,33 +394,17 @@ void APlayerableCharacter::Attack_Melee()
 		}
 		else
 		{
-			currentCombo = 0;
+			Attack_Melee_End();
 		}
 	}
 }
 
 void APlayerableCharacter::Attack_Melee_End()
 {
+	currentCombo = 0;
 	bisAttack = false;
-}
-
-UAnimMontage* APlayerableCharacter::Get_Attack_AnimMontage()
-{
-	return AnimInstance->Attack_AnimMontage;
-}
-
-void APlayerableCharacter::Attack_Input_Checking()
-{
-	if (currentCombo > maxCombo)
-	{
-		currentCombo = 0;
-		bIsAttackWhenAttacking = false;
-	}
-	if (bIsAttackWhenAttacking == true)
-	{
-		currentCombo++;
-		Attack_Melee();
-	}
+	
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("ResetCombo"));
 }
 
 void APlayerableCharacter::Attack_Shooting()

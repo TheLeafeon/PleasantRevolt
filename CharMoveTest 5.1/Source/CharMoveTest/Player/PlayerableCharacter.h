@@ -7,13 +7,10 @@
 #include "InteractionInterface.h"
 #include "WeaponInterface.h"
 #include "WeaponBase.h"
-//#include "NearWeapon1.h"
 #include "Components/BoxComponent.h"
 #include "Components/TimeLineComponent.h"
 #include "GameFramework/Character.h"
 #include "PlayerableCharacter.generated.h"
-
-//class UCurveFloat;
 
 UCLASS()
 class CHARMOVETEST_API APlayerableCharacter : public ACharacter
@@ -43,16 +40,13 @@ protected:
 
 	void Tick(float DeltaTime) override;
 
-	/** Resets HMD orientation in VR. */
-	void OnResetVR();
-
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
-	/**
+	/*
 	 * Called via input to turn at a given rate.
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
@@ -108,15 +102,7 @@ private :
 	UPROPERTY(EditAnywhere, Category = "Status")
 		float Player_HP;
 	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Speed;
-	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Roll_Test;
-	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Attack_Power;
-	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Attack_Near_Distance;
-	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Attack_Far_Distance;
+		float Player_Roll_Time;
 
 /* Player Dodge */
 	UPROPERTY(EditAnywhere, Category = "Status")
@@ -149,13 +135,14 @@ public :
 
 /* Player Attack 관련 */
 public :
-	bool bisAttack;
-	int32 currentCombo;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
+		bool bisAttack;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
+		int32 currentCombo;
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee_End();
 
-	UAnimMontage* Get_Attack_AnimMontage();
 private :
 	// Weapon관련 interface
 	IWeaponInterface* WeaponInterface;
@@ -182,17 +169,10 @@ private :
 	void FirstMeleeWeapon();
 	void SecondMeleeWeapon();
 
-	bool bLMBDown;
-	bool bIsAttackWhenAttacking;
 	int32 maxCombo;
-
-	void LMBDown();
-	FORCEINLINE void LMBUp() { bLMBDown = false; }
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee();
-	UFUNCTION(BlueprintCallable)
-		void Attack_Input_Checking();
 	UFUNCTION(BlueprintCallable)
 		void Attack_Shooting();
 
