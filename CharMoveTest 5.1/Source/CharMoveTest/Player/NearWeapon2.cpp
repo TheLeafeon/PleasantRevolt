@@ -11,6 +11,8 @@ ANearWeapon2::ANearWeapon2()
 	WeaponMaxCombo = 2;
 	WeaponAttackNearDistance = 3.0f;
 	WeaponAttackTime = 3.0f;
+
+	WeaponName = "NearWeapon2";
 }
 
 void ANearWeapon2::BeginPlay()

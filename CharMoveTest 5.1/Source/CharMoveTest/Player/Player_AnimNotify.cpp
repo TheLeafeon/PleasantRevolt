@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PlayerableCharacter.h"
 #include "Player_AnimNotify.h"
+#include "PlayerableCharacter.h"
 
 void UPlayer_AnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDurtion)
 {
@@ -10,7 +10,9 @@ void UPlayer_AnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequ
 		APlayerableCharacter* Player = Cast<APlayerableCharacter>(MeshComp->GetOwner());
 		if (Player != NULL)
 		{
-			Player->bisAttack = true;
+			Player->bisAttack = false;
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("NotifyBegin"));
+
 		}
 	}
 }
@@ -22,8 +24,7 @@ void UPlayer_AnimNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequen
 		APlayerableCharacter* Player = Cast<APlayerableCharacter>(MeshComp->GetOwner());
 		if (Player != NULL)
 		{
-			Player->Attack_Melee_End();
-			Player->bisAttack = false;
+			//Player->Attack_Melee_End();
 		}
 	}
 }
