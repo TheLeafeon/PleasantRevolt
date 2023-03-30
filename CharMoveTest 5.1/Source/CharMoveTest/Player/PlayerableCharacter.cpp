@@ -9,9 +9,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "CharMoveTest/Interaction/HandUP.h"
 
 // Sets default values
-APlayerableCharacter::APlayerableCharacter()
+APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocation(0)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -121,13 +122,23 @@ void APlayerableCharacter::MoveForward(float Value)
 {
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		if (isLadder)
+		{
+			LadderMove(Value);
+			
+		}
+		else
+		{
+			// find out which way is forward
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
+			// get forward vector
+			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+			AddMovementInput(Direction, Value);
+		}
+		
+
 	}
 }
 
@@ -135,14 +146,24 @@ void APlayerableCharacter::MoveRight(float Value)
 {
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
+		if (isLadder)
+		{
+			LadderMove(Value);
+			
+		}
+		else
+		{
+			// find out which way is right
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get right vector 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
-		AddMovementInput(Direction, Value);
+			// get right vector 
+			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+			// add movement in that direction
+			AddMovementInput(Direction, Value);
+		}
+
+		
 	}
 }
 
@@ -512,4 +533,61 @@ void APlayerableCharacter::OnInteract()
 	{
 		Interface->InteractWithMe();
 	}
+}
+
+void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
+{
+
+
+	if (OtherActor)
+	{
+		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("handUp"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
+	}
+
+}
+
+void APlayerableCharacter::LadderMove(float Value)
+{
+	/*
+	// find out which way is forward
+	const FRotator Rotation = Controller->GetControlRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// get forward vector
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
+	AddMovementInput(Direction, Value);
+	*/
+
+	if (Value > 0)
+	{
+		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed));
+	}
+	else if (Value < 0)
+	{
+		if (GetActorLocation().Z <= SaveZLocation)
+		{
+			SetLadderMoveFalse();
+		}
+		//바닥에 닿으면 멈추게 해야함 + 바닥에 닿으면 사다리와 분리
+		//펠링으로 한 다음 떨어짐 상태 체크해놓고 떨어짐 상태면 다시 워킹 상태 + 로더 상태 체크 해제?
+		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed * -1));
+		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
+	}
+	
+}
+
+void APlayerableCharacter::SetLadderMoveTrue()
+{
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+	isLadder = true;
+	//이때 로케이션을 저장해두고 로케이션 Z축 이하게 되면 강제로 원래 로케이션으로 돌리고 False호출
+	SaveZLocation = GetActorLocation().Z;
+}
+
+void APlayerableCharacter::SetLadderMoveFalse()
+{
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	isLadder = false;
 }

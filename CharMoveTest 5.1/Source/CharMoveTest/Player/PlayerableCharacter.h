@@ -203,4 +203,25 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	//virtual void CharacterMovementComponent() override;
+
+	//HandUp관련
+	UFUNCTION()
+	void PlayerHandUp(AActor* OtherActor);
+private:
+	//Ladder관련
+	UPROPERTY()
+	bool isLadder;
+	UFUNCTION()
+	void LadderMove(float Value);
+	UPROPERTY()
+	float SaveZLocation;
+public:
+	UPROPERTY(EditAnywhere)
+	float LadderMoveSpeed;
+	UFUNCTION(BlueprintCallable)
+	void SetLadderMoveTrue();
+	UFUNCTION(BlueprintCallable)
+	void SetLadderMoveFalse();
 };

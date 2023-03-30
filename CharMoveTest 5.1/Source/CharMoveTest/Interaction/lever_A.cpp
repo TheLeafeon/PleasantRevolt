@@ -28,6 +28,7 @@ void Alever_A::Tick(float DeltaTime)
 void Alever_A::InteractWithMe()
 {
 	// On/Off 상호작용
+	/*
 	if (bIsOn)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Interact"));
@@ -37,17 +38,18 @@ void Alever_A::InteractWithMe()
 	{
 		bIsOn = true;
 	}
+	*/
 }
 
 void Alever_A::ShowInteractionWidget()
 {
-	InteractionWidget->SetVisibility(true);
+	//InteractionWidget->SetVisibility(true);
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("You press E"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("You press E"));
 
 }
 
 void Alever_A::HideInteractionWidget()
 {
-	InteractionWidget->SetVisibility(false);
+	//InteractionWidget->SetVisibility(false);
 }

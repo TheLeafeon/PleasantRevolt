@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "InteractionInterface.h"
+#include "CharMoveTest/Player/InteractionInterface.h"
 #include "lever_A.generated.h"
 
 UCLASS()
