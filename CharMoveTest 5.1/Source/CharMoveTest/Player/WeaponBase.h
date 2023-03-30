@@ -25,6 +25,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void MeleeAttacking();
+
 protected :
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
 		float PlayerAttackPower;
@@ -48,7 +50,7 @@ private :
 	UPROPERTY(EditAnywhere)
 		class UBoxComponent* WeaponCollision;
 
-
+	bool isAttacking;
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }
 	int32 GetMaxCombo() { return WeaponMaxCombo; }

@@ -171,23 +171,27 @@ void APlayerableCharacter::BeginPlay()
 	AnimInstance = Cast<UPlayerAnimInstnce>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
 		return;
-	
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NotReturn"));
+
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 
 	CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(FirstWeapon, SpawnParams);
-	CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
 	if (CurrentWeapon)
 	{
 		MeleeWeaponsArray.Add(CurrentWeapon);
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
+		CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
 		maxCombo = CurrentWeapon->GetMaxCombo();
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon1"));
 	}
 	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SecondWeapon, SpawnParams))
 	{
 		Weapon->GetWeponMesh()->SetHiddenInGame(true);
 		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
 		MeleeWeaponsArray.Add(Weapon);
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon2"));
 	}
 
 	// initialize the timeline and the curve float
@@ -458,7 +462,7 @@ void APlayerableCharacter::Rolling()
 	//PlayerController->bShowMouseCursor = true;
 	PlayerController->DisableInput(PlayerController);
 
-	AnimInstance->PlaySampleMontage();
+	AnimInstance->PlayRollingMontage();
 
 	RollTimeline = FTimeline{};
 	FOnTimelineFloat RollCurveUpdate;

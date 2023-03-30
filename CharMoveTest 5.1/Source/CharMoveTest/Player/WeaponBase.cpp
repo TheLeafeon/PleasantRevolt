@@ -26,6 +26,7 @@ AWeaponBase::AWeaponBase()
 	WeaponAttackNearDistance = 0.0f;
 	WeaponAttackTime = 0;
 	WeaponName = "";
+	isAttacking = false;
 
 	MyPawn = Cast<APlayerableCharacter>(StaticClass());
 }
@@ -44,15 +45,27 @@ void AWeaponBase::Tick(float DeltaTime)
 
 }
 
+void AWeaponBase::MeleeAttacking()
+{
+	isAttacking = true;
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot");
+
+}
+
 void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	APlayerableCharacter* MyPlayer = Cast<APlayerableCharacter>(StaticClass());
-
-	if (OtherActor->IsA(AActor::StaticClass()) && !OtherActor->IsA(APlayerableCharacter::StaticClass())/*&& isAttacking == true*/)
+	if (isAttacking)
 	{
-		UGameplayStatics::ApplyDamage(OtherActor, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot Damage");
+		APlayerableCharacter* MyPlayer = Cast<APlayerableCharacter>(StaticClass());
+
+		if (OtherActor->IsA(AActor::StaticClass()) && !OtherActor->IsA(APlayerableCharacter::StaticClass())/*&& isAttacking == true*/)
+		{
+			UGameplayStatics::ApplyDamage(OtherActor, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot Damage");
+		}
+	isAttacking = false;
 	}
+
 }

@@ -5,16 +5,10 @@
 
 UPlayerAnimInstnce::UPlayerAnimInstnce()
 {
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> SAMPLE_MONTAGE(TEXT("/Game/PlayerTest/Samples/RetargetAnimation/Rolling_Montage.Rolling_Montage"));
-	if (SAMPLE_MONTAGE.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Rolling_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/Dive_Roll_Montage.Dive_Roll_Montage"));
+	if (Rolling_MONTAGE.Succeeded())
 	{
-		Sample = SAMPLE_MONTAGE.Object;
-	}
-
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> MELEEATTACK_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/ComboAttack1.ComboAttack1"));
-	if (MELEEATTACK_MONTAGE.Succeeded())
-	{
-		Attack_AnimMontage = MELEEATTACK_MONTAGE.Object;
+		Rolling_AnimMontage = Rolling_MONTAGE.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON1_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/Nearweapon1_Combo_Montage.Nearweapon1_Combo_Montage"));
@@ -33,22 +27,16 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 	//	BeHit_AnimMontage = BEHIT_MONTAGE.Object;
 	//}
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> DEATH_MONTAGE(TEXT("/Game/PlayerTest/Samples/RetargetAnimation/Dying_Montage.Dying_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> DEATH_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/Player_Death_Montage.Player_Death_Montage"));
 	if (DEATH_MONTAGE.Succeeded())
 	{
 		Death_AnimMontage = DEATH_MONTAGE.Object;
 	}
 }
 
-void UPlayerAnimInstnce::PlaySampleMontage()
+void UPlayerAnimInstnce::PlayRollingMontage()
 {
-	Montage_Play(Sample, 1.0f);
-}
-
-void UPlayerAnimInstnce::PlayMeleeAttackMontage()
-{
-	Montage_Play(Attack_AnimMontage, 1.0f);
-	
+	Montage_Play(Rolling_AnimMontage, 1.0f);
 }
 
 void UPlayerAnimInstnce::PlayBeHitMontage()
