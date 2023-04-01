@@ -22,16 +22,19 @@ public:
 	void PlayDeathMontage();
 
 private :
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Rolling, Meta = (AllowPrivateAccess = true))
-		UAnimMontage* Rolling_AnimMontage;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* BeHit_AnimMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Rolling, Meta = (AllowPrivateAccess = true))
+		float Roll_Animation_Speed;
+
 public :
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Rolling, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* Rolling_AnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* NearWeapon1_AnimMontage;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* NearWeapon2_AnimMontage;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* Death_AnimMontage;
 };

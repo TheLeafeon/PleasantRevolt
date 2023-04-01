@@ -5,11 +5,12 @@
 
 UPlayerAnimInstnce::UPlayerAnimInstnce()
 {
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> Rolling_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/Dive_Roll_Montage.Dive_Roll_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Rolling_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/Rolling_Montage.Rolling_Montage"));
 	if (Rolling_MONTAGE.Succeeded())
 	{
 		Rolling_AnimMontage = Rolling_MONTAGE.Object;
 	}
+	Roll_Animation_Speed = 1.0f;
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON1_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/Nearweapon1_Combo_Montage.Nearweapon1_Combo_Montage"));
 	if (NEARWEAPON1_MONTGE.Succeeded())
@@ -36,7 +37,7 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 
 void UPlayerAnimInstnce::PlayRollingMontage()
 {
-	Montage_Play(Rolling_AnimMontage, 1.0f);
+	Montage_Play(Rolling_AnimMontage, Roll_Animation_Speed);
 }
 
 void UPlayerAnimInstnce::PlayBeHitMontage()

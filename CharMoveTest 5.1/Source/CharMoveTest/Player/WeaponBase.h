@@ -25,7 +25,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void MeleeAttacking();
+	UFUNCTION(BlueprintCallable)
+		virtual void Attack_Enemy() override;
 
 protected :
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")

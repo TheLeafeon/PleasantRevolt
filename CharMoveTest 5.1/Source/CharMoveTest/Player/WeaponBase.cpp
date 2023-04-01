@@ -45,7 +45,7 @@ void AWeaponBase::Tick(float DeltaTime)
 
 }
 
-void AWeaponBase::MeleeAttacking()
+void AWeaponBase::Attack_Enemy()
 {
 	isAttacking = true;
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot");
