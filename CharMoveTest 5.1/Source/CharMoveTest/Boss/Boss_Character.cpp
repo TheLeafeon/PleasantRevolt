@@ -82,7 +82,11 @@ void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, 
 
 void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
+	//ABossAIController::PauseBehaviorTree();
+	SetActorTickEnabled(false); //비헤이비어 트리를 중지
 
+	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+	GetMesh()->SetSimulatePhysics(true);
 }
 
 void ABoss_Character::HPHalf()
