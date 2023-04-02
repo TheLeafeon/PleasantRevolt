@@ -7,13 +7,10 @@
 #include "InteractionInterface.h"
 #include "WeaponInterface.h"
 #include "WeaponBase.h"
-#include "NearWeapon1.h"
 #include "Components/BoxComponent.h"
 #include "Components/TimeLineComponent.h"
 #include "GameFramework/Character.h"
 #include "PlayerableCharacter.generated.h"
-
-//class UCurveFloat;
 
 UCLASS()
 class CHARMOVETEST_API APlayerableCharacter : public ACharacter
@@ -43,16 +40,13 @@ protected:
 
 	void Tick(float DeltaTime) override;
 
-	/** Resets HMD orientation in VR. */
-	void OnResetVR();
-
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
-	/**
+	/*
 	 * Called via input to turn at a given rate.
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
@@ -67,7 +61,9 @@ protected:
 private :
 	// 플레이어의 애니메이션을 저장해둔 것
 	UPlayerAnimInstnce* AnimInstance;
-
+	APlayerController* PlayerController;
+	// Timer남은시간
+	float RemainingTime;
 /* Player Rolling */
 protected :
 	// Player Roll Function
@@ -93,7 +89,7 @@ protected :
 	float RollAnimationLength = 1.0f;
 
 	// 타이머 설정을 위한 TimerHandle
-	FTimerHandle TimerHandle;
+	FTimerHandle RollTimerHandle;
 	
 	float UpdateRollCurve(float Value);
 	// 구르는 상태인지 확인
@@ -107,16 +103,17 @@ private :
 	UPROPERTY(EditAnywhere, Category = "Status")
 		float Player_HP;
 	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Speed;
-	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Roll_Test;
-	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Attack_Power;
-	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Attack_Near_Distance;
-	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_Attack_Far_Distance;
+		float Player_Roll_Time;
 
+/* Player Dodge */
+	UPROPERTY(EditAnywhere, Category = "Status")
+		float Player_Dodge_Time;
+
+	FTimerHandle DodgeTimerHandle;
+
+	void DodgeStart(const float& time);
+	void DodgeEnd();
+	bool isDodge;
 /* Player Get Damage & Die 관련 */
 public :
 	// 플레이어의 체력을 밖으로 보내기 위위해서 작성
@@ -129,14 +126,25 @@ public :
 	// 히트 판정
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 	// Get Damage
-	UFUNCTION(BlueprintCallable)
-		virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	// 플레이어 사망
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	// 플레이어 사망 애니메이션 종료 시 발생하는 함수
 	void DeathEnd();
 
+	FTimerHandle DeathTimerHandle;
+
 /* Player Attack 관련 */
+public :
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
+		bool bisAttack;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
+		int32 currentCombo;
+
+	UFUNCTION(BlueprintCallable)
+		void Attack_Melee_End();
+	UFUNCTION(BlueprintCallable)
+		void Attack_Enemy();
 private :
 	// Weapon관련 interface
 	IWeaponInterface* WeaponInterface;
@@ -157,19 +165,18 @@ private :
 	// 현재 장착중인 무기 확인용
 	UPROPERTY(VisibleAnywhere, Category = "Weapons")
 		class AWeaponBase* CurrentWeapon;
-
-	bool isAttack;
+	class UAnimMontage* CurrentWeaponComboAnim;
 
 	void SwitchWeapon(int32 WeaponIndex);
 	void FirstMeleeWeapon();
 	void SecondMeleeWeapon();
 
+	int32 maxCombo;
+
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee();
-	void Attack_Melee_End();
 	UFUNCTION(BlueprintCallable)
 		void Attack_Shooting();
-
 
 /* Interaction System 관련 */
 private :
