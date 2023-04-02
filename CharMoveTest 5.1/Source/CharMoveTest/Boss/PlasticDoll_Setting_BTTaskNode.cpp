@@ -10,7 +10,8 @@ UPlasticDoll_Setting_BTTaskNode::UPlasticDoll_Setting_BTTaskNode()
 
 EBTNodeResult::Type UPlasticDoll_Setting_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::isRotate, false);
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey2::player, PlayerPawn);
 
 	return EBTNodeResult::Succeeded;
 }
