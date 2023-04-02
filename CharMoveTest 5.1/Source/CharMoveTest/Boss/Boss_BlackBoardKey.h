@@ -19,3 +19,8 @@ namespace bossKey
 	TCHAR const* const setRotation = TEXT("SetRotation");
 	TCHAR const* const isRotate = TEXT("IsRotate");
 }
+
+namespace bossKey2
+{
+	TCHAR const* const player = TEXT("Player");
+}

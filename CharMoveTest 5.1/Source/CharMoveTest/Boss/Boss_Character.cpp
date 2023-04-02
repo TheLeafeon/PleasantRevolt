@@ -9,7 +9,7 @@ ABoss_Character::ABoss_Character() : BossHP(20.0f), MaxBossHP(20.0f), isSpawn(fa
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> FallObj_Spawn(TEXT("Blueprint'/Game/Boss/FallObj_Spawn.FallObj_Spawn'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> FallObj_Spawn(TEXT("Blueprint'/Game/Boss/1Stage/FallObj_Spawn.FallObj_Spawn'"));
 	if (FallObj_Spawn.Object)
 	{
 		FallObj_Spawn_Blueprint = (UClass*)FallObj_Spawn.Object->GeneratedClass;

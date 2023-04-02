@@ -5,13 +5,13 @@
 
 ABossAIController::ABossAIController() : BlackboardComp(Blackboard)
 {
-	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT("/Game/Boss/BearDoll_BlackboardData.BearDoll_BlackboardData"));
+	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT("/Game/Boss/1Stage/BearDoll_BlackboardData.BearDoll_BlackboardData"));
 	if (BBObject.Succeeded())
 	{
 		BBAsset = BBObject.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/Boss/BearDoll_BehaviorTree.BearDoll_BehaviorTree"));
+	static ConstructorHelpers::FObjectFinder<UBehaviorTree> BTObject(TEXT("/Game/Boss/1Stage/BearDoll_BehaviorTree.BearDoll_BehaviorTree"));
 	if (BTObject.Succeeded())
 	{
 		BTAsset = BTObject.Object;
