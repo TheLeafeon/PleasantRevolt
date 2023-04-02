@@ -71,6 +71,7 @@ APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocat
 	InteractionBox->SetupAttachment(RootComponent);
 
 	Interface = nullptr;
+	WeaponInterface = nullptr;
 }
 
 // Called to bind functionality to input
@@ -186,29 +187,33 @@ void APlayerableCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	PlayerController->bShowMouseCursor = true;
 
 	AnimInstance = Cast<UPlayerAnimInstnce>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
 		return;
-	
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NotReturn"));
+
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 
 	CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(FirstWeapon, SpawnParams);
-	CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
 	if (CurrentWeapon)
 	{
 		MeleeWeaponsArray.Add(CurrentWeapon);
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
+		CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
 		maxCombo = CurrentWeapon->GetMaxCombo();
+
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon1"));
 	}
 	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SecondWeapon, SpawnParams))
 	{
 		Weapon->GetWeponMesh()->SetHiddenInGame(true);
 		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
 		MeleeWeaponsArray.Add(Weapon);
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon2"));
 	}
 
 	// initialize the timeline and the curve float
@@ -419,12 +424,20 @@ void APlayerableCharacter::Attack_Melee()
 		}
 	}
 }
+void APlayerableCharacter::Attack_Enemy()
+{
+	WeaponInterface = Cast<IWeaponInterface>(CurrentWeapon);
+
+	if (WeaponInterface)
+	{
+		WeaponInterface->Attack_Enemy();
+	}
+}
 
 void APlayerableCharacter::Attack_Melee_End()
 {
 	currentCombo = 0;
 	bisAttack = false;
-	
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("ResetCombo"));
 }
 
@@ -450,47 +463,36 @@ float APlayerableCharacter::UpdateRollCurve(float Value)
 
 void APlayerableCharacter::EnableInputAfterRoll()
 {
-	GetCharacterMovement()->StopMovementImmediately();
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	/*
-	PlayerController->InputComponent->ClearBindingValues();
-	PlayerController->InputComponent->ClearActionBindings();
-	PlayerController->InputComponent->AxisBindings.Empty();
-*/
-	GetCharacterMovement()->Velocity = FVector::ZeroVector;
+	//GetCharacterMovement()->StopMovementImmediately();
+	//GetCharacterMovement()->Velocity = FVector::ZeroVector;
 	// Re-enable input after rolling
-	PlayerController->SetInputMode(FInputModeGameOnly());
-	PlayerController->EnableInput(PlayerController);
-	PlayerController->FlushPressedKeys();
+	//PlayerController->SetInputMode(FInputModeGameOnly());
+
+	//PlayerController->EnableInput(PlayerController);
+	//PlayerController->FlushPressedKeys();
 	bIsRolling = false;
 }
 
 void APlayerableCharacter::Rolling()
 {
-	if (bIsRolling || (GetCharacterMovement()->IsFalling()))
+	if (bIsRolling || (GetCharacterMovement()->IsFalling()) || GetCharacterMovement()->Velocity == FVector::ZeroVector)
 	{
 		return;
 	}
 
 	bIsRolling = true;
-
-	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	/*
 	PlayerController->SetInputMode(FInputModeUIOnly());
-	//PlayerController->bShowMouseCursor = true;
 	PlayerController->DisableInput(PlayerController);
-
-	AnimInstance->PlaySampleMontage();
 
 	RollTimeline = FTimeline{};
 	FOnTimelineFloat RollCurveUpdate;
 
-	// Bind the timeline to the function that will be called when it is updated
-	//RollTimeline.AddInterpFloat(RollCurve, FOnTimelineFloat::CreateUObject(this, &APlayerableCharacter::TimelineProgress));
+	RollTimeline.AddInterpFloat(RollCurve, FOnTimelineFloat::CreateUObject(this, &APlayerableCharacter::TimelineProgress));
 	
 	RollCurveUpdate.BindUFunction(this, "TimelineProgress");
 	RollTimeline.AddInterpFloat(RollCurve, RollCurveUpdate);
 
-	// Set the start and end rotations for the roll animation
 	StartRotation = GetActorRotation();
 	EndRotation = GetActorRotation() + FRotator(0.0f, 90.0f, 0.0f);
 
@@ -502,10 +504,11 @@ void APlayerableCharacter::Rolling()
 	GetCharacterMovement()->Velocity = RollDirection;
 
 	RollTimeline.PlayFromStart();
-
-	DodgeStart(RollTimeline.GetTimelineLength());
-
-	GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, RollTimeline.GetTimelineLength(), false);
+	*/
+	AnimInstance->PlayRollingMontage();
+	float timer = AnimInstance->Rolling_AnimMontage->GetPlayLength();
+	GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, timer, false);
+	DodgeStart(timer);
 }
 
 void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

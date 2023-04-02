@@ -61,6 +61,7 @@ protected:
 private :
 	// 플레이어의 애니메이션을 저장해둔 것
 	UPlayerAnimInstnce* AnimInstance;
+	APlayerController* PlayerController;
 	// Timer남은시간
 	float RemainingTime;
 /* Player Rolling */
@@ -142,7 +143,8 @@ public :
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee_End();
-
+	UFUNCTION(BlueprintCallable)
+		void Attack_Enemy();
 private :
 	// Weapon관련 interface
 	IWeaponInterface* WeaponInterface;

@@ -25,6 +25,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+		virtual void Attack_Enemy() override;
+
 protected :
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
 		float PlayerAttackPower;
@@ -48,7 +51,7 @@ private :
 	UPROPERTY(EditAnywhere)
 		class UBoxComponent* WeaponCollision;
 
-
+	bool isAttacking;
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }
 	int32 GetMaxCombo() { return WeaponMaxCombo; }

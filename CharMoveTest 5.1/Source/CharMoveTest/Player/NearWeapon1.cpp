@@ -25,8 +25,3 @@ void ANearWeapon1::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
-void ANearWeapon1::Attack()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Weapon1 Attack"));
-}
