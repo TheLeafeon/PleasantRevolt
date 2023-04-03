@@ -8,9 +8,11 @@ ANearWeapon2::ANearWeapon2()
 	PrimaryActorTick.bCanEverTick = true;
 
 	PlayerAttackPower = 2.0f;
-	WeaponMaxCombo = 5.0f;
+	WeaponMaxCombo = 2;
 	WeaponAttackNearDistance = 3.0f;
 	WeaponAttackTime = 3.0f;
+
+	WeaponName = "NearWeapon2";
 }
 
 void ANearWeapon2::BeginPlay()
@@ -22,9 +24,4 @@ void ANearWeapon2::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void ANearWeapon2::Attack()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Weapon2 Attack"));
 }

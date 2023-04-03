@@ -17,20 +17,24 @@ class CHARMOVETEST_API UPlayerAnimInstnce : public UAnimInstance
 	UPlayerAnimInstnce();
 
 public:
-	void PlaySampleMontage();
-	void PlayMeleeAttackMontage();
+	void PlayRollingMontage();
 	void PlayBeHitMontage();
 	void PlayDeathMontage();
 
 private :
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Sample", Meta = (AllowPrivateAccess = true))
-		UAnimMontage* Sample;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-		UAnimMontage* Attack_AnimMontage;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* BeHit_AnimMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Rolling, Meta = (AllowPrivateAccess = true))
+		float Roll_Animation_Speed;
+
 public :
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Rolling, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* Rolling_AnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* NearWeapon1_AnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		UAnimMontage* NearWeapon2_AnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* Death_AnimMontage;
 };

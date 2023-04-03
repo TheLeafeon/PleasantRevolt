@@ -2,6 +2,8 @@
 
 
 #include "WeaponBase.h"
+#include "PlayerableCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -14,6 +16,19 @@ AWeaponBase::AWeaponBase()
 
 	NearWeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SampleMesh"));
 	NearWeaponMesh->SetupAttachment(RootComponent);
+
+	WeaponCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollision"));
+	WeaponCollision->SetBoxExtent(FVector(3.f, 3.f, 3.f));
+	WeaponCollision->SetupAttachment(NearWeaponMesh);
+
+	PlayerAttackPower = 0.0f;
+	WeaponMaxCombo = 0;
+	WeaponAttackNearDistance = 0.0f;
+	WeaponAttackTime = 0;
+	WeaponName = "";
+	isAttacking = false;
+
+	MyPawn = Cast<APlayerableCharacter>(StaticClass());
 }
 
 // Called when the game starts or when spawned
@@ -27,5 +42,30 @@ void AWeaponBase::BeginPlay()
 void AWeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+void AWeaponBase::Attack_Enemy()
+{
+	isAttacking = true;
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot");
+
+}
+
+void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	if (isAttacking)
+	{
+		APlayerableCharacter* MyPlayer = Cast<APlayerableCharacter>(StaticClass());
+
+		if (OtherActor->IsA(AActor::StaticClass()) && !OtherActor->IsA(APlayerableCharacter::StaticClass())/*&& isAttacking == true*/)
+		{
+			UGameplayStatics::ApplyDamage(OtherActor, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot Damage");
+		}
+	isAttacking = false;
+	}
 
 }
