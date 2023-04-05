@@ -33,6 +33,23 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 	{
 		Death_AnimMontage = DEATH_MONTAGE.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> LADDERMOVEUP_MONTAGE(TEXT("/Game/Interaction/Animation/ModularAnimalKnightsPolyart/Animations/LadderUp_Montage.LadderUp_Montage"));
+	if (LADDERMOVEUP_MONTAGE.Succeeded())
+	{
+		LadderMoveUp_AnimMontage = LADDERMOVEUP_MONTAGE.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> LADDERMOVEDOWN_MONTAGE(TEXT("/Game/Interaction/Animation/ModularAnimalKnightsPolyart/Animations/LadderDown_Montage.LadderDown_Montage"));
+	if (LADDERMOVEDOWN_MONTAGE.Succeeded())
+	{
+		LadderMoveDown_AnimMontage = LADDERMOVEDOWN_MONTAGE.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> HANDUP_MONTAGE(TEXT("/Game/Interaction/Animation/ThirdPerson_GripLoop_FBX/Grip_Montage.Grip_Montage"));
+	if (HANDUP_MONTAGE.Succeeded())
+	{
+		HandUp_AnimMontage = HANDUP_MONTAGE.Object;
+	}
 }
 
 void UPlayerAnimInstnce::PlayRollingMontage()
@@ -48,4 +65,25 @@ void UPlayerAnimInstnce::PlayBeHitMontage()
 void UPlayerAnimInstnce::PlayDeathMontage()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Dead"));
+}
+
+void UPlayerAnimInstnce::PlayLadderMoveUpMontage()
+{
+	Montage_Play(LadderMoveUp_AnimMontage, 1.0f);
+}
+
+void UPlayerAnimInstnce::PlayLadderMoveDownMontage()
+{
+	Montage_Play(LadderMoveDown_AnimMontage, 1.0f);
+}
+
+void UPlayerAnimInstnce::StopLadderMoveMontage()
+{
+	Montage_Stop(0.0f, LadderMoveDown_AnimMontage);
+	Montage_Stop(0.0f, LadderMoveUp_AnimMontage);
+}
+
+void UPlayerAnimInstnce::PlayHandUpMontage()
+{
+	Montage_Play(HandUp_AnimMontage, 1.0f);
 }

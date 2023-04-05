@@ -23,4 +23,8 @@ namespace bossKey
 namespace bossKey2
 {
 	TCHAR const* const player = TEXT("Player");
+	TCHAR const* const leftArm = TEXT("LeftArm");
+	TCHAR const* const rightArm = TEXT("RightArm");
+	TCHAR const* const randomArm = TEXT("RandomArm");
+	TCHAR const* const keyTrue = TEXT("True");
 }

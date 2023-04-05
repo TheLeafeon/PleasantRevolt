@@ -39,4 +39,8 @@ public:
 	float Fall_time; //충돌 오브젝트 공격 범위가 생성되는 주기
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Fall_Delay; //충돌 오브젝트가 생성되기까지 딜레이
+
+	//PD
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float PD_Hit_Delay; //빨간원 쫓아가다가 멈출때까지의 딜레이 
 };

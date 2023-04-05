@@ -37,4 +37,18 @@ public :
 		UAnimMontage* NearWeapon2_AnimMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* Death_AnimMontage;
+
+	//Ladder包访 根鸥林
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ladder, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* LadderMoveUp_AnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ladder, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* LadderMoveDown_AnimMontage;
+	void PlayLadderMoveUpMontage();
+	void PlayLadderMoveDownMontage();
+	void StopLadderMoveMontage();
+
+	//HandUp包访 根鸥林
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = HandUp, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* HandUp_AnimMontage;
+	void PlayHandUpMontage();
 };

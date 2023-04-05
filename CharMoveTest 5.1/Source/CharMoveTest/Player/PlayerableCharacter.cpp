@@ -12,7 +12,7 @@
 #include "CharMoveTest/Interaction/HandUP.h"
 
 // Sets default values
-APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocation(0)
+APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocation(0), StopLadderMove(false)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -552,10 +552,14 @@ void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 
 void APlayerableCharacter::LadderMove(float Value)
 {
-	//여기에 걷는 애니메이션
 	if (Value > 0)
 	{
-		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+		if (!StopLadderMove)
+		{
+			AnimInstance->PlayLadderMoveUpMontage();
+			StopLadderMove = true;
+		}
+
 		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed));
 	}
 	else if (Value < 0)
@@ -565,8 +569,13 @@ void APlayerableCharacter::LadderMove(float Value)
 			SetLadderMoveFalse();
 		}
 		
+		if (!StopLadderMove)
+		{
+			AnimInstance->PlayLadderMoveDownMontage();
+			StopLadderMove = true;
+		}
+		
 		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed * -1));
-		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
 	}
 	
 }
@@ -586,4 +595,6 @@ void APlayerableCharacter::SetLadderMoveFalse()
 	//사다리 끝
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	isLadder = false;
+	AnimInstance->StopLadderMoveMontage();
+	StopLadderMove = false;
 }

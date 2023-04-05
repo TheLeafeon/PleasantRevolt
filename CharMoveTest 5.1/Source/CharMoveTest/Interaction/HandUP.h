@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Engine/Public/TimerManager.h"
+#include "CharMoveTest/Player/PlayerAnimInstnce.h"
 #include "HandUP.generated.h"
 
 UCLASS()
@@ -45,4 +46,10 @@ private:
 	virtual void HideInteractionWidget() override;
 
 	void SetFalsePhysics();
+
+	// 플레이어의 애니메이션을 저장해둔 것
+	UPlayerAnimInstnce* AnimInstance;
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void HandUpAni(bool value);
 };

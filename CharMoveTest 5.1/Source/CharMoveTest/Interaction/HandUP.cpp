@@ -16,6 +16,7 @@ void AHandUP::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerCharacter = Cast<APlayerableCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	AnimInstance = Cast<UPlayerAnimInstnce>(PlayerCharacter->GetMesh()->GetAnimInstance());
 }
 
 // Called every frame
@@ -45,6 +46,8 @@ void AHandUP::InteractWithMe()
 
 			}), 1.0f, false);
 
+		HandUpAni(false);
+
 		IsHandUp = false;
 	}
 	else
@@ -52,6 +55,8 @@ void AHandUP::InteractWithMe()
 		CollisionComponent->SetSimulatePhysics(false);
 		CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		PlayerCharacter->PlayerHandUp(this);
+		//AnimInstance->PlayHandUpMontage();
+		HandUpAni(true);
 
 		IsHandUp = true;
 	}
