@@ -4,8 +4,6 @@
 #include "CharMoveTest/FieldMonster/BTService_DragonDollDetect.h"
 #include "CharMoveTest/FieldMonster/DragonDollAIController.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
-#include "Components/SphereComponent.h"
-#include "CharMoveTest/TestCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 
@@ -20,14 +18,15 @@ void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
+	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
 	if (nullptr == ControllingPawn) return;
 
 	UWorld* World = ControllingPawn->GetWorld();
-	FVector Center = DragonDollArea->GetActorLocation();
-	
-	float DetectRadius = 600.0f;
+	FVector Center = BlackboardComp->GetValueAsVector("AreaPos");
 
-	float AreaSize = DragonDollArea->CollisionSphere->GetScaledSphereRadius();
+	FVector DetectRadius = BlackboardComp->GetValueAsVector("AreaSize");;
+
+
 
 	if (nullptr == World) return;
 	TArray<FOverlapResult> OverlapResults;
@@ -37,7 +36,7 @@ void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 		Center,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(AreaSize),
+		FCollisionShape::MakeBox(DetectRadius),
 		CollisionQueryParam
 	);
 
@@ -45,19 +44,15 @@ void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	{
 		for (auto const& OverlapResult : OverlapResults)
 		{
-			ATestCharacter* PlayerableCharacter = Cast<ATestCharacter>(OverlapResult.GetActor());
+			APlayerableCharacter* PlayerableCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor());
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ADragonDollAIController::TargetKey, PlayerableCharacter);
-				//DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
-
-				//DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				//DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
+				
 				return;
 			}
 		}
 	}
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(ADragonDollAIController::TargetKey, nullptr);
-	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
 }

@@ -20,14 +20,15 @@ EBTNodeResult::Type UBTTask_GirlDollAttack::ExecuteTask(UBehaviorTreeComponent& 
 	if (nullptr == GirlDoll)
 		return EBTNodeResult::Failed;
 
-	GirlDoll->Attack_Melee();
+	GirlDoll->Attack_Ready();
 	IsAttacking = true;
-	GirlDoll->OnAttackEnd.AddLambda([this]() -> void {
+
+	GirlDoll->GirlDollOnAttackEnd.AddLambda([this]() -> void {
 		IsAttacking = false;
 	});
-	
 
-		return EBTNodeResult::InProgress;
+
+	return EBTNodeResult::InProgress;
 	//return EBTNodeResult::Type();
 }
 

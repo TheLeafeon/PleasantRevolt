@@ -26,7 +26,7 @@ void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	FVector Center = BlackboardComp->GetValueAsVector("AreaPos");
 	//FVector Center = ControllingPawn->GetActorLocation();
 
-	float DetectRadius = BlackboardComp->GetValueAsFloat("AreaSize");;
+	FVector DetectRadius = BlackboardComp->GetValueAsVector("AreaSize");;
 	//float DetectRadius = 600.0f;
 
 	if (nullptr == World) return;
@@ -37,7 +37,7 @@ void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 		Center,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(DetectRadius),
+		FCollisionShape::MakeBox(DetectRadius),
 		CollisionQueryParam
 	);
 
@@ -49,7 +49,7 @@ void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AGirlDollAIController::TargetKey, PlayerableCharacter);
-				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
+				
 
 				DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
 				DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
@@ -59,5 +59,5 @@ void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	}
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(AGirlDollAIController::TargetKey, nullptr);
-	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
+	
 }

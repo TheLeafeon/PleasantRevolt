@@ -24,7 +24,7 @@ void UBTService_RabbitDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = BlackboardComp->GetValueAsVector("AreaPos");
 
-	float DetectRadius = BlackboardComp->GetValueAsFloat("AreaSize");;
+	FVector DetectRadius = BlackboardComp->GetValueAsVector("AreaSize");;
 
 	if (nullptr == World) return;
 	TArray<FOverlapResult> OverlapResults;
@@ -34,7 +34,7 @@ void UBTService_RabbitDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 		Center,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(DetectRadius),
+		FCollisionShape::MakeBox(DetectRadius),
 		CollisionQueryParam
 	);
 
@@ -46,7 +46,7 @@ void UBTService_RabbitDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ARabbitDollAIController::TargetKey, PlayerableCharacter);
-				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
+
 
 				DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
 				DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
@@ -56,6 +56,6 @@ void UBTService_RabbitDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	}
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(ARabbitDollAIController::TargetKey, nullptr);
-	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
+	
 
 }

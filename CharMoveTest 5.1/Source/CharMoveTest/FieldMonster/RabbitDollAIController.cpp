@@ -65,9 +65,9 @@ void ARabbitDollAIController::OnPossessDelayed(APawn* InPawn)
 	{
 		BlackboardComp->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
 		BlackboardComp->SetValueAsVector(AreaPosKey, MyRabbitDoll->MyAreaLocation);
-		BlackboardComp->SetValueAsFloat(AreaSizeKey, MyRabbitDoll->MyAreaSize);
+		BlackboardComp->SetValueAsVector(AreaSizeKey, MyRabbitDoll->MyAreaSize);
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Object name is: %f"), MyRabbitDoll->MyAreaSize));
+		
 
 
 		
