@@ -537,12 +537,11 @@ void APlayerableCharacter::OnInteract()
 		Interface->InteractWithMe();
 	}
 }
-
 void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 {
 	if (OtherActor)
 	{
-		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("handUp"));
+		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}
 
@@ -566,16 +565,16 @@ void APlayerableCharacter::LadderMove(float Value)
 		{
 			SetLadderMoveFalse();
 		}
-		
+
 		if (!StopLadderMove)
 		{
 			AnimInstance->PlayLadderMoveDownMontage();
 			StopLadderMove = true;
 		}
-		
+
 		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed * -1));
 	}
-	
+
 }
 
 //아래 두 개는 사다리 블루프린트에서 호출
