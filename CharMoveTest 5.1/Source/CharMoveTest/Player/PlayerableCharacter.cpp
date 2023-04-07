@@ -12,7 +12,7 @@
 #include "CharMoveTest/Interaction/HandUP.h"
 
 // Sets default values
-APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocation(0), StopLadderMove(false)
+APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -540,8 +540,6 @@ void APlayerableCharacter::OnInteract()
 
 void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 {
-
-
 	if (OtherActor)
 	{
 		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("handUp"));

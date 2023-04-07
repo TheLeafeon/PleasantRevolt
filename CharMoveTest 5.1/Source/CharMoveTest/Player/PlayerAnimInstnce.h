@@ -46,9 +46,4 @@ public :
 	void PlayLadderMoveUpMontage();
 	void PlayLadderMoveDownMontage();
 	void StopLadderMoveMontage();
-
-	//HandUp관련 몽타주
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = HandUp, Meta = (AllowPrivateAccess = true))
-	UAnimMontage* HandUp_AnimMontage;
-	void PlayHandUpMontage();
 };

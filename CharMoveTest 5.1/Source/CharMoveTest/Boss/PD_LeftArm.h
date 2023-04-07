@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CharMoveTest/Boss/PlasticDoll_Arm.h"
+#include "CharMoveTest/Boss/PD_FallDecal_Pawn.h"
 #include "PD_LeftArm.generated.h"
 
 UCLASS()
 class CHARMOVETEST_API APD_LeftArm : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APD_LeftArm();
 
@@ -20,11 +20,24 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void Smash();
 	void SmashWait();
 	void BackSmash();
+	void SetFallDecalPawn(APawn* Pawn);
+
+private:
+	FVector StartLocation;
+	FVector TargetLocation;
+	float StartTime;
+	float Smash_TotalTime;
+	float Restoration_TotalTime;
+
+	bool IsSmash;
+	bool Restoration;
+
+	APD_FallDecal_Pawn* FallDecalPawn;
 };

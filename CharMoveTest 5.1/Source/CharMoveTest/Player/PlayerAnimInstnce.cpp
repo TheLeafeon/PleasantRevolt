@@ -44,12 +44,6 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 	{
 		LadderMoveDown_AnimMontage = LADDERMOVEDOWN_MONTAGE.Object;
 	}
-
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> HANDUP_MONTAGE(TEXT("/Game/Interaction/Animation/ThirdPerson_GripLoop_FBX/Grip_Montage.Grip_Montage"));
-	if (HANDUP_MONTAGE.Succeeded())
-	{
-		HandUp_AnimMontage = HANDUP_MONTAGE.Object;
-	}
 }
 
 void UPlayerAnimInstnce::PlayRollingMontage()
@@ -81,9 +75,4 @@ void UPlayerAnimInstnce::StopLadderMoveMontage()
 {
 	Montage_Stop(0.0f, LadderMoveDown_AnimMontage);
 	Montage_Stop(0.0f, LadderMoveUp_AnimMontage);
-}
-
-void UPlayerAnimInstnce::PlayHandUpMontage()
-{
-	Montage_Play(HandUp_AnimMontage, 1.0f);
 }

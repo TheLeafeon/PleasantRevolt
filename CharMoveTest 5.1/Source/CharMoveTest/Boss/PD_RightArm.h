@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CharMoveTest/Boss/PlasticDoll_Arm.h"
+#include "CharMoveTest/Boss/PD_FallDecal_Pawn.h"
 #include "PD_RightArm.generated.h"
 
 UCLASS()
@@ -27,4 +27,17 @@ public:
 	void Smash();
 	void SmashWait();
 	void BackSmash();
+	void SetFallDecalPawn(APawn* Pawn);
+
+private:
+	FVector StartLocation;
+	FVector TargetLocation;
+	float StartTime;
+	float Smash_TotalTime;
+	float Restoration_TotalTime;
+
+	bool IsSmash;
+	bool Restoration;
+
+	APD_FallDecal_Pawn* FallDecalPawn;
 };

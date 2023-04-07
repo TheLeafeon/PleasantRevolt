@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Boss_Character.generated.h"
 
 UCLASS()

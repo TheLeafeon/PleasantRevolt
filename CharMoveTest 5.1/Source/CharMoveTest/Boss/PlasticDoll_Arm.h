@@ -18,5 +18,10 @@ public:
 	UPlasticDoll_Arm();
 
 	//팔에서 공통적으로 쓸 함수 및 변수
-	static void Smash();
+	void Smash(const AActor*& SmashArm);
+	void SetFallDecalPos(const FVector& FallDecalPos);
+	FVector GetFallDecalPos();
+
+private:
+	FVector SavePos;
 };

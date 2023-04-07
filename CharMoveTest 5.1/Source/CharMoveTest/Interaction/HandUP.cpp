@@ -30,21 +30,26 @@ void AHandUP::InteractWithMe()
 {
 	if (IsHandUp)
 	{
-		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("IsHandUp"));
-
-		//만약 애니메이션 내려놓는게 있으면 좀 수정하기
-		SetActorLocation(PlayerCharacter->GetActorLocation() + (PlayerCharacter->GetActorForwardVector() * 10));
-
-		CollisionComponent->SetSimulatePhysics(true);
-		//1초 뒤 피직스 꺼줌(그러면 움직이지 않음)!
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 			{
+				DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+				
+				CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
 
-				CollisionComponent->SetSimulatePhysics(false);
+				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+					{
+						CollisionComponent->SetSimulatePhysics(true);
 
-			}), 1.0f, false);
+						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+						GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+							{
+								CollisionComponent->SetSimulatePhysics(false);
+
+								GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+							}), 1.5f, false);
+					}), 0.2f, false);	
+			}), 0.65f, false);
 
 		HandUpAni(false);
 
@@ -55,7 +60,7 @@ void AHandUP::InteractWithMe()
 		CollisionComponent->SetSimulatePhysics(false);
 		CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		PlayerCharacter->PlayerHandUp(this);
-		//AnimInstance->PlayHandUpMontage();
+
 		HandUpAni(true);
 
 		IsHandUp = true;
