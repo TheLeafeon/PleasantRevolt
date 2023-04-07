@@ -38,6 +38,9 @@ private:
 
 	bool IsSmash;
 	bool Restoration;
+	float CurrentTime;
+	float Alpha;
+	FVector NewLocation;
 
 	APD_FallDecal_Pawn* FallDecalPawn;
 };

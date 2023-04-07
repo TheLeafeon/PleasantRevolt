@@ -4,7 +4,7 @@
 #include "CharMoveTest/Boss/PD_RightArm.h"
 
 // Sets default values
-APD_RightArm::APD_RightArm() : Smash_TotalTime(1.0f), IsSmash(false), Restoration_TotalTime(3.0f)
+APD_RightArm::APD_RightArm() : Smash_TotalTime(1.0f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -25,13 +25,13 @@ void APD_RightArm::Tick(float DeltaTime)
 	if (IsSmash)
 	{
 		// 현재 시간을 계산합니다.
-		float CurrentTime = GetWorld()->GetTimeSeconds() - StartTime;
+		CurrentTime = GetWorld()->GetTimeSeconds() - StartTime;
 
 		// 보간 계산을 위한 알파 값을 계산합니다.
-		float Alpha = FMath::Clamp(CurrentTime / Smash_TotalTime, 0.0f, 1.0f);
+		Alpha = FMath::Clamp(CurrentTime / Smash_TotalTime, 0.0f, 1.0f);
 
 		// 보간된 위치를 계산합니다.
-		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
+		NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
 
 		// 액터의 위치를 업데이트합니다.
 		SetActorLocation(NewLocation);
@@ -43,21 +43,22 @@ void APD_RightArm::Tick(float DeltaTime)
 	}
 	else
 	{
-		if (Restoration)
+		GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Red, TEXT("else"));
+		if (Restoration == true)
 		{
 			// 현재 시간을 계산합니다.
-			float CurrentTime = GetWorld()->GetTimeSeconds() - StartTime;
+			CurrentTime = GetWorld()->GetTimeSeconds() - StartTime;
 
 			// 보간 계산을 위한 알파 값을 계산합니다.
-			float Alpha = FMath::Clamp(CurrentTime / Restoration_TotalTime, 0.0f, 1.0f);
+			Alpha = FMath::Clamp(CurrentTime / Restoration_TotalTime, 0.0f, 1.0f);
 
 			// 보간된 위치를 계산합니다.
-			FVector NewLocation = FMath::Lerp(TargetLocation, StartLocation, Alpha);
+			NewLocation = FMath::Lerp(TargetLocation, StartLocation, Alpha);
 
 			// 액터의 위치를 업데이트합니다.
 			SetActorLocation(NewLocation);
 
-			if (GetActorLocation().Equals(TargetLocation, 0.1))
+			if (GetActorLocation().Equals(StartLocation, 0.1))
 			{
 				Restoration = false;
 			}
