@@ -12,17 +12,18 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 	}
 	Roll_Animation_Speed = 1.0f;
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON1_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/Nearweapon1_Combo_Montage.Nearweapon1_Combo_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON1_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/NearWeapon1_Attack_Montage.NearWeapon1_Attack_Montage"));
 	if (NEARWEAPON1_MONTGE.Succeeded())
 	{
 		NearWeapon1_AnimMontage = NEARWEAPON1_MONTGE.Object;
 	}
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON2_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/NearWeapon3_Combo_Montage.NearWeapon3_Combo_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON2_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/NearWeapon2_Attack_Montage.NearWeapon2_Attack_Montage"));
 	if (NEARWEAPON2_MONTGE.Succeeded())
 	{
 		NearWeapon2_AnimMontage = NEARWEAPON2_MONTGE.Object;
 	}
-	//static ConstructorHelpers::FObjectFinder<UAnimMontage> BEHIT_MONTAGE(TEXT("));
+
+	//static ConstructorHelpers::FObjectFinder<UAnimMontage> BEHIT_MONTAGE(TEXT(""));
 	//if (BEHIT_MONTAGE.Succeeded())
 	//{
 	//	BeHit_AnimMontage = BEHIT_MONTAGE.Object;
