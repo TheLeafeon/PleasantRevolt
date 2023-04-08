@@ -64,7 +64,7 @@ APlayerableCharacter::APlayerableCharacter()
 	bisAttack = false;
 	currentCombo = 0;
 	maxCombo = 0;
-
+	comboCoolTime = 5.0f;
 	// Interaction System
 	InteractionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Interaction box"));
 	InteractionBox->SetupAttachment(RootComponent);
@@ -222,6 +222,14 @@ void APlayerableCharacter::Tick(float DeltaTime)
 		if (RemainingTime <= 0.0f)
 		{
 			DodgeEnd();
+		}
+	}
+	if (GetWorld()->GetTimerManager().IsTimerActive(NextComboTimerHandle))
+	{
+		RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(NextComboTimerHandle);
+		if (RemainingTime <= 0.0f)
+		{
+			Attack_Melee_End();
 		}
 	}
 	if (GetWorld()->GetTimerManager().IsTimerActive(DeathTimerHandle))
@@ -396,6 +404,7 @@ void APlayerableCharacter::Attack_Melee()
 			PlayAnimMontage(CurrentWeaponComboAnim, 1.0f, FName(*PlayerSection));
 			currentCombo++;
 			bisAttack = true;
+			GetWorld()->GetTimerManager().SetTimer(NextComboTimerHandle, this, &APlayerableCharacter::Attack_Melee_End, comboCoolTime, false);
 		}
 		else
 		{
@@ -422,7 +431,6 @@ void APlayerableCharacter::Attack_Melee_End()
 
 void APlayerableCharacter::Attack_Shooting()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Shooting"));
 }
 
 //=============== Player Roll =============== //

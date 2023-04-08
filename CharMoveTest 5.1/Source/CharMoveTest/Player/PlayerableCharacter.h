@@ -140,6 +140,8 @@ public :
 		bool bisAttack;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
 		int32 currentCombo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
+		float comboCoolTime;
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee_End();
@@ -172,6 +174,7 @@ private :
 	void SecondMeleeWeapon();
 
 	int32 maxCombo;
+	FTimerHandle NextComboTimerHandle;
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee();
