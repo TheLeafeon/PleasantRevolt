@@ -220,10 +220,10 @@ private:
 	UPROPERTY()
 	float SaveZLocation;
 public:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "Ladder")
 	bool StopLadderMove;
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ladder")
 	float LadderMoveSpeed;
 	UFUNCTION(BlueprintCallable)
 	void SetLadderMoveTrue();

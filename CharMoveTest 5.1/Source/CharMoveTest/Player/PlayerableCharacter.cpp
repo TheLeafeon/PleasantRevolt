@@ -565,8 +565,7 @@ void APlayerableCharacter::LadderMove(float Value)
 		{
 			SetLadderMoveFalse();
 		}
-
-		if (!StopLadderMove)
+		else if (!StopLadderMove)
 		{
 			AnimInstance->PlayLadderMoveDownMontage();
 			StopLadderMove = true;
@@ -590,8 +589,9 @@ void APlayerableCharacter::SetLadderMoveTrue()
 void APlayerableCharacter::SetLadderMoveFalse()
 {
 	//사다리 끝
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("MoveFalse"));
+	AnimInstance->StopLadderMoveMontage();
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	isLadder = false;
-	AnimInstance->StopLadderMoveMontage();
 	StopLadderMove = false;
 }

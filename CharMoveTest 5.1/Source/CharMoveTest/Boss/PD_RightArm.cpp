@@ -4,7 +4,7 @@
 #include "CharMoveTest/Boss/PD_RightArm.h"
 
 // Sets default values
-APD_RightArm::APD_RightArm() : Smash_TotalTime(1.0f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0)
+APD_RightArm::APD_RightArm() : Smash_TotalTime(1.0f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0), RightArmHP(10.0f)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -99,4 +99,46 @@ void APD_RightArm::BackSmash()
 void APD_RightArm::SetFallDecalPawn(APawn* Pawn)
 {
 	FallDecalPawn = Cast<APD_FallDecal_Pawn>(Pawn);
+}
+
+float APD_RightArm::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	const float getDamage = Super::TakeDamage(Damage, DamgaeEvent, EventInstigator, DamageCauser);
+
+	if (RightArmHP <= 0.0f)
+	{
+		return 0.0f;
+	}
+
+	if (getDamage > 0.0f)
+	{
+		RightArmHP -= getDamage;
+	}
+
+	if (RightArmHP <= 0)
+	{
+		Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
+	}
+	else
+	{
+		OnHit(getDamage, DamgaeEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
+	}
+
+	return getDamage;
+}
+
+void APD_RightArm::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APawn* PawnInstigator, AActor* DamageCauser)
+{
+	//애니메이션 들어갈 곳
+
+	if (DamageTaken > 0.0f)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("hit"));
+		//ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
+	}
+}
+
+void APD_RightArm::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
+{
+	Destroy();
 }
