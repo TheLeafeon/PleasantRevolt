@@ -26,7 +26,7 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 	FVector SpawnLocation = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 
 	APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PD_FallDecal, SpawnLocation, Rotator);
-
+	
 	if (RandomValue <= 0.5)
 	{
 		LArm = Cast<APD_LeftArm>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm));
@@ -39,6 +39,6 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 		RArm->SmashWait();
 		RArm->SetFallDecalPawn(SpawnedPawn);
 	}
-
+	
 	return EBTNodeResult::Succeeded;
 }
