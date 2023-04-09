@@ -5,6 +5,10 @@
 
 // Add default functionality here for any IWeaponInterface functions that are not pure virtual.
 
-void IWeaponInterface::Attack_Enemy()
+void IWeaponInterface::Enable_Attack_Enemy()
+{
+}
+
+void IWeaponInterface::Disable_Attack_Enemy()
 {
 }

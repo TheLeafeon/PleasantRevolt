@@ -26,7 +26,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		virtual void Attack_Enemy() override;
+		virtual void Enable_Attack_Enemy() override;
+	UFUNCTION(BlueprintCallable)
+		virtual void Disable_Attack_Enemy() override;
 
 protected :
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")

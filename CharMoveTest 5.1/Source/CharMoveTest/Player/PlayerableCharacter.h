@@ -146,7 +146,9 @@ public :
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee_End();
 	UFUNCTION(BlueprintCallable)
-		void Attack_Enemy();
+		void Enable_Attack_Enemy();
+	UFUNCTION(BlueprintCallable)
+		void Disable_Attack_Enemy();
 private :
 	// Weapon°ü·Ã interface
 	IWeaponInterface* WeaponInterface;
