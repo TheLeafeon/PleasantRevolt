@@ -21,6 +21,15 @@ ARabbitDoll::ARabbitDoll()
 	Monster_Attack_Time = 1.0f;
 	Monster_Attack_Delay = 0.5f;
 	Monster_Knockback_Time = 0.5;
+
+	AttackRangeBoxSize = FVector(100.0f, 100.0f, 100.0f);
+
+	AttackRangeBox = CreateDefaultSubobject<UBoxComponent>(TEXT("AttackRange"));
+
+	AttackRangeBox->SetBoxExtent(AttackRangeBoxSize);
+	AttackRangeBox->SetupAttachment(GetMesh());
+
+	
 }
 
 void ARabbitDoll::BeginPlay()
@@ -92,6 +101,8 @@ void ARabbitDoll::RabbitDollSpawnEffect()
 		GetWorld()->GetTimerManager().ClearTimer(RabbitDollSpawnMoveUpHandle);
 	}
 }
+
+
 
 float ARabbitDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {

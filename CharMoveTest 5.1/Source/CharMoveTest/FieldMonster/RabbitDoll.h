@@ -44,9 +44,16 @@ public:
 		void RabbitAttackCheck();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void RabbitDollKnockBack();
+	void RabbitDollKnockBack();
 
 	void RabbitDollSpawnEffect();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class UBoxComponent* AttackRangeBox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector AttackRangeBoxSize;
+	
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator, class AActor* DamageCauser);

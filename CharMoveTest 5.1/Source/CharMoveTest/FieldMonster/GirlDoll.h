@@ -58,6 +58,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void GirlDollAttackSetMotion();
 
+	//공격 후 다시 움직이도록 변수 변경 하는 함수 BP에서 정의
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void GirlDollAttackFinishedSetMotion();
+
 
 	void GirlDollSpawnEffect();
 

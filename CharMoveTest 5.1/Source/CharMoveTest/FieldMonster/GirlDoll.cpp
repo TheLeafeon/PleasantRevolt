@@ -24,8 +24,8 @@ AGirlDoll::AGirlDoll()
 	Monster_HP = 3.0f;
 	Monster_Power = 1.0f;
 	Monster_Speed = 2.0f;
-	Monster_Attack_Time = 3.0f;
-	Monster_Attack_Delay = 3.0f;
+	Monster_Attack_Time = 0.3f;
+	Monster_Attack_Delay = 0.5f;
 	Monster_Knockback_Time = 0.5;
 	AttackRangeBoxSize = FVector(100.0f, 100.0f, 100.0f);
 
@@ -76,13 +76,13 @@ void AGirlDoll::Attack_Ready()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack Ready"));
 	isAttackReady = true;
-
+	isAttackHit = false;
 	GirlDollAttackSetMotion();
 
 	FTimerHandle AttackReadyTimerHandle;
 
 	FTimerDelegate AttackReadyTimerDelegate = FTimerDelegate::CreateUObject(this, &AGirlDoll::AttackReadyTimer);
-	GetWorldTimerManager().SetTimer(AttackReadyTimerHandle, AttackReadyTimerDelegate, Monster_Attack_Time, false);
+	GetWorldTimerManager().SetTimer(AttackReadyTimerHandle, AttackReadyTimerDelegate, 0.3f, false);
 
 }
 //공격 함수
@@ -119,28 +119,31 @@ void AGirlDoll::Attack_Melee()
 					isAttackHit = true;
 					GirlDollApplyDamageEvent();
 				}
-				else
-				{
-					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Miss"));
-				}
+				
 			}
 
 		}
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Miss"));
+	}
+	isAttackReady = false;
+	GirlDollAttackFinishedSetMotion();
 	FTimerDelegate AttackTimerDelegate = FTimerDelegate::CreateUObject(this, &AGirlDoll::AttackTimer);
-	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimerDelegate, Monster_Attack_Delay, false);
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimerDelegate, 0.3f, false);
 
 }
 //공격 모션 시간
 void AGirlDoll::AttackTimer()
 {
-	isAttackReady = false;
+	
+	
 	GirlDollOnAttackEnd.Broadcast();
 }
 //공격 준비 시간
 void AGirlDoll::AttackReadyTimer()
 {
-	isAttackHit = false;
 	Attack_Melee();
 }
 
@@ -205,12 +208,13 @@ void AGirlDoll::OnHit(float DamageTaken, FDamageEvent const& DamageEvent, APawn*
 {
 	if (DamageTaken > 0.0f)
 	{
-
-		GirlDollOnAttackEnd.Broadcast();
+		isAttackHit = true;
+		//GirlDollOnAttackEnd.Broadcast();
 
 		GirlDollKnockBack();
 
 		ApplyDamageMomentum(DamageTaken, DamageEvent, PawnInstigator, DamageCauser);
+
 
 	}
 }
