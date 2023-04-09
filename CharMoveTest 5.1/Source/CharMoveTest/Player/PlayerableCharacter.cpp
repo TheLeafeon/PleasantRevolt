@@ -12,7 +12,7 @@
 #include "CharMoveTest/Interaction/HandUP.h"
 
 // Sets default values
-APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false)
+APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false), isLeftLadder(false), SaveValue(0), SaveValue2(0), isTopDown(false), isLeftRight(false)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -121,11 +121,19 @@ void APlayerableCharacter::LookUpAtRate(float Rate)
 
 void APlayerableCharacter::MoveForward(float Value)
 {
+	SaveValue = Value;
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
-		if (isLadder)
+		if (isLadder && isTopDown)
 		{
-			LadderMove(Value);
+			if (isLeftLadder)
+			{
+				LadderLeftMove(Value);
+			}
+			else
+			{
+				LadderRightMove(Value);
+			}
 			
 		}
 		else
@@ -138,19 +146,25 @@ void APlayerableCharacter::MoveForward(float Value)
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 			AddMovementInput(Direction, Value);
 		}
-		
-
 	}
 }
 
 void APlayerableCharacter::MoveRight(float Value)
 {
+	SaveValue2 = Value;
+
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
-		if (isLadder)
+		if (isLadder && isLeftRight)
 		{
-			LadderMove(Value);
-			
+			if (isLeftLadder)
+			{
+				LadderLeftMove(Value);
+			}
+			else
+			{
+				LadderRightMove(Value);
+			}
 		}
 		else
 		{
@@ -555,7 +569,7 @@ void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 
 }
 
-void APlayerableCharacter::LadderMove(float Value)
+void APlayerableCharacter::LadderRightMove(float Value)
 {
 	if (Value > 0)
 	{
@@ -581,6 +595,34 @@ void APlayerableCharacter::LadderMove(float Value)
 
 		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed * -1));
 	}
+}
+
+void APlayerableCharacter::LadderLeftMove(float Value)
+{
+	if (Value < 0)
+	{
+		if (!StopLadderMove)
+		{
+			AnimInstance->PlayLadderMoveUpMontage();
+			StopLadderMove = true;
+		}
+
+		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed));
+	}
+	else if (Value > 0)
+	{
+		if (GetActorLocation().Z <= SaveZLocation)
+		{
+			SetLadderMoveFalse();
+		}
+		else if (!StopLadderMove)
+		{
+			AnimInstance->PlayLadderMoveDownMontage();
+			StopLadderMove = true;
+		}
+
+		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed * -1));
+	}
 
 }
 
@@ -589,6 +631,55 @@ void APlayerableCharacter::SetLadderMoveTrue()
 {
 	//사다리 모드
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("1 ") + FString::SanitizeFloat(SaveValue)); //이건 안 건들였을 때 0
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("2 ") + FString::SanitizeFloat(SaveValue2));
+
+	if (SaveValue > 0 && SaveValue2 == 0)
+	{
+		isLeftLadder = false;
+		isTopDown = true;
+	}
+	else if (SaveValue2 > 0 && SaveValue == 0)
+	{
+		isLeftLadder = false;
+		isLeftRight = true;
+	}
+	else if (SaveValue < 0 && SaveValue2 == 0)
+	{
+		isLeftLadder = true;
+		isTopDown = true;
+	}
+	else if (SaveValue2 < 0 && SaveValue == 0)
+	{
+		isLeftLadder = true;
+		isLeftRight = true;
+	}
+	else if (SaveValue > 0 && SaveValue2 > 0)
+	{
+		//키 하나만 받게 하기
+		isLeftLadder = false; //오른쪽 위
+		isTopDown = true;
+		//위 기준
+	}
+	else if (SaveValue < 0 && SaveValue2 > 0) //오른쪽 아래
+	{
+		isLeftLadder = false;
+		isLeftRight = true;
+		//오른쪽 기준으로 하게 하기
+	}
+	else if (SaveValue > 0 && SaveValue2 < 0)
+	{
+		isLeftLadder = true; //왼쪽 위
+		isLeftRight = true;
+		//왼쪽 기준으로 하게 하기
+	}
+	else if (SaveValue < 0 && SaveValue2 < 0) //왼쪽 아래
+	{
+		isLeftLadder = true;
+		isTopDown = true;
+		//아래 기준
+	}
+
 	isLadder = true;
 	//이때 로케이션을 저장해두고 로케이션 Z축 이하게 되면 강제로 원래 로케이션으로 돌리고 False호출
 	SaveZLocation = GetActorLocation().Z;
@@ -602,4 +693,6 @@ void APlayerableCharacter::SetLadderMoveFalse()
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	isLadder = false;
 	StopLadderMove = false;
+	isTopDown = false;
+	isLeftRight = false;
 }

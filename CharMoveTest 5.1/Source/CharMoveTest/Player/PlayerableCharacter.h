@@ -218,18 +218,29 @@ private:
 	//Ladder°ü·Ã
 	UPROPERTY()
 	bool isLadder;
+	UPROPERTY()
+	bool isLeftLadder;
+	UPROPERTY()
+	float SaveValue;
+	UPROPERTY()
+	float SaveValue2;
+	UPROPERTY()
+	bool isTopDown;
+	UPROPERTY()
+	bool isLeftRight;
 	UFUNCTION()
-	void LadderMove(float Value);
+	void LadderRightMove(float Value);
+	UFUNCTION()
+	void LadderLeftMove(float Value);
 	UPROPERTY()
 	float SaveZLocation;
 public:
 	UPROPERTY(BlueprintReadWrite, Category = "Ladder")
 	bool StopLadderMove;
-public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ladder")
 	float LadderMoveSpeed;
 	UFUNCTION(BlueprintCallable)
-	void SetLadderMoveTrue();
+	void SetLadderMoveTrue(bool Left_or_Right);
 	UFUNCTION(BlueprintCallable)
 	void SetLadderMoveFalse();
 };
