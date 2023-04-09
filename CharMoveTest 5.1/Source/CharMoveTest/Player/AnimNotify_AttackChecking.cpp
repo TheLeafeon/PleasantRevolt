@@ -14,7 +14,7 @@ void UAnimNotify_AttackChecking::Notify(USkeletalMeshComponent* MeshComp, UAnimS
 		APlayerableCharacter* Player = Cast<APlayerableCharacter>(MeshComp->GetOwner());
 		if (Player != NULL)
 		{
-			Player->Attack_Enemy();
+			Player->Enable_Attack_Enemy();
 		}
 	}
 }

@@ -45,11 +45,14 @@ void AWeaponBase::Tick(float DeltaTime)
 
 }
 
-void AWeaponBase::Attack_Enemy()
+void AWeaponBase::Enable_Attack_Enemy()
 {
 	isAttacking = true;
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot");
+}
 
+void AWeaponBase::Disable_Attack_Enemy()
+{
+	isAttacking = false;
 }
 
 void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -60,12 +63,10 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		APlayerableCharacter* MyPlayer = Cast<APlayerableCharacter>(StaticClass());
 
-		if (OtherActor->IsA(AActor::StaticClass()) && !OtherActor->IsA(APlayerableCharacter::StaticClass())/*&& isAttacking == true*/)
+		if (OtherActor->IsA(AActor::StaticClass()) && !OtherActor->IsA(APlayerableCharacter::StaticClass()))
 		{
 			UGameplayStatics::ApplyDamage(OtherActor, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
 			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot Damage");
 		}
-	isAttacking = false;
 	}
-
 }

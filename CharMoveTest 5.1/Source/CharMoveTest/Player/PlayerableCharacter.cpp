@@ -163,8 +163,6 @@ void APlayerableCharacter::MoveRight(float Value)
 			// add movement in that direction
 			AddMovementInput(Direction, Value);
 		}
-
-		
 	}
 }
 
@@ -433,13 +431,24 @@ void APlayerableCharacter::Attack_Melee()
 		}
 	}
 }
-void APlayerableCharacter::Attack_Enemy()
+
+void APlayerableCharacter::Enable_Attack_Enemy()
 {
 	WeaponInterface = Cast<IWeaponInterface>(CurrentWeapon);
 
 	if (WeaponInterface)
 	{
-		WeaponInterface->Attack_Enemy();
+		WeaponInterface->Enable_Attack_Enemy();
+	}
+}
+
+void APlayerableCharacter::Disable_Attack_Enemy()
+{
+	WeaponInterface = Cast<IWeaponInterface>(CurrentWeapon);
+
+	if (WeaponInterface)
+	{
+		WeaponInterface->Disable_Attack_Enemy();
 	}
 }
 
@@ -447,7 +456,6 @@ void APlayerableCharacter::Attack_Melee_End()
 {
 	currentCombo = 0;
 	bisAttack = false;
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("ResetCombo"));
 }
 
 void APlayerableCharacter::Attack_Shooting()

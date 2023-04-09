@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "WeaponBase.h"
-#include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "NearWeapon1.generated.h"
 
 /**
@@ -23,6 +22,4 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-private :
 };

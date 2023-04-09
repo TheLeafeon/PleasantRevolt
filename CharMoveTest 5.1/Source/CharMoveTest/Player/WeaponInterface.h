@@ -21,5 +21,6 @@ class CHARMOVETEST_API IWeaponInterface
 	GENERATED_BODY()
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void Attack_Enemy();
+	virtual void Enable_Attack_Enemy();
+	virtual void Disable_Attack_Enemy();
 };
