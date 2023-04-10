@@ -2,6 +2,7 @@
 
 
 #include "CharMoveTest/Boss/PD_SmashWait_BTTaskNode.h"
+#include "Kismet/GameplayStatics.h"
 
 UPD_SmashWait_BTTaskNode::UPD_SmashWait_BTTaskNode()
 {

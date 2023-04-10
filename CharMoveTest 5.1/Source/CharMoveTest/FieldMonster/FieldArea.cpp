@@ -47,7 +47,7 @@ void AFieldArea::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	{
 		firstIn = true;
 
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlap"));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlap"));
 
 
 		if (AreaSpawnMonsterArray.Num() == 0)

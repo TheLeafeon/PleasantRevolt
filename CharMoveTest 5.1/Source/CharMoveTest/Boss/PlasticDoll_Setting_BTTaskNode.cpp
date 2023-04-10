@@ -2,6 +2,7 @@
 
 
 #include "CharMoveTest/Boss/PlasticDoll_Setting_BTTaskNode.h"
+#include "Kismet/GameplayStatics.h"
 
 UPlasticDoll_Setting_BTTaskNode::UPlasticDoll_Setting_BTTaskNode()
 {
