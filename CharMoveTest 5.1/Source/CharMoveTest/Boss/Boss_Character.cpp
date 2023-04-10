@@ -69,8 +69,8 @@ void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, 
 
 	if (DamageTaken > 0.0f)
 	{
-		//데미지 받고 뒤로 밀림
-		ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
+		//데미지 받고 뒤로 밀림?
+		//ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
 
 		if ((BossHP <= MaxBossHP / 2) && isSpawn == false)
 		{
@@ -87,6 +87,8 @@ void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, 
 
 	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
 	GetMesh()->SetSimulatePhysics(true);
+	SpawnDanger->Destroy();
+	GetController()->Destroy();
 }
 
 void ABoss_Character::HPHalf()
@@ -102,7 +104,7 @@ void ABoss_Character::HPHalf()
 			FRotator rotator;
 			FVector  SpawnLocation = GetActorLocation(); //이걸 보스 맵 중앙에 박아둘 필요가 있음! 그래야 맵 범위 내에 스폰이 가능하니까
 
-			world->SpawnActor<AActor>(FallObj_Spawn_Blueprint, SpawnLocation, rotator, SpawnParams);
+			SpawnDanger = world->SpawnActor<AActor>(FallObj_Spawn_Blueprint, SpawnLocation, rotator, SpawnParams);
 		}
 	}
 }

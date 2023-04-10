@@ -47,4 +47,6 @@ private:
 	UPROPERTY()
 	TSubclassOf<class AActor> FallObj_Spawn_Blueprint;
 	bool isSpawn;
+
+	AActor* SpawnDanger; //소환한 장판 소환기
 };
