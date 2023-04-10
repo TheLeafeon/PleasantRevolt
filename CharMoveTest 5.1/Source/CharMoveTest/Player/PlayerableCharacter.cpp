@@ -205,7 +205,7 @@ void APlayerableCharacter::BeginPlay()
 	AnimInstance = Cast<UPlayerAnimInstnce>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
 		return;
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NotReturn"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NotReturn"));
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
@@ -218,14 +218,14 @@ void APlayerableCharacter::BeginPlay()
 		CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
 		maxCombo = CurrentWeapon->GetMaxCombo();
 
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon1"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon1"));
 	}
 	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SecondWeapon, SpawnParams))
 	{
 		Weapon->GetWeponMesh()->SetHiddenInGame(true);
 		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
 		MeleeWeaponsArray.Add(Weapon);
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon2"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon2"));
 	}
 
 	// initialize the timeline and the curve float
@@ -396,7 +396,7 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		CurrentWeapon = NextWeapon;
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Change to NearWeapon %d"), WeaponIndex));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Change to NearWeapon %d"), WeaponIndex));
 
 
 		if (WeaponIndex == FIRST_WEAPON)
@@ -429,7 +429,7 @@ void APlayerableCharacter::Attack_Melee()
 {
 	if (!bisAttack)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), currentCombo));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), currentCombo));
 
 		if (currentCombo < maxCombo)
 		{
@@ -573,7 +573,7 @@ void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 	if (OtherActor)
 	{
 		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}
 
 }
@@ -640,8 +640,8 @@ void APlayerableCharacter::SetLadderMoveTrue()
 {
 	//사다리 모드
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("1 ") + FString::SanitizeFloat(SaveValue)); //이건 안 건들였을 때 0
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("2 ") + FString::SanitizeFloat(SaveValue2));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("1 ") + FString::SanitizeFloat(SaveValue)); //이건 안 건들였을 때 0
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("2 ") + FString::SanitizeFloat(SaveValue2));
 
 	if (SaveValue > 0 && SaveValue2 == 0)
 	{
@@ -697,7 +697,7 @@ void APlayerableCharacter::SetLadderMoveTrue()
 void APlayerableCharacter::SetLadderMoveFalse()
 {
 	//사다리 끝
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("MoveFalse"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("MoveFalse"));
 	AnimInstance->StopLadderMoveMontage();
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	isLadder = false;

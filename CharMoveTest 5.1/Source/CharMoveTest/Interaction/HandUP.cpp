@@ -35,7 +35,10 @@ void AHandUP::InteractWithMe()
 				DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				
 				CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
+				//GetActorLocation + PlayerCharacter->GetActorLocation().ForwardVector
+				//SetActorLocation()
 
+				
 				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
@@ -48,9 +51,10 @@ void AHandUP::InteractWithMe()
 
 								GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 							}), 1.5f, false);
-					}), 0.2f, false);	
+					}), 0.2f, false);
+					
 			}), 0.65f, false);
-
+			
 		HandUpAni(false);
 
 		IsHandUp = false;

@@ -102,7 +102,7 @@ void ABoss_Character::HPHalf()
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Owner = this;
 			FRotator rotator;
-			FVector  SpawnLocation = GetActorLocation(); //이걸 보스 맵 중앙에 박아둘 필요가 있음! 그래야 맵 범위 내에 스폰이 가능하니까
+			FVector  SpawnLocation = GetActorLocation(); //보스 스폰 액터 자리에 소환? 아님 보스 근처에서 소환?
 
 			SpawnDanger = world->SpawnActor<AActor>(FallObj_Spawn_Blueprint, SpawnLocation, rotator, SpawnParams);
 		}

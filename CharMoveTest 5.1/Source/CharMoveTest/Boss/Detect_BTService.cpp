@@ -54,9 +54,11 @@ void UDetect_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey::enemyActor, PlayerCharacter); //블랙보드에 플레이어 캐릭터 변수 저장
 				OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange, true); //범위 안에 있으면 true
 
+				/*
 				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
 				DrawDebugPoint(World, PlayerCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
 				DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerCharacter->GetActorLocation(), FColor::Blue, false, 0.2f);
+				*/
 				return;
 			}
 		}
