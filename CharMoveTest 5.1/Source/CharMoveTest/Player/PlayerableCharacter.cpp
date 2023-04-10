@@ -317,11 +317,11 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 		if (Player_HP <= 0)
 		{
 			Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
-			DodgeStart(Player_Dodge_Time);
 		}
 		else
 		{
 			OnHit(getDamage, DamgaeEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
+			DodgeStart(Player_Dodge_Time);
 		}
 	}
 
@@ -504,7 +504,7 @@ void APlayerableCharacter::Rolling()
 	RollTimeline = FTimeline{};
 	FOnTimelineFloat RollCurveUpdate;
 
-	RollTimeline.AddInterpFloat(RollCurve, FOnTimelineFloat::CreateUObject(this, &APlayerableCharacter::TimelineProgress));
+	//RollTimeline.AddInterpFloat(RollCurve, FOnTimelineFloat::CreateUObject(this, &APlayerableCharacter::TimelineProgress));
 	
 	RollCurveUpdate.BindUFunction(this, "TimelineProgress");
 	RollTimeline.AddInterpFloat(RollCurve, RollCurveUpdate);
@@ -523,6 +523,7 @@ void APlayerableCharacter::Rolling()
 	*/
 	AnimInstance->PlayRollingMontage();
 	float timer = AnimInstance->Rolling_AnimMontage->GetPlayLength();
+
 	GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, timer, false);
 	DodgeStart(timer);
 }

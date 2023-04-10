@@ -25,10 +25,10 @@ private :
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* BeHit_AnimMontage;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Rolling, Meta = (AllowPrivateAccess = true))
-		float Roll_Animation_Speed;
 
 public :
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Rolling, Meta = (AllowPrivateAccess = true))
+		float Roll_Animation_Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Rolling, Meta = (AllowPrivateAccess = true))
 		UAnimMontage* Rolling_AnimMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
