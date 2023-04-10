@@ -17,12 +17,9 @@ class CHARMOVETEST_API UBTService_DragonDollDetect : public UBTService
 	
 public:
 	UBTService_DragonDollDetect();
-
-	UPROPERTY(EditAnywhere, Category = "Area")
-		ATestMonsterArea* DragonDollArea;
-
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+
 
 
 

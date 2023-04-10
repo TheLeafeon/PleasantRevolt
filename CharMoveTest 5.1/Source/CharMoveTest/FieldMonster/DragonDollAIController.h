@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharMoveTest/FieldMonster/DragonDoll.h"
 #include "AIController.h"
 #include "DragonDollAIController.generated.h"
 
@@ -20,8 +21,15 @@ public:
 
 	virtual void OnPossess(APawn* InPawn) override;
 
+	void OnPossessDelayed(APawn* InPawn);
+
 	static const FName HomePosKey;
 	static const FName TargetKey;
+	static const FName AreaPosKey;
+	static const FName AreaSizeKey;
+
+	UPROPERTY(BlueprintReadOnly, Category = "AI")
+		ADragonDoll* MyDragonDoll;
 
 private:
 	UPROPERTY()

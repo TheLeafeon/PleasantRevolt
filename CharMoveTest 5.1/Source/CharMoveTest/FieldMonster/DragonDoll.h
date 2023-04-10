@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
+#include "CharMoveTest/FieldMonster/FieldArea.h"
 #include "Camera/CameraComponent.h"
 #include "CharMoveTest/FieldMonster/FPSProjectile.h"
 #include "DragonDoll.generated.h"
@@ -11,6 +12,8 @@
 /**
  * 
  */
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+
 UCLASS()
 class CHARMOVETEST_API ADragonDoll : public AMonsterBase
 {
@@ -18,20 +21,17 @@ class CHARMOVETEST_API ADragonDoll : public AMonsterBase
 public:
 	ADragonDoll();
 
+	virtual void BeginPlay() override;
 
-	void Attack_Ready();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void Fire();
+
 	void Attack_Melee();
-	void Attack_Melee_End();
 
-	bool isReadyAttack;
-	bool isDuringAttack;
+	void AttackTimer();
 
-	// 입력에 함수성을 바인딩하기 위해 호출됩니다.
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-
-	UFUNCTION()
-	void Fire();
+	FOnAttackEndDelegate DragonDollOnAttackEnd;
 
 	// 카메라 위치에서의 총구 오프셋
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
@@ -39,9 +39,35 @@ public:
 
 	// 스폰시킬 프로젝타일 클래스
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-	TSubclassOf<class AFPSProjectile> ProjectileClass;
+		TSubclassOf<class AFPSProjectile> ProjectileClass;
 
 	// 구체 발사지점
-	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* DragonDollHead;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		UCameraComponent* DragonDollHead;
+
+	//MonsterArea
+	AFieldArea* FindClosestMonsterArea();
+
+	//스폰 타이머
+	FTimerHandle DragonDollSpawnMoveUpHandle;
+
+	//액터 스폰 z 축
+	float StartZLocation;
+
+	//스폰 효과
+	void DragonDollSpawnEffect();
+
+
+	UPROPERTY(BlueprintReadWrite)
+		FVector DragonDollHeadLocation;
+	UPROPERTY(BlueprintReadWrite)
+		FRotator DragonDollHeadRotation;
+
+	AFieldArea* MyArea;
+	FVector MyAreaLocation;
+	FVector MyAreaSize;
+
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 };

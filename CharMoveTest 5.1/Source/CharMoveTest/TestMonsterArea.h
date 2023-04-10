@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "TestDoor.h"
-#include "MonsterSpawnActor.h"
+#include "CharMoveTest/FieldMonster/MonsterSpawnActor.h"
 #include "TestMonsterArea.generated.h"
 
 UCLASS()
@@ -43,15 +43,35 @@ public:
 	UPROPERTY(EditAnywhere, Category = "MyBot")
 		TArray<TSubclassOf<AActor>>myBot;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="LinkDoor")
-	ATestDoor* InLinkDoor;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LinkDoor")
+		ATestDoor* InLinkDoor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LinkDoor")
-	ATestDoor* OutLinkDoor;
+		ATestDoor* OutLinkDoor;
 
 
-	UPROPERTY(EditAnywhere, Category = "SpawnMonster")
+	UPROPERTY(EditAnywhere, Category = "SpawnMonsterWave1")
 		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArray;
+
+	UPROPERTY(EditAnywhere, Category = "SpawnMonsterWave2")
+		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArrayWave2;
+
+
+	UFUNCTION(BlueprintCallable)
+		void Wave2Spawn();
+
+
+	//처치된 몬스터 수
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int numberOfMonstersDefeafed;
+
+	//Wave2가 시작되었는지
+	bool Wave2Start;
+
+	//Area의 Wave 수 설정
+	UPROPERTY(EditAnywhere)
+		int thisAreaWaveNumber;
+
 
 private:
 

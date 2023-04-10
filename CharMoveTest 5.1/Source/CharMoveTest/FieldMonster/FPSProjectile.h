@@ -45,4 +45,7 @@ public:
 	
 
 	void OnCollision(const FHitResult& HitResult);
+
+	UPROPERTY(BlueprintReadOnly)
+		float Fire_Power;
 };

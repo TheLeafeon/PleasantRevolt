@@ -5,11 +5,14 @@
 #include "CharMoveTest/CharMoveTest.h"
 #include "Components/BoxComponent.h"
 #include "CharMoveTest/FieldMonster/GirlDollAIController.h"
+#include "CharMoveTest/Player/PlayerableCharacter.h"
+#include "Delegates/DelegateSignatureImpl.inl"
+#include "TimerManager.h"
 #include "Engine/EngineTypes.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
 #include "Engine.h"
-#include <CharMoveTest/CharMoveTest.h>
+
 
 AGirlDoll::AGirlDoll()
 {
@@ -21,7 +24,7 @@ AGirlDoll::AGirlDoll()
 	Monster_HP = 3.0f;
 	Monster_Power = 1.0f;
 	Monster_Speed = 2.0f;
-	Monster_Attack_Time = 1.0f;
+	Monster_Attack_Time = 0.3f;
 	Monster_Attack_Delay = 0.5f;
 	Monster_Knockback_Time = 0.5;
 	AttackRangeBoxSize = FVector(100.0f, 100.0f, 100.0f);
@@ -31,110 +34,151 @@ AGirlDoll::AGirlDoll()
 	AttackRangeBox->SetBoxExtent(AttackRangeBoxSize);
 	AttackRangeBox->SetupAttachment(GetMesh());
 
-	isAttackDuring = false;
+	isAttackHit = false;
 	isAttackReady = false;
 
-	AttackRange = 200.0f;
-	AttackRadius = 50.0f;
 
+	AttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &AGirlDoll::OnOverlapBegin);
 
 }
 
 void AGirlDoll::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//GirlDoll이 땅에서부터 자라나듯이 스폰
+	FVector GirlDollSpawnStartLocation = GetActorLocation();
+	StartZLocation = GirlDollSpawnStartLocation.Z;
+	GirlDollSpawnStartLocation.Z = GirlDollSpawnStartLocation.Z - 200.0f;
+	SetActorLocation(GirlDollSpawnStartLocation);
+
+	SetActorEnableCollision(false);
+	//자라나기 타이머
+	//FTimerHandle GirlDollSpawnMoveUpHandle;
+
+
+	FTimerDelegate GirlDollSpawnMoveUpDelegate = FTimerDelegate::CreateUObject(this, &AGirlDoll::GirlDollSpawnEffect);
+	GetWorldTimerManager().SetTimer(GirlDollSpawnMoveUpHandle, GirlDollSpawnMoveUpDelegate, 0.01f, true);
+
+
 	int TestNum = 100;
 
 	MyArea = FindClosestMonsterArea();
-	MyAreaSize = MyArea->CollisionSphere->GetScaledSphereRadius();
-	MyAreaLocation = MyArea->GetActorLocation(); 
+	MyAreaSize = MyArea->CollisionBox->GetScaledBoxExtent();
+	MyAreaLocation = MyArea->GetActorLocation();
 
-	
+
 }
 
 
-
+//공격 준비 함수
 void AGirlDoll::Attack_Ready()
 {
-	if (isAttackReady || isAttackDuring) return;
-
-	//공격 준비 애님 몽타주
-
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack Ready"));
 	isAttackReady = true;
-}
+	isAttackHit = false;
+	GirlDollAttackSetMotion();
 
+	FTimerHandle AttackReadyTimerHandle;
+
+	FTimerDelegate AttackReadyTimerDelegate = FTimerDelegate::CreateUObject(this, &AGirlDoll::AttackReadyTimer);
+	GetWorldTimerManager().SetTimer(AttackReadyTimerHandle, AttackReadyTimerDelegate, Monster_Attack_Time, false);
+
+}
+//공격 함수
 void AGirlDoll::Attack_Melee()
 {
-	/*isAttackReady = false;
-	if (isAttackDuring) return;*/
-	
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack"));
-	//OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-	//공격 애님 몽타주
+	//오버랩 되어있는 actor 배열
+	TArray<AActor*> OverlappingActors;
+	//공격 시간 타이머 핸들
+	FTimerHandle AttackTimerHandle;
 
-	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack!"));
 
-	AttackCheck();
 
-	/*isAttackDuring = true;*/
-}
-
-void AGirlDoll::AttackCheck()
-{
-	FHitResult HitResult;
-	FCollisionQueryParams Params(NAME_None, false, this);
-	bool bResult = GetWorld()->SweepSingleByChannel(
-		HitResult,
-		GetActorLocation(),
-		GetActorLocation() + GetActorForwardVector() * AttackRange,
-		FQuat::Identity,
-		ECollisionChannel::ECC_EngineTraceChannel3,
-		FCollisionShape::MakeSphere(AttackRadius),
-		Params
-	);
-
-	
-#if ENABLE_DRAW_DEBUG
-
-	FVector TraceVec = GetActorForwardVector() * AttackRange;
-	FVector Center = GetActorLocation() + TraceVec * 0.5f;
-	float HalfHeight = AttackRange * 0.5f + AttackRadius;
-	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
-	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
-	float DebugLifeTime = 5.0f;
-
-	DrawDebugCapsule(GetWorld(),
-		Center,
-		HalfHeight,
-		AttackRadius,
-		CapsuleRot,
-		DrawColor,
-		false,
-		DebugLifeTime);
-
-#endif
-	if (bResult)
+	if (!isAttackHit)
 	{
-		
-		if (HitResult.GetActor())
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("HIt"));
-			FDamageEvent DamageEvent;
-			HitResult.GetActor()->TakeDamage(Monster_Power, DamageEvent, GetController(), this);
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack"));
 
-			//나중에 제거 예정
-			OnAttackEnd.Broadcast();
+		//오버랩 갱신
+		AttackRangeBox->UpdateOverlaps();
+		//오버랩되어있는 컴포넌트들 다 OverlappingActors에 넣기
+		AttackRangeBox->GetOverlappingActors(OverlappingActors);
+
+		//공격 이펙트
+		GirlDollAttackEffect();
+
+		for (AActor* Actor : OverlappingActors)
+		{
+			// 원하는 액터인지 확인
+			if (Actor->IsA(APlayerableCharacter::StaticClass()))
+			{
+				APlayerableCharacter* OtherActor = Cast<APlayerableCharacter>(Actor);
+				if (OtherActor)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Hit"));
+					isAttackHit = true;
+					GirlDollApplyDamageEvent();
+				}
+				
+			}
 
 		}
-
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Miss"));
+	}
+	isAttackReady = false;
+	GirlDollAttackFinishedSetMotion();
+	FTimerDelegate AttackTimerDelegate = FTimerDelegate::CreateUObject(this, &AGirlDoll::AttackTimer);
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimerDelegate, Monster_Attack_Delay, false);
+
+}
+//공격 모션 시간
+void AGirlDoll::AttackTimer()
+{
 	
+	
+	GirlDollOnAttackEnd.Broadcast();
+}
+//공격 준비 시간
+void AGirlDoll::AttackReadyTimer()
+{
+	Attack_Melee();
+}
+
+void AGirlDoll::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+}
+
+void AGirlDoll::GirlDollSpawnEffect()
+{
+	FVector GirlDollSpawnStartLocation = GetActorLocation();
+	float CurrentZ = GirlDollSpawnStartLocation.Z;
+	float TargetZ = StartZLocation; // 목표 위치
+	float Speed = 10.f; // 이동 속도 (1초에 1000만큼 이동)
+
+	float DeltaZ = Speed * GetWorld()->GetDeltaSeconds();
+	float NewZ = FMath::FInterpTo(CurrentZ, TargetZ, GetWorld()->GetDeltaSeconds(), Speed);
+	GirlDollSpawnStartLocation.Z = NewZ;
+
+	SetActorLocation(GirlDollSpawnStartLocation);
+
+	if (FMath::IsNearlyEqual(NewZ, TargetZ, 0.1f)) // 목표 위치에 도달했을 때 타이머 종료
+	{
+		SetActorEnableCollision(true);
+		GetWorld()->GetTimerManager().ClearTimer(GirlDollSpawnMoveUpHandle);
+	}
+
+
 }
 
 float AGirlDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float getDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+
 
 	if (Monster_HP <= 0.0f)
 	{
@@ -149,6 +193,8 @@ float AGirlDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 	if (Monster_HP <= 0)
 	{
 		//Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
+		MyArea->numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed + 1;
+		Destroy();
 	}
 	else
 	{
@@ -162,24 +208,30 @@ void AGirlDoll::OnHit(float DamageTaken, FDamageEvent const& DamageEvent, APawn*
 {
 	if (DamageTaken > 0.0f)
 	{
-		
+		isAttackHit = true;
+		//GirlDollOnAttackEnd.Broadcast();
+
+		GirlDollKnockBack();
+
 		ApplyDamageMomentum(DamageTaken, DamageEvent, PawnInstigator, DamageCauser);
+
+
 	}
 }
 
-ATestMonsterArea* AGirlDoll::FindClosestMonsterArea()
+AFieldArea* AGirlDoll::FindClosestMonsterArea()
 {
 	TArray<AActor*> OverlappingActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATestMonsterArea::StaticClass(), OverlappingActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFieldArea::StaticClass(), OverlappingActors);
 
-	ATestMonsterArea* ClosestArea = nullptr;
+	AFieldArea* ClosestArea = nullptr;
 	FVector GirlDollLocation = GetActorLocation();
 
 	float MinDistance = TNumericLimits<float>::Max();
 
 	for (AActor* Actor : OverlappingActors)
 	{
-		ATestMonsterArea* Area = Cast<ATestMonsterArea>(Actor);
+		AFieldArea* Area = Cast<AFieldArea>(Actor);
 		if (Area != nullptr)
 		{
 			float Distance = FVector::Distance(GirlDollLocation, Area->GetActorLocation());
@@ -193,11 +245,3 @@ ATestMonsterArea* AGirlDoll::FindClosestMonsterArea()
 
 	return ClosestArea;
 }
-
-void AGirlDoll::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack!"));
-
-	AttackCheck();
-}
-

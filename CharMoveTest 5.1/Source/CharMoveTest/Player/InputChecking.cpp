@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PlayerableCharacter.h"
 #include "InputChecking.h"
+#include "PlayerableCharacter.h"
+
 
 UInputChecking::UInputChecking()
 {

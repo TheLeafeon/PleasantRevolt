@@ -32,6 +32,8 @@ AFPSProjectile::AFPSProjectile()
 
     //3초 후 탄환 구체 삭제
     InitialLifeSpan = 0.1f;
+
+    Fire_Power = 1.0f;
 }
 
 // Called when the game starts or when spawned

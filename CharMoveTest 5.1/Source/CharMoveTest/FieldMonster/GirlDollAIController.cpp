@@ -35,15 +35,7 @@ AGirlDollAIController::AGirlDollAIController()
 void AGirlDollAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	/*UBlackboardComponent* BlackboardComp = Blackboard.Get();
-	if (UseBlackboard(BBGirlDoll, BlackboardComp))
-	{
-		BlackboardComp->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
-		if (!RunBehaviorTree(BTGirlDoll))
-		{
 
-		}
-	}*/
 	FTimerHandle TimerHandleGirlDoll;
 
 	FTimerDelegate TimerDelegateGirlDoll = FTimerDelegate::CreateUObject(this, &AGirlDollAIController::OnPossessDelayed, InPawn);
@@ -71,9 +63,8 @@ void AGirlDollAIController::OnPossessDelayed(APawn* InPawn)
 	{
 		BlackboardComp->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
 		BlackboardComp->SetValueAsVector(AreaPosKey, MyGirlDoll->MyAreaLocation);
-		BlackboardComp->SetValueAsFloat(AreaSizeKey, MyGirlDoll->MyAreaSize);
+		BlackboardComp->SetValueAsVector(AreaSizeKey, MyGirlDoll->MyAreaSize);
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Object name is: %f"), MyGirlDoll->MyAreaSize));
 
 
 		if (!RunBehaviorTree(BTGirlDoll))
