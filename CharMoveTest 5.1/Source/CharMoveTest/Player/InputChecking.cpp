@@ -15,7 +15,7 @@ void UInputChecking::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase*
 		if (Player != NULL)
 		{
 			Player->bisAttack = false;
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("NotifyBegin"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("NotifyBegin"));
 		}
 	}
 }

@@ -59,7 +59,7 @@ void UPlayerAnimInstnce::PlayBeHitMontage()
 
 void UPlayerAnimInstnce::PlayDeathMontage()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Dead"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Dead"));
 }
 
 void UPlayerAnimInstnce::PlayLadderMoveUpMontage()

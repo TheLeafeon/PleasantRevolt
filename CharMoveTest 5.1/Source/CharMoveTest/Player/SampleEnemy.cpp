@@ -37,7 +37,7 @@ void ASampleEnemy::NotifyActorBeginOverlap(AActor* OtherActor)
 float ASampleEnemy::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float getDamage = Super::TakeDamage(Damage, DamgaeEvent, EventInstigator, DamageCauser);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Debug %d"), hp));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Debug %d"), hp));
 	
 	if (hp <= 0.0f)
 		return 0.0f;
