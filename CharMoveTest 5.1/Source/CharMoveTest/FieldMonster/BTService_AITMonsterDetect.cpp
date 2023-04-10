@@ -51,6 +51,6 @@ void UBTService_AITMonsterDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	}
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(AAITMonsterAIController::TargetKey, nullptr);
-	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
+	//DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
 
 }

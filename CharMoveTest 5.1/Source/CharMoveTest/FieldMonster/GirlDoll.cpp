@@ -74,7 +74,7 @@ void AGirlDoll::BeginPlay()
 //공격 준비 함수
 void AGirlDoll::Attack_Ready()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack Ready"));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack Ready"));
 	isAttackReady = true;
 	isAttackHit = false;
 	GirlDollAttackSetMotion();
@@ -97,7 +97,7 @@ void AGirlDoll::Attack_Melee()
 
 	if (!isAttackHit)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack"));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack"));
 
 		//오버랩 갱신
 		AttackRangeBox->UpdateOverlaps();
@@ -115,7 +115,7 @@ void AGirlDoll::Attack_Melee()
 				APlayerableCharacter* OtherActor = Cast<APlayerableCharacter>(Actor);
 				if (OtherActor)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Hit"));
+					//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Hit"));
 					isAttackHit = true;
 					GirlDollApplyDamageEvent();
 				}
@@ -126,7 +126,7 @@ void AGirlDoll::Attack_Melee()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Miss"));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Miss"));
 	}
 	isAttackReady = false;
 	GirlDollAttackFinishedSetMotion();

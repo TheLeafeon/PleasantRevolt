@@ -41,7 +41,7 @@ void AInteractMonsterSpawnActor::InteractWithMe()
 	{
 		bIsMonsterSpawned = true;
 
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("MonsterSpawn"));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("MonsterSpawn"));
 
 		if (SpawnMonsterArray.Num() == 0)
 		{
@@ -56,7 +56,7 @@ void AInteractMonsterSpawnActor::InteractWithMe()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("AlreadyMonsterSpawn"));
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("AlreadyMonsterSpawn"));
 	}
 	
 	
@@ -65,5 +65,5 @@ void AInteractMonsterSpawnActor::InteractWithMe()
 
 void AInteractMonsterSpawnActor::ShowInteractionWidget()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("You press E"));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("You press E"));
 }
