@@ -68,7 +68,7 @@ void UDetect_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		//OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey::enemyActor, nullptr); //없으면 null
 	}
 	
-	DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
+	//DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange, false); //범위 안에 없으면 false
 	//타격판정 false로 바꿔주기
 }
