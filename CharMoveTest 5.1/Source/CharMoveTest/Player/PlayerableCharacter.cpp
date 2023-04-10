@@ -61,6 +61,9 @@ APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocat
 	Player_Dodge_Time = 1.0f;
 	isDodge = false;
 
+	// Check Player Die
+	isDie = false;
+
 	// Player Melee
 	bisAttack = false;
 	currentCombo = 0;
@@ -328,14 +331,17 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 			Player_HP -= getDamage;
 		}
 
-		if (Player_HP <= 0)
+		if (!isDie)
 		{
-			Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
-		}
-		else
-		{
-			OnHit(getDamage, DamgaeEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
-			DodgeStart(Player_Dodge_Time);
+			if (Player_HP <= 0)
+			{
+				Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
+			}
+			else
+			{
+				OnHit(getDamage, DamgaeEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
+				DodgeStart(Player_Dodge_Time);
+			}
 		}
 	}
 
@@ -345,40 +351,41 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
 	Player_HP = FMath::Min(0.f, Player_HP);
+	isDie = true;
 
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
 
-	Killer = GetDamageInstigator(Killer, *DamageType);
-	/*
+	//Killer = GetDamageInstigator(Killer, *DamageType);
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 
 	if (Controller != NULL)
 	{
-		Controller->UnPossess();
+		//Controller->UnPossess();
 	}
-*/
 	if (GetCapsuleComponent())
 	{
 		GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_Pawn, ECR_Ignore);
 		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
 	}
-
 	if (GetCharacterMovement())
 	{
 		GetCharacterMovement()->StopMovementImmediately();
 		GetCharacterMovement()->DisableMovement();
 	}
+	if (AnimInstance)
+	{
+	}
 
-	float DeathAnimDuration = PlayAnimMontage(AnimInstance->Death_AnimMontage);
+	//float DeathAnimDuration = PlayAnimMontage(AnimInstance->Death_AnimMontage);
 
-	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
+	//GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
 }
 
 void APlayerableCharacter::DeathEnd()
 {
 	//this->SetActorHiddenInGame(this);
-	SetLifeSpan(0.1f);
+	//SetLifeSpan(0.1f);
 }
 
 //=============== Weapon & Switching System =============== //
@@ -505,7 +512,7 @@ void APlayerableCharacter::EnableInputAfterRoll()
 
 void APlayerableCharacter::Rolling()
 {
-	if (bIsRolling || (GetCharacterMovement()->IsFalling()) || GetCharacterMovement()->Velocity == FVector::ZeroVector)
+	if (bIsRolling || (GetCharacterMovement()->IsFalling()))
 	{
 		return;
 	}

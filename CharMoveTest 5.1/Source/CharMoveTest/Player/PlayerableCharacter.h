@@ -115,6 +115,8 @@ private :
 	void DodgeEnd();
 	bool isDodge;
 /* Player Get Damage & Die 관련 */
+private :
+	bool isDie;
 public :
 	// 플레이어의 체력을 밖으로 보내기 위위해서 작성
 	UFUNCTION(BlueprintCallable, Category = "Status")
