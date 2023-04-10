@@ -8,6 +8,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "CharMoveTest/Boss/PD_RightArm.h"
 #include "CharMoveTest/Boss/PD_LeftArm.h"
+#include "Kismet/GameplayStatics.h"
 #include "PD_SmashWait_BTTaskNode.generated.h"
 
 /**
