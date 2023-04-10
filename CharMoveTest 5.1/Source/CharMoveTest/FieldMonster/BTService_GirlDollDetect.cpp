@@ -51,8 +51,8 @@ void UBTService_GirlDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AGirlDollAIController::TargetKey, PlayerableCharacter);
 				
 
-				DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
+				//DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
+				//DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
 				return;
 			}
 		}
