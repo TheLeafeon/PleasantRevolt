@@ -242,7 +242,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ladder")
 	float LadderMoveSpeed;
 	UFUNCTION(BlueprintCallable)
-	void SetLadderMoveTrue(bool Left_or_Right);
+	void SetLadderMoveTrue();
 	UFUNCTION(BlueprintCallable)
 	void SetLadderMoveFalse();
 };

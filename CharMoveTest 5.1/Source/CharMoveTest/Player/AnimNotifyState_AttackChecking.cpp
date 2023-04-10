@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PlayerableCharacter.h"
 #include "AnimNotifyState_AttackChecking.h"
+#include "PlayerableCharacter.h"
+
 
 UAnimNotifyState_AttackChecking::UAnimNotifyState_AttackChecking()
 {
