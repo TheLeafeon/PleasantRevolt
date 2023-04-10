@@ -6,6 +6,7 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
+#include "Kismet/GameplayStatics.h"
 #include "PlasticDoll_Setting_BTTaskNode.generated.h"
 
 /**
