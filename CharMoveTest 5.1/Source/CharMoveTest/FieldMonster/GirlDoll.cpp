@@ -82,7 +82,7 @@ void AGirlDoll::Attack_Ready()
 	FTimerHandle AttackReadyTimerHandle;
 
 	FTimerDelegate AttackReadyTimerDelegate = FTimerDelegate::CreateUObject(this, &AGirlDoll::AttackReadyTimer);
-	GetWorldTimerManager().SetTimer(AttackReadyTimerHandle, AttackReadyTimerDelegate, 0.3f, false);
+	GetWorldTimerManager().SetTimer(AttackReadyTimerHandle, AttackReadyTimerDelegate, Monster_Attack_Time, false);
 
 }
 //공격 함수
@@ -131,7 +131,7 @@ void AGirlDoll::Attack_Melee()
 	isAttackReady = false;
 	GirlDollAttackFinishedSetMotion();
 	FTimerDelegate AttackTimerDelegate = FTimerDelegate::CreateUObject(this, &AGirlDoll::AttackTimer);
-	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimerDelegate, 0.3f, false);
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimerDelegate, Monster_Attack_Delay, false);
 
 }
 //공격 모션 시간
