@@ -23,11 +23,11 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 		NearWeapon2_AnimMontage = NEARWEAPON2_MONTGE.Object;
 	}
 
-	//static ConstructorHelpers::FObjectFinder<UAnimMontage> BEHIT_MONTAGE(TEXT(""));
-	//if (BEHIT_MONTAGE.Succeeded())
-	//{
-	//	BeHit_AnimMontage = BEHIT_MONTAGE.Object;
-	//}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> BEHIT_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/Player_Hit_Montage.Player_Hit_Montage"));
+	if (BEHIT_MONTAGE.Succeeded())
+	{
+		BeHit_AnimMontage = BEHIT_MONTAGE.Object;
+	}
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> DEATH_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/Player_Death_Montage.Player_Death_Montage"));
 	if (DEATH_MONTAGE.Succeeded())
@@ -54,7 +54,7 @@ void UPlayerAnimInstnce::PlayRollingMontage()
 
 void UPlayerAnimInstnce::PlayBeHitMontage()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Hit"));
+	Montage_Play(BeHit_AnimMontage, 1.0f);
 }
 
 void UPlayerAnimInstnce::PlayDeathMontage()
