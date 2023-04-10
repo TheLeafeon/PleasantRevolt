@@ -47,9 +47,6 @@ void UBTService_RabbitDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ARabbitDollAIController::TargetKey, PlayerableCharacter);
 
-
-				DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
 				return;
 			}
 		}
