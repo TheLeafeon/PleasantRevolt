@@ -567,6 +567,7 @@ void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 	{
 		HandUpObj = OtherActor;
 		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
+		SetAnimIsDrop(false);
 		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}
 

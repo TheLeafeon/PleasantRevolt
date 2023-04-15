@@ -222,6 +222,8 @@ public:
 	AActor* HandUpObj;
 	UFUNCTION(BlueprintImplementableEvent)
 	void HitDrop();
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetAnimIsDrop(bool IsDrop);
 private:
 	//Ladder°ü·Ã
 	UPROPERTY()
