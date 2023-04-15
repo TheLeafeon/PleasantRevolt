@@ -43,7 +43,13 @@ public :
 	UAnimMontage* LadderMoveUp_AnimMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ladder, Meta = (AllowPrivateAccess = true))
 	UAnimMontage* LadderMoveDown_AnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ladder, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* LadderMoveStart_AnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ladder, Meta = (AllowPrivateAccess = true))
+	UAnimMontage* LadderMoveEnd_AnimMontage;
 	void PlayLadderMoveUpMontage();
 	void PlayLadderMoveDownMontage();
 	void StopLadderMoveMontage();
+	void PlayLadderMoveStartMontage();
+	void PlayLadderMoveEndMontage();
 };

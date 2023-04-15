@@ -218,22 +218,16 @@ public:
 	//HandUp관련
 	UFUNCTION()
 	void PlayerHandUp(AActor* OtherActor);
+	UPROPERTY(BlueprintReadWrite)
+	AActor* HandUpObj;
+	UFUNCTION(BlueprintImplementableEvent)
+	void HitDrop();
 private:
 	//Ladder관련
 	UPROPERTY()
 	bool isLadder;
-	UPROPERTY()
-	bool isLeftLadder;
-	UPROPERTY()
-	float SaveValue;
-	UPROPERTY()
-	float SaveValue2;
-	UPROPERTY()
-	bool isTopDown;
-	UPROPERTY()
-	bool isLeftRight;
 	UFUNCTION()
-	void LadderRightMove(float Value);
+	void LadderMove(float Value);
 	UFUNCTION()
 	void LadderLeftMove(float Value);
 	UPROPERTY()
@@ -247,4 +241,6 @@ public:
 	void SetLadderMoveTrue();
 	UFUNCTION(BlueprintCallable)
 	void SetLadderMoveFalse();
+	UPROPERTY(BlueprintReadWrite, Category = "Ladder")
+	bool LadderStart;
 };

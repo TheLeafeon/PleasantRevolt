@@ -45,6 +45,16 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 	{
 		LadderMoveDown_AnimMontage = LADDERMOVEDOWN_MONTAGE.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> LADDERMOVESTART_MONTAGE(TEXT("/Game/Interaction/Animation/ModularAnimalKnightsPolyart/Animations/LadderStart_Montage.LadderStart_Montage"));
+	if (LADDERMOVESTART_MONTAGE.Succeeded())
+	{
+		LadderMoveStart_AnimMontage = LADDERMOVESTART_MONTAGE.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> LADDERMOVEEND_MONTAGE(TEXT("/Game/Interaction/Animation/ModularAnimalKnightsPolyart/Animations/LadderEnd_Montage.LadderEnd_Montage"));
+	if (LADDERMOVEEND_MONTAGE.Succeeded())
+	{
+		LadderMoveEnd_AnimMontage = LADDERMOVEEND_MONTAGE.Object;
+	}
 }
 
 void UPlayerAnimInstnce::PlayRollingMontage()
@@ -74,6 +84,17 @@ void UPlayerAnimInstnce::PlayLadderMoveDownMontage()
 
 void UPlayerAnimInstnce::StopLadderMoveMontage()
 {
+	Montage_Stop(0.0f, LadderMoveStart_AnimMontage);
 	Montage_Stop(0.0f, LadderMoveDown_AnimMontage);
 	Montage_Stop(0.0f, LadderMoveUp_AnimMontage);
+}
+
+void UPlayerAnimInstnce::PlayLadderMoveStartMontage()
+{
+	Montage_Play(LadderMoveStart_AnimMontage, 1.0f);
+}
+
+void UPlayerAnimInstnce::PlayLadderMoveEndMontage()
+{
+	Montage_Play(LadderMoveEnd_AnimMontage, 1.0f);
 }

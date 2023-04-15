@@ -33,10 +33,11 @@ private:
 	UPROPERTY()
 	APlayerableCharacter* PlayerCharacter;
 
-	/* Interaction Interface 속 함수 재정의  */
 public:
 	UPROPERTY(BlueprintReadWrite)
 	UPrimitiveComponent* CollisionComponent;
+	UPROPERTY(BlueprintReadWrite)
+	UPrimitiveComponent* BlockCollisionComponent;
 private:
 	bool IsHandUp;
 	FTimerHandle TimerHandle;
@@ -52,4 +53,8 @@ private:
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void HandUpAni(bool value);
+	UFUNCTION(BlueprintCallable)
+	void Drop();
+	UFUNCTION(BlueprintCallable)
+	void BackDrop();
 };
