@@ -29,6 +29,7 @@ void AHandUP::InteractWithMe()
 {
 	if (IsHandUp)
 	{
+		//거울 핸드업 생성
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 			{
 				DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -68,6 +69,7 @@ void AHandUP::InteractWithMe()
 	}
 	else
 	{
+		//거울 핸드업 삭제
 		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		CollisionComponent->SetSimulatePhysics(false);

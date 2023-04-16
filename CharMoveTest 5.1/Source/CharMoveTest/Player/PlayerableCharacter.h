@@ -230,8 +230,6 @@ private:
 	bool isLadder;
 	UFUNCTION()
 	void LadderMove(float Value);
-	UFUNCTION()
-	void LadderLeftMove(float Value);
 	UPROPERTY()
 	float SaveZLocation;
 public:
