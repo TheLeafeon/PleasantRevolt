@@ -7,7 +7,7 @@
 #include "Engine/EngineTypes.h"
 
 #include "Engine/World.h"
-#include "Engine.h"
+//#include "Engine.h"
 
 // Sets default values
 AFieldArea::AFieldArea()

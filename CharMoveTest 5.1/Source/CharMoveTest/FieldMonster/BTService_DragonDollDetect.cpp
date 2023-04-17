@@ -24,7 +24,7 @@ void UBTService_DragonDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = BlackboardComp->GetValueAsVector("AreaPos");
 
-	FVector DetectRadius = BlackboardComp->GetValueAsVector("AreaSize");;
+	FVector DetectRadius = BlackboardComp->GetValueAsVector("AreaSize");
 
 
 

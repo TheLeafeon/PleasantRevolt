@@ -8,10 +8,11 @@
 #include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "Delegates/DelegateSignatureImpl.inl"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/EngineTypes.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
-#include "Engine.h"
+//#include "Engine.h"
 
 
 AGirlDoll::AGirlDoll()
@@ -68,6 +69,8 @@ void AGirlDoll::BeginPlay()
 	MyAreaLocation = MyArea->GetActorLocation();
 
 
+
+
 }
 
 
@@ -93,8 +96,6 @@ void AGirlDoll::Attack_Melee()
 	//공격 시간 타이머 핸들
 	FTimerHandle AttackTimerHandle;
 
-
-
 	if (!isAttackHit)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack"));
@@ -116,7 +117,7 @@ void AGirlDoll::Attack_Melee()
 				if (OtherActor)
 				{
 					//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("GirDoll Attack Hit"));
-					isAttackHit = true;
+					//isAttackHit = true;
 					GirlDollApplyDamageEvent();
 				}
 				
