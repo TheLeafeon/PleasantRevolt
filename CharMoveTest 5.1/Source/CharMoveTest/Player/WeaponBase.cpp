@@ -66,7 +66,7 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 		if (OtherActor->IsA(AActor::StaticClass()) && !OtherActor->IsA(APlayerableCharacter::StaticClass()))
 		{
 			UGameplayStatics::ApplyDamage(OtherActor, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
-			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot Damage");
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot Damage");
 		}
 	}
 }

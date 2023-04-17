@@ -15,6 +15,7 @@ void UAnimNotifyState_AttackChecking::NotifyBegin(USkeletalMeshComponent* MeshCo
 		APlayerableCharacter* Player = Cast<APlayerableCharacter>(MeshComp->GetOwner());
 		if (Player != NULL)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Attack"));
 			Player->Enable_Attack_Enemy();
 		}
 	}
@@ -27,6 +28,7 @@ void UAnimNotifyState_AttackChecking::NotifyEnd(USkeletalMeshComponent* MeshComp
 		APlayerableCharacter* Player = Cast<APlayerableCharacter>(MeshComp->GetOwner());
 		if (Player != NULL)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("EndAttack"));
 			Player->Disable_Attack_Enemy();
 		}
 	}
