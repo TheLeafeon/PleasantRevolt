@@ -12,7 +12,8 @@
 #include "CharMoveTest/Interaction/HandUP.h"
 
 // Sets default values
-APlayerableCharacter::APlayerableCharacter() : LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false), isLeftLadder(false), SaveValue(0), SaveValue2(0), isTopDown(false), isLeftRight(false)
+APlayerableCharacter::APlayerableCharacter()
+	: LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -125,61 +126,45 @@ void APlayerableCharacter::LookUpAtRate(float Rate)
 
 void APlayerableCharacter::MoveForward(float Value)
 {
-	SaveValue = Value;
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
-		if (isLadder && isTopDown)
+		if (LadderStart == false)
 		{
-			if (isLeftLadder)
+			if (isLadder)
 			{
-				LadderLeftMove(Value);
+				LadderMove(Value);
 			}
 			else
 			{
-				LadderRightMove(Value);
-			}
-			
-		}
-		else
-		{
-			// find out which way is forward
-			const FRotator Rotation = Controller->GetControlRotation();
-			const FRotator YawRotation(0, Rotation.Yaw, 0);
+				// find out which way is forward
+				const FRotator Rotation = Controller->GetControlRotation();
+				const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-			// get forward vector
-			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-			AddMovementInput(Direction, Value);
+				// get forward vector
+				const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+				AddMovementInput(Direction, Value);
+			}
 		}
 	}
 }
 
 void APlayerableCharacter::MoveRight(float Value)
 {
-	SaveValue2 = Value;
-
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
-		if (isLadder && isLeftRight)
+		if (LadderStart == false)
 		{
-			if (isLeftLadder)
+			if (!isLadder)
 			{
-				LadderLeftMove(Value);
-			}
-			else
-			{
-				LadderRightMove(Value);
-			}
-		}
-		else
-		{
-			// find out which way is right
-			const FRotator Rotation = Controller->GetControlRotation();
-			const FRotator YawRotation(0, Rotation.Yaw, 0);
+				// find out which way is right
+				const FRotator Rotation = Controller->GetControlRotation();
+				const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-			// get right vector 
-			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-			// add movement in that direction
-			AddMovementInput(Direction, Value);
+				// get right vector 
+				const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+				// add movement in that direction
+				AddMovementInput(Direction, Value);
+			}
 		}
 	}
 }
@@ -323,6 +308,7 @@ void APlayerableCharacter::OnHit(float DamageTaken, FDamageEvent const& DamgaeEv
 	if (DamageTaken > 0.f)
 	{
 		ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
+		HitDrop();
 	}
 }
 
@@ -361,6 +347,8 @@ void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEv
 {
 	Player_HP = FMath::Min(0.f, Player_HP);
 	isDie = true;
+
+	HitDrop();
 
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
 
@@ -407,6 +395,8 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 			return;
 		
 		AWeaponBase* NextWeapon = MeleeWeaponsArray[WeaponIndex];
+
+		HitDrop();
 
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(true);
 		UnEquipSubWeapon();
@@ -458,6 +448,7 @@ void APlayerableCharacter::Attack_Melee()
 {
 	if (!bisAttack)
 	{
+		HitDrop();
 		if (currentCombo < maxCombo)
 		{
 			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
@@ -595,17 +586,20 @@ void APlayerableCharacter::OnInteract()
 		Interface->InteractWithMe();
 	}
 }
+
 void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 {
 	if (OtherActor)
 	{
+		HandUpObj = OtherActor;
 		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
+		SetAnimIsDrop(false);
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}
 
 }
 
-void APlayerableCharacter::LadderRightMove(float Value)
+void APlayerableCharacter::LadderMove(float Value)
 {
 	if (Value > 0)
 	{
@@ -621,6 +615,8 @@ void APlayerableCharacter::LadderRightMove(float Value)
 	{
 		if (GetActorLocation().Z <= SaveZLocation)
 		{
+			LadderStart = true;
+			AnimInstance->PlayLadderMoveEndMontage();
 			SetLadderMoveFalse();
 		}
 		else if (!StopLadderMove)
@@ -631,90 +627,16 @@ void APlayerableCharacter::LadderRightMove(float Value)
 
 		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed * -1));
 	}
-}
-
-void APlayerableCharacter::LadderLeftMove(float Value)
-{
-	if (Value < 0)
-	{
-		if (!StopLadderMove)
-		{
-			AnimInstance->PlayLadderMoveUpMontage();
-			StopLadderMove = true;
-		}
-
-		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed));
-	}
-	else if (Value > 0)
-	{
-		if (GetActorLocation().Z <= SaveZLocation)
-		{
-			SetLadderMoveFalse();
-		}
-		else if (!StopLadderMove)
-		{
-			AnimInstance->PlayLadderMoveDownMontage();
-			StopLadderMove = true;
-		}
-
-		SetActorLocation(GetActorLocation() + FVector(0, 0, LadderMoveSpeed * -1));
-	}
-
 }
 
 //아래 두 개는 사다리 블루프린트에서 호출
 void APlayerableCharacter::SetLadderMoveTrue()
 {
+	AnimInstance->PlayLadderMoveStartMontage();
 	//사다리 모드
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("1 ") + FString::SanitizeFloat(SaveValue)); //이건 안 건들였을 때 0
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("2 ") + FString::SanitizeFloat(SaveValue2));
-
-	if (SaveValue > 0 && SaveValue2 == 0)
-	{
-		isLeftLadder = false;
-		isTopDown = true;
-	}
-	else if (SaveValue2 > 0 && SaveValue == 0)
-	{
-		isLeftLadder = false;
-		isLeftRight = true;
-	}
-	else if (SaveValue < 0 && SaveValue2 == 0)
-	{
-		isLeftLadder = true;
-		isTopDown = true;
-	}
-	else if (SaveValue2 < 0 && SaveValue == 0)
-	{
-		isLeftLadder = true;
-		isLeftRight = true;
-	}
-	else if (SaveValue > 0 && SaveValue2 > 0)
-	{
-		//키 하나만 받게 하기
-		isLeftLadder = false; //오른쪽 위
-		isTopDown = true;
-		//위 기준
-	}
-	else if (SaveValue < 0 && SaveValue2 > 0) //오른쪽 아래
-	{
-		isLeftLadder = false;
-		isLeftRight = true;
-		//오른쪽 기준으로 하게 하기
-	}
-	else if (SaveValue > 0 && SaveValue2 < 0)
-	{
-		isLeftLadder = true; //왼쪽 위
-		isLeftRight = true;
-		//왼쪽 기준으로 하게 하기
-	}
-	else if (SaveValue < 0 && SaveValue2 < 0) //왼쪽 아래
-	{
-		isLeftLadder = true;
-		isTopDown = true;
-		//아래 기준
-	}
+	LadderStart = true;
+	AnimInstance->PlayLadderMoveStartMontage();
 
 	isLadder = true;
 	//이때 로케이션을 저장해두고 로케이션 Z축 이하게 되면 강제로 원래 로케이션으로 돌리고 False호출
@@ -724,11 +646,9 @@ void APlayerableCharacter::SetLadderMoveTrue()
 void APlayerableCharacter::SetLadderMoveFalse()
 {
 	//사다리 끝
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("MoveFalse"));
-	AnimInstance->StopLadderMoveMontage();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("MoveFalse"));
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	AnimInstance->StopLadderMoveMontage();
 	isLadder = false;
 	StopLadderMove = false;
-	isTopDown = false;
-	isLeftRight = false;
 }
