@@ -57,4 +57,6 @@ public:
 	void Drop();
 	UFUNCTION(BlueprintCallable)
 	void BackDrop();
+	UPROPERTY(BlueprintReadWrite)
+	bool IsMirror;
 };
