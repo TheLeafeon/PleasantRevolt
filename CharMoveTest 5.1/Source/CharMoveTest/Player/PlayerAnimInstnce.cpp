@@ -22,7 +22,11 @@ UPlayerAnimInstnce::UPlayerAnimInstnce()
 	{
 		NearWeapon2_AnimMontage = NEARWEAPON2_MONTGE.Object;
 	}
-
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> NEARWEAPON3_MONTGE(TEXT("/Game/PlayerTest/Player/Animations/NearWeapon3_Attack_Montage.NearWeapon3_Attack_Montage"));
+	if (NEARWEAPON3_MONTGE.Succeeded())
+	{
+		NearWeapon3_AnimMontage = NEARWEAPON3_MONTGE.Object;
+	}
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> BEHIT_MONTAGE(TEXT("/Game/PlayerTest/Player/Animations/Player_Hit_Montage.Player_Hit_Montage"));
 	if (BEHIT_MONTAGE.Succeeded())
 	{

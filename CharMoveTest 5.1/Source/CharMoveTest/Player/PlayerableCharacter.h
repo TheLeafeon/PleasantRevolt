@@ -161,22 +161,32 @@ private :
 
 	const int32 FIRST_WEAPON = 0;
 	const int32 SECOND_WEAPON = 1;
+	const int32 THIRD_WEAPON = 2;
 
 	// Weapon 1, 2, 3
 	UPROPERTY(EditAnywhere, Category = "Weapons")
 		TSubclassOf<class AWeaponBase> FirstWeapon;
 	UPROPERTY(EditAnywhere, Category = "Weapons")
 		TSubclassOf<class AWeaponBase> SecondWeapon;
+	UPROPERTY(EditAnywhere, Category = "Weapons")
+		TSubclassOf<class AWeaponBase> ThirdWeapon;
+	UPROPERTY(EditAnywhere, Category = "Weapons")
+		TSubclassOf<class AWeaponBase> SubWeapon;
 
 	// 현재 장착중인 무기 확인용
 	UPROPERTY(VisibleAnywhere, Category = "Weapons")
 		class AWeaponBase* CurrentWeapon;
+	UPROPERTY(VisibleAnywhere, Category = "Weapons")
+		class AWeaponBase* CurrentSubWeapon;
+
 	class UAnimMontage* CurrentWeaponComboAnim;
 
 	void SwitchWeapon(int32 WeaponIndex);
 	void FirstMeleeWeapon();
 	void SecondMeleeWeapon();
-
+	void ThirdMeleeWeapon();
+	void EquipSubWeapon();
+	void UnEquipSubWeapon();
 	int32 maxCombo;
 	FTimerHandle NextComboTimerHandle;
 
