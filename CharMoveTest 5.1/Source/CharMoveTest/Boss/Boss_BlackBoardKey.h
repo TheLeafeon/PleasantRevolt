@@ -11,6 +11,7 @@ namespace bossKey
 	TCHAR const* const selfActor = TEXT("SelfActor");
 	TCHAR const* const enemyActor = TEXT("EnemyActor");
 	TCHAR const* const inRange = TEXT("InRange"); 
+	TCHAR const* const inRange2 = TEXT("InRange2");
 	TCHAR const* const detectRadius = TEXT("DetectRadius");
 	TCHAR const* const setting = TEXT("Setting");
 	TCHAR const* const keyTrue = TEXT("True"); 

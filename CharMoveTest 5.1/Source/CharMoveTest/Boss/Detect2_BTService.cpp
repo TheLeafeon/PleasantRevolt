@@ -1,15 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharMoveTest/Boss/Detect_BTService.h"
+#include "CharMoveTest/Boss/Detect2_BTService.h"
 
-UDetect_BTService::UDetect_BTService() : DetectRadius(0)
+UDetect2_BTService::UDetect2_BTService() : DetectRadius(0)
 {
-	NodeName = TEXT("Detect");
+	NodeName = TEXT("Detect2");
 	Interval = 1.0f;
 }
 
-void UDetect_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UDetect2_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
@@ -51,15 +51,8 @@ void UDetect_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 			if (PlayerCharacter && PlayerCharacter->GetController()->IsPlayerController()) //플레이어 캐릭터라면?
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey::enemyActor, PlayerCharacter); //블랙보드에 플레이어 캐릭터 변수 저장
-				OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange, true); //범위 안에 있으면 true
 				OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange2, true); //범위 안에 있으면 true
 
-				/*
-				DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Green, false, 0.2f);
-				DrawDebugPoint(World, PlayerCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerCharacter->GetActorLocation(), FColor::Blue, false, 0.2f);
-				*/
 				return;
 			}
 		}
@@ -68,9 +61,7 @@ void UDetect_BTService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	{
 		//OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey::enemyActor, nullptr); //없으면 null
 	}
-	
+
 	//DrawDebugSphere(World, Center, DetectRadius, 16, FColor::Red, false, 0.2f);
-	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange, false); //범위 안에 없으면 false
-	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange2, false); //범위 안에 있으면 true
-	//타격판정 false로 바꿔주기
+	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::inRange2, false); //범위 안에 없으면
 }

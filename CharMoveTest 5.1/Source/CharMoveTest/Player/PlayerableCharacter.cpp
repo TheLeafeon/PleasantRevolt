@@ -448,7 +448,6 @@ void APlayerableCharacter::Attack_Melee()
 {
 	if (!bisAttack)
 	{
-		HitDrop();
 		if (currentCombo < maxCombo)
 		{
 			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
@@ -461,6 +460,7 @@ void APlayerableCharacter::Attack_Melee()
 		{
 			Attack_Melee_End();
 		}
+		HitDrop();
 	}
 }
 
