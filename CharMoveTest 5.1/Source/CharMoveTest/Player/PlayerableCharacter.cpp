@@ -97,6 +97,7 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	// 근거리 관련 입력
 	PlayerInputComponent->BindAction("FirstMeleeWeapon", IE_Released, this, &APlayerableCharacter::FirstMeleeWeapon);
 	PlayerInputComponent->BindAction("SecondMeleeWeapon", IE_Released, this, &APlayerableCharacter::SecondMeleeWeapon);
+	PlayerInputComponent->BindAction("ThirdMeleeWeapon", IE_Released, this, &APlayerableCharacter::ThirdMeleeWeapon);
 	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &APlayerableCharacter::Attack_Melee);
 	
 	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
@@ -220,17 +221,25 @@ void APlayerableCharacter::BeginPlay()
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
 		CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
 		maxCombo = CurrentWeapon->GetMaxCombo();
-
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon1"));
 	}
 	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SecondWeapon, SpawnParams))
 	{
 		Weapon->GetWeponMesh()->SetHiddenInGame(true);
 		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
 		MeleeWeaponsArray.Add(Weapon);
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NearWeapon2"));
 	}
-
+	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(ThirdWeapon, SpawnParams))
+	{
+		Weapon->GetWeponMesh()->SetHiddenInGame(true);
+		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
+		MeleeWeaponsArray.Add(Weapon);
+	}
+	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SubWeapon, SpawnParams))
+	{
+		Weapon->GetWeponMesh()->SetHiddenInGame(true);
+		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_l"));
+		CurrentSubWeapon = Weapon;
+	}
 	// initialize the timeline and the curve float
 	RollTimeline.SetLooping(false);
 	RollTimeline.SetTimelineLength(RollAnimationLength);
@@ -400,11 +409,9 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		AWeaponBase* NextWeapon = MeleeWeaponsArray[WeaponIndex];
 
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(true);
+		UnEquipSubWeapon();
 		CurrentWeapon = NextWeapon;
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
-
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Change to NearWeapon %d"), WeaponIndex));
-
 
 		if (WeaponIndex == FIRST_WEAPON)
 		{
@@ -414,30 +421,43 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		{
 			CurrentWeaponComboAnim = AnimInstance->NearWeapon2_AnimMontage;
 		}
+		else if (WeaponIndex == THIRD_WEAPON)
+		{
+			CurrentWeaponComboAnim = AnimInstance->NearWeapon3_AnimMontage;
+		}
 
 		maxCombo = CurrentWeapon->GetMaxCombo();
 		currentCombo = 0;
 	}
 }
-
+void APlayerableCharacter::EquipSubWeapon()
+{
+	CurrentSubWeapon->GetWeponMesh()->SetHiddenInGame(false);
+}
+void APlayerableCharacter::UnEquipSubWeapon()
+{
+	CurrentSubWeapon->GetWeponMesh()->SetHiddenInGame(true);
+}
 void APlayerableCharacter::FirstMeleeWeapon()
 {
 	SwitchWeapon(FIRST_WEAPON);
 }
-
 void APlayerableCharacter::SecondMeleeWeapon()
 {
 	SwitchWeapon(SECOND_WEAPON);
 }
 
+void APlayerableCharacter::ThirdMeleeWeapon()
+{
+	SwitchWeapon(THIRD_WEAPON);
+	EquipSubWeapon();
+}
 //===============  Player Melee Attack =============== //
 
 void APlayerableCharacter::Attack_Melee()
 {
 	if (!bisAttack)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Debug %d"), currentCombo));
-
 		if (currentCombo < maxCombo)
 		{
 			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
