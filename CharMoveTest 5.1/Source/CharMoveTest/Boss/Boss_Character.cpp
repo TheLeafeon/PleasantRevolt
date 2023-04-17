@@ -65,12 +65,13 @@ float ABoss_Character::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent,
 
 void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APawn* PawnInstigator, AActor* DamageCauser)
 {
-	//애니메이션 들어갈 곳
-
 	if (DamageTaken > 0.0f)
 	{
 		//데미지 받고 뒤로 밀림?
 		//ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
+
+		HitAni();
+		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("!"));
 
 		if ((BossHP <= MaxBossHP / 2) && isSpawn == false)
 		{

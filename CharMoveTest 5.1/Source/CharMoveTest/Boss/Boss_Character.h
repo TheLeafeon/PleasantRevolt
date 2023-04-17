@@ -49,4 +49,8 @@ private:
 	bool isSpawn;
 
 	AActor* SpawnDanger; //소환한 장판 소환기
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void HitAni();
 };

@@ -8,20 +8,18 @@
 #include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "DrawDebugHelpers.h" //디버그용
-//#include "CharMoveTest/Boss/BossAI_NumericalControl.h" //기획자가 수치 조절할 수 있게
-#include "Detect_BTService.generated.h"
+#include "Detect2_BTService.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CHARMOVETEST_API UDetect_BTService : public UBTService
+class CHARMOVETEST_API UDetect2_BTService : public UBTService
 {
 	GENERATED_BODY()
-	
+
 private:
-	UDetect_BTService();
+	UDetect2_BTService();
 
 	UPROPERTY()
 	float DetectRadius; //범위 반지름
