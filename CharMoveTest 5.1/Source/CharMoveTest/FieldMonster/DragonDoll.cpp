@@ -6,11 +6,15 @@
 #include "DrawDebugHelpers.h"
 #include "CharMoveTest/FieldMonster/DragonDollAIController.h"
 #include "Delegates/DelegateSignatureImpl.inl"
+#include "Components/BoxComponent.h"
 #include "TimerManager.h"
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Engine/EngineTypes.h"
 #include "DrawDebugHelpers.h"
+#include "GameFramework/Character.h"
 #include "Engine/World.h"
-#include "Engine.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
