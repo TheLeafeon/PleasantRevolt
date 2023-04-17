@@ -23,20 +23,28 @@ void AHandUP::BeginPlay()
 void AHandUP::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AHandUP::InteractWithMe()
 {
 	if (IsHandUp)
 	{
+		//거울 핸드업 생성
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 			{
 				DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				
-				CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
-				//GetActorLocation + PlayerCharacter->GetActorLocation().ForwardVector
-				//SetActorLocation()
+				//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
+				BlockCollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
+
+				const FRotator Rotation = PlayerCharacter->GetActorRotation();
+				const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+				// get forward vector
+				const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 150;
+				
+				SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
+				SetActorRotation(FRotator(0, 0, GetActorRotation().Yaw));
 
 				
 				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
@@ -61,8 +69,10 @@ void AHandUP::InteractWithMe()
 	}
 	else
 	{
+		//거울 핸드업 삭제
+		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
+		BlockCollisionComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		CollisionComponent->SetSimulatePhysics(false);
-		CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		PlayerCharacter->PlayerHandUp(this);
 
 		HandUpAni(true);
@@ -88,4 +98,82 @@ void AHandUP::HideInteractionWidget()
 void AHandUP::SetFalsePhysics()
 {
 	CollisionComponent->SetSimulatePhysics(false);
+}
+
+void AHandUP::Drop()
+{
+	if (IsHandUp)
+	{
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
+		BlockCollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
+
+		const FRotator Rotation = PlayerCharacter->GetActorRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 150;
+
+		SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
+		SetActorRotation(FRotator(0, 0, GetActorRotation().Yaw));
+
+
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+			{
+				CollisionComponent->SetSimulatePhysics(true);
+
+				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+					{
+						CollisionComponent->SetSimulatePhysics(false);
+
+						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+					}), 1.5f, false);
+			}), 0.2f, false);
+
+		HandUpAni(false);
+
+		IsHandUp = false;
+	}
+}
+
+void AHandUP::BackDrop()
+{
+	if (IsHandUp)
+	{
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
+		BlockCollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
+
+		const FRotator Rotation = PlayerCharacter->GetActorRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * -150;
+
+		SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
+		SetActorRotation(FRotator(0, 0, GetActorRotation().Yaw));
+
+
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+			{
+				CollisionComponent->SetSimulatePhysics(true);
+
+				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+					{
+						CollisionComponent->SetSimulatePhysics(false);
+
+						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+					}), 1.5f, false);
+			}), 0.2f, false);
+
+		HandUpAni(false);
+
+		IsHandUp = false;
+	}
 }
