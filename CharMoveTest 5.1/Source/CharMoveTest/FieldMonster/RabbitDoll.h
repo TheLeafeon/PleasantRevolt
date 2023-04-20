@@ -41,7 +41,7 @@ public:
 	//virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void RabbitAttackCheck();
+	void RabbitAttackCheck();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RabbitDollKnockBack();
