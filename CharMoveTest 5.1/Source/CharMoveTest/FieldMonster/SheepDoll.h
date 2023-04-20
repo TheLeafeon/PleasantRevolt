@@ -11,6 +11,11 @@
 /**
  * 
  */
+
+DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAttackReadyEndDelegate);
+DECLARE_MULTICAST_DELEGATE(FStunEndDelegate);
+
 UCLASS()
 class CHARMOVETEST_API ASheepDoll : public AMonsterBase
 {
@@ -26,11 +31,46 @@ public:
 	FVector MyAreaLocation;
 	FVector MyAreaSize;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		class UBoxComponent* AttackRangeBox;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector AttackRangeBoxSize;
+
 	void Rush_Ready();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Rush();
+
+	UFUNCTION(BlueprintCallable)
 	void Stun();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void IsStunEnd();
+	
+	UPROPERTY(VisibleAnyWhere,BlueprintReadOnly)
+	bool isAttacking;
+
+	UPROPERTY(VisibleAnyWhere,BlueprintReadOnly)
+	bool isStun;
+
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly)
+	bool isPlayerAttackHit;
+
+
+
 	void RushReadyTimer();
+	void StunTimer();
+
+
+	//AttackReady Task 완료 델리케이트
+	FOnAttackEndDelegate SheepDollOnAttackReadyEnd;
+
+	//Attack Task 완료 델리케이트
+	FOnAttackReadyEndDelegate SheepDollOnAttackEnd;
+
+	//Stun Task 완료 델리케이트
+	FStunEndDelegate SheepDollStunEnd;
 
 	//데미지 주는 함수 BP에서 정의
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
@@ -40,17 +80,23 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SheepDollKnockBack();
 
+	//죽고 사라지는 시간
+	void DeathTimer();
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 
-private:
+
 	USheepDollAnimInstance* AnimInstance;
 
-	bool isPlayerAttackHit;
+	
+
+private:
+
+	
 	bool isDie;
-	bool isAttacking;
+
 
 
 };
