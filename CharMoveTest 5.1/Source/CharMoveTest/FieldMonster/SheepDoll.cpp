@@ -120,7 +120,17 @@ void ASheepDoll::StunTimer()
 
 void ASheepDoll::DeathTimer()
 {
-	Destroy();
+	if (GetCapsuleComponent())
+	{
+		GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_Pawn, ECR_Ignore);
+		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
+	}
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->StopMovementImmediately();
+		GetCharacterMovement()->DisableMovement();
+	}
 }
 
 float ASheepDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -145,6 +155,7 @@ float ASheepDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 			//Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
 			MyArea->numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed + 1;
 
+			SheepDollDeathKnockBack();
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
 			//Destroy();
 		}
@@ -178,17 +189,7 @@ void ASheepDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, ACont
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 
-	if (GetCapsuleComponent())
-	{
-		GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_Pawn, ECR_Ignore);
-		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
-	}
-	if (GetCharacterMovement())
-	{
-		GetCharacterMovement()->StopMovementImmediately();
-		GetCharacterMovement()->DisableMovement();
-	}
+
 	AnimInstance->PlayDeathMontage();
 	FTimerHandle DeathTimerHandle;
 	FTimerDelegate DeathTimerDelegate = FTimerDelegate::CreateUObject(this, &ASheepDoll::DeathTimer);

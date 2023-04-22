@@ -213,7 +213,21 @@ float AMouseDoll::GetMouseDollHP()
 
 void AMouseDoll::DeathTimer()
 {
-	Destroy();
+	
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->StopMovementImmediately();
+		GetCharacterMovement()->DisableMovement();
+	}
+	if (GetCapsuleComponent())
+	{
+	GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_Pawn, ECR_Ignore);
+	GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
+	}
+
+
+	//Destroy();
 }
 
 float AMouseDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -240,6 +254,7 @@ float AMouseDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 			//Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
 			MyArea->numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed + 1;
 			
+			MouseDollDeathKnockBack();
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
 			//Destroy();
 		}
@@ -273,17 +288,9 @@ void AMouseDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, ACont
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 
-	if (GetCapsuleComponent())
-	{
-		GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_Pawn, ECR_Ignore);
-		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
-	}
-	if (GetCharacterMovement())
-	{
-		GetCharacterMovement()->StopMovementImmediately();
-		GetCharacterMovement()->DisableMovement();
-	}
+	
+
+
 	AnimInstance->PlayDeathMontage();
 	FTimerHandle DeathTimerHandle;
 	FTimerDelegate DeathTimerDelegate = FTimerDelegate::CreateUObject(this, &AMouseDoll::DeathTimer);
