@@ -51,7 +51,7 @@ private:
 	// 플레이어의 애니메이션을 저장해둔 것
 	UPlayerAnimInstnce* AnimInstance;
 public:
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
 	void HandUpAni(bool value);
 	UFUNCTION(BlueprintCallable)
 	void Drop();
@@ -59,4 +59,10 @@ public:
 	void BackDrop();
 	UPROPERTY(BlueprintReadWrite)
 	bool IsMirror;
+	/*
+	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
+	void SetMirrorHandUp();
+	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
+	void DestroyMirrorHandUp();
+	*/
 };

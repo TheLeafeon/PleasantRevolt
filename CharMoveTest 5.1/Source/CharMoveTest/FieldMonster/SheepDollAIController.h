@@ -25,9 +25,26 @@ public:
 	static const FName TargetKey;
 	static const FName AreaPosKey;
 	static const FName AreaSizeKey;
+	static const FName TargetLocationKey;
+	static const FName SeeKey;
+	static const FName TrueKey;
+	static const FName StunKey;
+
+	UPROPERTY()
+	UBlackboardComponent* BlackboardComp;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI")
 		ASheepDoll* MySheepDoll;
+
+	UFUNCTION(BlueprintCallable)
+	void SetRushStop();
+	UFUNCTION(BlueprintCallable)
+	void PlayerAttackHit();
+	UFUNCTION(BlueprintCallable)
+		void PauseBehaviorTree();
+	UFUNCTION(BlueprintCallable)
+		void ResumeBehaviorTree();
+
 private:
 	UPROPERTY()
 		class UBehaviorTree* BTSheepDoll;

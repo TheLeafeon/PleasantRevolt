@@ -15,8 +15,12 @@ const FName ASheepDollAIController::HomePosKey(TEXT("HomePos"));
 const FName ASheepDollAIController::TargetKey(TEXT("Target"));
 const FName ASheepDollAIController::AreaPosKey(TEXT("AreaPos"));
 const FName ASheepDollAIController::AreaSizeKey(TEXT("AreaSize"));
+const FName ASheepDollAIController::TargetLocationKey(TEXT("TargetLocation"));
+const FName ASheepDollAIController::SeeKey(TEXT("See"));
+const FName ASheepDollAIController::TrueKey(TEXT("True"));
+const FName ASheepDollAIController::StunKey(TEXT("Stun"));
 
-ASheepDollAIController::ASheepDollAIController()
+ASheepDollAIController::ASheepDollAIController() : BlackboardComp(Blackboard)
 {
 	static ConstructorHelpers::FObjectFinder<UBlackboardData>BBObject(TEXT("/Game/Monster/AI/BB_SheepDoll.BB_SheepDoll"));
 	if (BBObject.Succeeded())
@@ -55,16 +59,41 @@ void ASheepDollAIController::OnPossessDelayed(APawn* InPawn)
 		return;
 	}
 
-	UBlackboardComponent* BlackboardComp = Blackboard.Get();
+	//UBlackboardComponent* BlackboardComp = Blackboard.Get();
 	if (UseBlackboard(BBSheepDoll, BlackboardComp) && MySheepDoll != nullptr)
 	{
+		
 		BlackboardComp->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
 		BlackboardComp->SetValueAsVector(AreaPosKey, MySheepDoll->MyAreaLocation);
 		BlackboardComp->SetValueAsVector(AreaSizeKey, MySheepDoll->MyAreaSize);
+		BlackboardComp->SetValueAsBool(SeeKey, false);
+		BlackboardComp->SetValueAsBool(TrueKey, true);
+		BlackboardComp->SetValueAsBool(StunKey, false);
 
 		if (!RunBehaviorTree(BTSheepDoll))
 		{
 
 		}
 	}
+}
+
+void ASheepDollAIController::SetRushStop()
+{
+	BlackboardComp->SetValueAsBool(StunKey, true);
+}
+
+void ASheepDollAIController::PlayerAttackHit()
+{
+	BlackboardComp->SetValueAsBool(StunKey, false);
+	BlackboardComp->SetValueAsBool(SeeKey, false);
+}
+
+void ASheepDollAIController::PauseBehaviorTree()
+{
+	SetActorTickEnabled(false); //비헤이비어 트리를 중지
+}
+
+void ASheepDollAIController::ResumeBehaviorTree()
+{
+	SetActorTickEnabled(true); //비헤이비어 트리를 다시 실행
 }
