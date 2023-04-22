@@ -71,7 +71,7 @@ void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, 
 		//ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
 
 		HitAni();
-		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("!"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("!"));
 
 		if ((BossHP <= MaxBossHP / 2) && isSpawn == false)
 		{
