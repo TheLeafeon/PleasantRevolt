@@ -80,10 +80,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SheepDollKnockBack();
 
-	//죽었을때 더 멀리 넉백되는 함수 BP에서 정의
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void SheepDollDeathKnockBack();
-
 	//죽고 사라지는 시간
 	void DeathTimer();
 
