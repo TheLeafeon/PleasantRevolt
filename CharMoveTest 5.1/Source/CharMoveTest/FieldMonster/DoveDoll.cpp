@@ -174,8 +174,8 @@ void ADoveDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, AContr
 	}
 	if (GetCharacterMovement())
 	{
-		GetCharacterMovement()->StopMovementImmediately();
-		GetCharacterMovement()->DisableMovement();
+		//GetCharacterMovement()->StopMovementImmediately();
+		//GetCharacterMovement()->DisableMovement();
 	}
 	AnimInstance->PlayDeathMontage();
 	FTimerHandle DeathTimerHandle;
