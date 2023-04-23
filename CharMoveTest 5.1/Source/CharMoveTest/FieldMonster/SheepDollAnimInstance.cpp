@@ -30,7 +30,7 @@ USheepDollAnimInstance::USheepDollAnimInstance()
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> STUN_MONTAGE(TEXT("/Game/Monster/Animation/Montage/SheepDoll_Stun_Montage.SheepDoll_Stun_Montage"));
 	if (STUN_MONTAGE.Succeeded())
 	{
-		DeathMontage = STUN_MONTAGE.Object;
+		StunMontage = STUN_MONTAGE.Object;
 	}
 }
 

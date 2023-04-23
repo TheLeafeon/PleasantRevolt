@@ -56,6 +56,12 @@ void AHandUP::InteractWithMe()
 						GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 							{
 								CollisionComponent->SetSimulatePhysics(false);
+	
+								/*
+								if (IsMirror)
+								{
+									SetMirrorHandUp();
+								}*/
 
 								GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 							}), 1.5f, false);
@@ -68,8 +74,7 @@ void AHandUP::InteractWithMe()
 		IsHandUp = false;
 	}
 	else
-	{
-		//거울 핸드업 삭제
+	{	
 		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		CollisionComponent->SetSimulatePhysics(false);
@@ -78,6 +83,11 @@ void AHandUP::InteractWithMe()
 		HandUpAni(true);
 
 		IsHandUp = true;
+		/*
+		if (IsMirror)
+		{
+			DestroyMirrorHandUp();
+		}*/
 	}
 	
 }
@@ -128,6 +138,11 @@ void AHandUP::Drop()
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
 						CollisionComponent->SetSimulatePhysics(false);
+						/*
+						if (IsMirror)
+						{
+							SetMirrorHandUp();
+						}*/
 
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 					}), 1.5f, false);
@@ -167,6 +182,11 @@ void AHandUP::BackDrop()
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
 						CollisionComponent->SetSimulatePhysics(false);
+						/*
+						if (IsMirror)
+						{
+							SetMirrorHandUp();
+						}*/
 
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 					}), 1.5f, false);
