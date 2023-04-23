@@ -16,8 +16,12 @@ APlayerableCharacter::APlayerableCharacter()
 	: LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false)
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	CapsualComp = GetCapsuleComponent();
+	CapsualComp->InitCapsuleSize(42.f, 96.0f);
 
+	Radius = CapsualComp->GetUnscaledCapsuleRadius();
+	HalfHeight = CapsualComp->GetUnscaledCapsuleHalfHeight();
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -194,7 +198,6 @@ void APlayerableCharacter::BeginPlay()
 	AnimInstance = Cast<UPlayerAnimInstnce>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
 		return;
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Green, TEXT("NotReturn"));
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
@@ -241,6 +244,7 @@ void APlayerableCharacter::Tick(float DeltaTime)
 	if (GetWorld()->GetTimerManager().IsTimerActive(RollTimerHandle))
 	{
 		RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(RollTimerHandle);
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Debug : %f"), RemainingTime));
 		if (RemainingTime <= 0.0f)
 		{
 			EnableInputAfterRoll();
@@ -511,14 +515,33 @@ float APlayerableCharacter::UpdateRollCurve(float Value)
 
 void APlayerableCharacter::EnableInputAfterRoll()
 {
-	//GetCharacterMovement()->StopMovementImmediately();
-	//GetCharacterMovement()->Velocity = FVector::ZeroVector;
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->Velocity = FVector::ZeroVector;
 	// Re-enable input after rolling
-	//PlayerController->SetInputMode(FInputModeGameOnly());
+	PlayerController->SetInputMode(FInputModeGameOnly());
 
-	//PlayerController->EnableInput(PlayerController);
-	//PlayerController->FlushPressedKeys();
+	PlayerController->EnableInput(PlayerController);
+	PlayerController->FlushPressedKeys();
+	RollingCollision(false);
+
 	bIsRolling = false;
+}
+
+void APlayerableCharacter::RollingCollision(bool bRolling)
+{
+
+	if (bRolling)
+	{
+		float newHalfHeight = HalfHeight * 0.5f;
+		CapsualComp->SetCapsuleSize(Radius, newHalfHeight);
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+
+	}
+	else
+	{
+		CapsualComp->SetCapsuleSize(Radius, HalfHeight);
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	}
 }
 
 void APlayerableCharacter::Rolling()
@@ -529,7 +552,8 @@ void APlayerableCharacter::Rolling()
 	}
 
 	bIsRolling = true;
-	/*
+
+	
 	PlayerController->SetInputMode(FInputModeUIOnly());
 	PlayerController->DisableInput(PlayerController);
 
@@ -549,14 +573,17 @@ void APlayerableCharacter::Rolling()
 
 	FVector RollDirection = GetActorForwardVector().RotateAngleAxis(UpdateRollCurve(RollTimeline.GetPlaybackPosition()), FVector{ 0.0f, 0.0f, 1.0f });
 	
+	RollTimeline.PlayFromStart();
 	GetCharacterMovement()->Velocity = RollDirection;
 
-	RollTimeline.PlayFromStart();
-	*/
 	AnimInstance->PlayRollingMontage();
-	float timer = AnimInstance->Rolling_AnimMontage->GetPlayLength();
+	float timer = AnimInstance->Rolling_AnimMontage->GetPlayLength() / AnimInstance->Roll_Animation_Speed;
 
 	GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, timer, false);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf( TEXT("Debug : %f"), timer ));
+
+	RollingCollision(true);
 	DodgeStart(timer);
 }
 

@@ -24,6 +24,7 @@ class CHARMOVETEST_API APlayerableCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
+
 public:
 	APlayerableCharacter();
 
@@ -65,7 +66,14 @@ private :
 	// Timer남은시간
 	float RemainingTime;
 /* Player Rolling */
+private :
+	UCapsuleComponent* CapsualComp;
+	float Radius;
+	float HalfHeight;
+
+	FVector MeshLocation;
 protected :
+	void RollingCollision(bool bRolling);
 	// Player Roll Function
 	void Rolling();
 
