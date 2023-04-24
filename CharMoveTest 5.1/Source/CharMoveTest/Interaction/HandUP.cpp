@@ -58,7 +58,7 @@ void AHandUP::InteractWithMe()
 								CollisionComponent->SetSimulatePhysics(false);
 	
 								/*
-								if (IsMirror)
+								if (IsMirror)IsMirror
 								{
 									SetMirrorHandUp();
 								}*/

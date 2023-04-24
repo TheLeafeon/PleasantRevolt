@@ -57,8 +57,8 @@ public:
 	void Drop();
 	UFUNCTION(BlueprintCallable)
 	void BackDrop();
-	UPROPERTY(BlueprintReadWrite)
-	bool IsMirror;
+	//UPROPERTY(BlueprintReadWrite)
+	//bool IsMirror;
 	/*
 	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
 	void SetMirrorHandUp();
