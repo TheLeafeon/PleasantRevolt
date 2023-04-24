@@ -5,7 +5,6 @@
 #include "DrawDebugHelpers.h"
 #include "Components/BoxComponent.h"
 #include "Engine/EngineTypes.h"
-
 #include "Engine/World.h"
 //#include "Engine.h"
 
@@ -16,7 +15,8 @@ AFieldArea::AFieldArea()
 	PrimaryActorTick.bCanEverTick = true;
 
 	firstIn = false;
-
+	Wave2Start = false;
+	Wave3Start = false;
 	bSpawn = false;
 
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnPointCom"));
@@ -39,6 +39,23 @@ void AFieldArea::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (thisAreaWaveNumber >= 2)
+	{
+		if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num())
+		{
+			Wave2Spawn();
+		}
+
+		if (thisAreaWaveNumber >= 3)
+		{
+			if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num() + AreaSpawnMonsterArrayWave2.Num())
+			{
+				Wave3Spawn();
+			}
+		}
+
+
+	}
 }
 
 void AFieldArea::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -75,6 +92,23 @@ void AFieldArea::Wave2Spawn()
 
 		}
 		Wave2Start = true;
+	}
+}
+
+void AFieldArea::Wave3Spawn()
+{
+	if (!Wave3Start)
+	{
+		if (AreaSpawnMonsterArrayWave3.Num() == 0)
+		{
+			return;
+		}
+		for (int ArrayCount = 0; ArrayCount < AreaSpawnMonsterArrayWave3.Num(); ArrayCount++)
+		{
+			AreaSpawnMonsterArrayWave3[ArrayCount]->MonsterSpawn();
+
+		}
+		Wave3Start = true;
 	}
 }
 

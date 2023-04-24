@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "Delegates/DelegateSignatureImpl.inl"
 #include "Components/BoxComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -89,7 +90,9 @@ void ADoveDoll::AttackTimer()
 
 void ADoveDoll::DeathTimer()
 {
+
 	Destroy();
+	
 }
 
 AFieldArea* ADoveDoll::FindClosestMonsterArea()
@@ -165,7 +168,6 @@ void ADoveDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, AContr
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
-
 	if (GetCapsuleComponent())
 	{
 		GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -174,9 +176,11 @@ void ADoveDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, AContr
 	}
 	if (GetCharacterMovement())
 	{
-		//GetCharacterMovement()->StopMovementImmediately();
-		//GetCharacterMovement()->DisableMovement();
+		GetCharacterMovement()->StopMovementImmediately();
+		GetCharacterMovement()->DisableMovement();
 	}
+
+
 	AnimInstance->PlayDeathMontage();
 	FTimerHandle DeathTimerHandle;
 	FTimerDelegate DeathTimerDelegate = FTimerDelegate::CreateUObject(this, &ADoveDoll::DeathTimer);

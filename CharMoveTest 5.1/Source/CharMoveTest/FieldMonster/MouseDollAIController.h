@@ -21,6 +21,11 @@ public:
 
 	void OnPossessDelayed(APawn* InPawn);
 
+	UFUNCTION(BlueprintCallable)
+		void PauseBehaviorTree();
+	UFUNCTION(BlueprintCallable)
+		void ResumeBehaviorTree();
+
 	static const FName HomePosKey;
 	static const FName TargetKey;
 	static const FName AreaPosKey;

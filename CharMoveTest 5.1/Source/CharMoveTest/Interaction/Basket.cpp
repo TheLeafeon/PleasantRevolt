@@ -8,9 +8,9 @@
 #include "DrawDebugHelpers.h"
 #include "Math/UnrealMathUtility.h"
 #include "TimerManager.h"
+#include "Misc/App.h"
 #include "Engine/EngineTypes.h"
 #include "Engine/World.h"
-#include "Engine.h"
 #include "Basket.h"
 
 // Sets default values
@@ -63,20 +63,51 @@ void ABasket::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
 void ABasket::MoveBasket()
 {
+	//FVector BasketLocation = GetActorLocation();
+	//TargetActorLocation = TargetActor->GetActorLocation();
+	//float Speed = 0.15f; // 이동 속도 (1초에 1000만큼 이동)
+
+	//float DeltaZ = Speed * GetWorld()->GetDeltaSeconds();
+	//FVector NewLocation = FMath::VInterpTo(BasketLocation, TargetActorLocation, GetWorld()->GetDeltaSeconds(), Speed);
+	//BasketLocation = NewLocation;
+
+	//SetActorLocation(BasketLocation);
+
+	//if (FMath::IsNearlyEqual(NewLocation.X, TargetActorLocation.X,500) && FMath::IsNearlyEqual(NewLocation.Y, TargetActorLocation.Y,500) && FMath::IsNearlyEqual(NewLocation.Z, TargetActorLocation.Z,500)) // 목표 위치에 도달했을 때 타이머 종료
+	//{
+	//	StudioTeleport();
+	//	GetWorld()->GetTimerManager().ClearTimer(BasketMoveHandle);
+	//}
+
 	FVector BasketLocation = GetActorLocation();
-	TargetActorLocation = TargetActor->GetActorLocation();
-	float Speed = 0.15f; // 이동 속도 (1초에 1000만큼 이동)
+	FVector TargetLocation = TargetActor->GetActorLocation();
 
-	float DeltaZ = Speed * GetWorld()->GetDeltaSeconds();
-	FVector NewLocation = FMath::VInterpTo(BasketLocation, TargetActorLocation, GetWorld()->GetDeltaSeconds(), Speed);
-	BasketLocation = NewLocation;
+	FVector MoveDirection = (TargetLocation - BasketLocation).GetSafeNormal();
 
-	SetActorLocation(BasketLocation);
+	MoveDirection.Normalize();
+	FVector NewLocation = GetActorLocation() + MoveDirection * 500.0f * GetWorld()->DeltaTimeSeconds;
+	SetActorLocation(NewLocation);
 
-	if (FMath::IsNearlyEqual(NewLocation.X, TargetActorLocation.X,500) && FMath::IsNearlyEqual(NewLocation.Y, TargetActorLocation.Y,500) && FMath::IsNearlyEqual(NewLocation.Z, TargetActorLocation.Z,500)) // 목표 위치에 도달했을 때 타이머 종료
+	if (FMath::IsNearlyEqual(NewLocation.X, TargetLocation.X,500) && FMath::IsNearlyEqual(NewLocation.Y, TargetLocation.Y,500) && FMath::IsNearlyEqual(NewLocation.Z, TargetLocation.Z,500)) // 목표 위치에 도달했을 때 타이머 종료
 	{
 		StudioTeleport();
 		GetWorld()->GetTimerManager().ClearTimer(BasketMoveHandle);
 	}
+
+	//float MoveDistnace = FVector::Dist(BasketLocation, TargetLocation);
+
+	//float MoveTime = MoveDistnace / 10.0f;
+
+	//float ElapsedTime = 0.0f;
+	//while (ElapsedTime < MoveTime)
+	//{
+	//	float Alpha = ElapsedTime / MoveTime;
+
+	//	FVector NewLocation = FMath::Lerp(BasketLocation, TargetLocation, Alpha);
+	//	SetActorLocation(NewLocation);
+	//	ElapsedTime += DeltaTime;
+	//}
+
+	
 }
 
