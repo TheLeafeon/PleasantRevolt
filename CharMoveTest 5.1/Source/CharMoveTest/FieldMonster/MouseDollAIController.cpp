@@ -68,3 +68,13 @@ void AMouseDollAIController::OnPossessDelayed(APawn* InPawn)
 		}
 	}
 }
+
+void AMouseDollAIController::PauseBehaviorTree()
+{
+	SetActorTickEnabled(false); //비헤이비어 트리를 중지
+}
+
+void AMouseDollAIController::ResumeBehaviorTree()
+{
+	SetActorTickEnabled(true); //비헤이비어 트리를 다시 실행
+}

@@ -84,14 +84,16 @@ AFieldArea* ASheepDoll::FindClosestMonsterArea()
 
 void ASheepDoll::Rush_Ready()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("SheepDoll_RushReady"));
-	AnimInstance->PlayRush_ReadyMontage();
+	if (!isDie)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("SheepDoll_RushReady"));
+		AnimInstance->PlayRush_ReadyMontage();
 
-	FTimerHandle RushReadyTimerHandle;
+		FTimerHandle RushReadyTimerHandle;
 
-	FTimerDelegate RushReadyTimerDelegate = FTimerDelegate::CreateUObject(this, &ASheepDoll::RushReadyTimer);
-	GetWorldTimerManager().SetTimer(RushReadyTimerHandle, RushReadyTimerDelegate, 1.0f, false);
-
+		FTimerDelegate RushReadyTimerDelegate = FTimerDelegate::CreateUObject(this, &ASheepDoll::RushReadyTimer);
+		GetWorldTimerManager().SetTimer(RushReadyTimerHandle, RushReadyTimerDelegate, 1.0f, false);
+	}
 }
 
 void ASheepDoll::Stun()

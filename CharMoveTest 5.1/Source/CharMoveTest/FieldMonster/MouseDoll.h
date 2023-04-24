@@ -75,6 +75,8 @@ private:
 
 
 	bool isPlayerAttackHit;
+
+
 	bool isDie;
 	bool isAttacking;
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
