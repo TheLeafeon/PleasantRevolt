@@ -38,9 +38,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "SpawnMonsterWave2")
 		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArrayWave2;
 
+	UPROPERTY(EditAnywhere, Category = "SpawnMonsterWave3")
+		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArrayWave3;
+
 
 	UFUNCTION(BlueprintCallable)
 		void Wave2Spawn();
+
+	UFUNCTION(BlueprintCallable)
+		void Wave3Spawn();
 
 
 	//처치된 몬스터 수
@@ -49,6 +55,10 @@ public:
 
 	//Wave2가 시작되었는지
 	bool Wave2Start;
+
+	//Wave3가 시작되었는지
+	bool Wave3Start;
+
 
 	//Area의 Wave 수 설정
 	UPROPERTY(EditAnywhere)

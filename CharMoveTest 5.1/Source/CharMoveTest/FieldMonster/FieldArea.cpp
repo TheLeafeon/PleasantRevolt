@@ -16,6 +16,7 @@ AFieldArea::AFieldArea()
 
 	firstIn = false;
 	Wave2Start = false;
+	Wave3Start = false;
 	bSpawn = false;
 
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnPointCom"));
@@ -44,6 +45,16 @@ void AFieldArea::Tick(float DeltaTime)
 		{
 			Wave2Spawn();
 		}
+
+		if (thisAreaWaveNumber >= 3)
+		{
+			if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num() + AreaSpawnMonsterArrayWave2.Num())
+			{
+				Wave3Spawn();
+			}
+		}
+
+
 	}
 }
 
@@ -81,6 +92,23 @@ void AFieldArea::Wave2Spawn()
 
 		}
 		Wave2Start = true;
+	}
+}
+
+void AFieldArea::Wave3Spawn()
+{
+	if (!Wave3Start)
+	{
+		if (AreaSpawnMonsterArrayWave3.Num() == 0)
+		{
+			return;
+		}
+		for (int ArrayCount = 0; ArrayCount < AreaSpawnMonsterArrayWave3.Num(); ArrayCount++)
+		{
+			AreaSpawnMonsterArrayWave3[ArrayCount]->MonsterSpawn();
+
+		}
+		Wave3Start = true;
 	}
 }
 
