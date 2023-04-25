@@ -261,4 +261,8 @@ public:
 	void SetLadderMoveFalse();
 	UPROPERTY(BlueprintReadWrite, Category = "Ladder")
 	bool LadderStart;
+
+	//Boss°ü·Ã
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boss")
+	int32 WeaponNumber;
 };

@@ -13,7 +13,7 @@
 
 // Sets default values
 APlayerableCharacter::APlayerableCharacter()
-	: LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false)
+	: LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false), WeaponNumber(0)
 {
 	// Set size for collision capsule
 	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -400,7 +400,8 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		
 		AWeaponBase* NextWeapon = MeleeWeaponsArray[WeaponIndex];
 
-		HitDrop();
+		HitDrop(); //핸드업 오브젝트 떨어트림
+		WeaponNumber = WeaponIndex; //어떤 무기인지 보스에게 전달
 
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(true);
 		UnEquipSubWeapon();
