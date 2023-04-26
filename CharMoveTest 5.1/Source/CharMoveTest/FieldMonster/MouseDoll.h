@@ -50,6 +50,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void MouseDollKnockBack();
 
+	//공격 시 파티클 출력 함수 BP에서 정의
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MouseDollAttackParticle();
+
 	UFUNCTION(BlueprintCallable)
 	float GetMouseDollHP();
 
