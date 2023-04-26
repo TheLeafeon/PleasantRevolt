@@ -88,8 +88,8 @@ AFieldArea* AMouseDoll::FindClosestMonsterArea()
 
 void AMouseDoll::Attack_Ready()
 {
-	//if (!isAttacking)
-	//{
+	if (!isDie)
+	{
 		isAttacking = true;
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("MouseDollReady"));
 
@@ -99,7 +99,7 @@ void AMouseDoll::Attack_Ready()
 
 		FTimerDelegate AttackReadyTimerDelegate = FTimerDelegate::CreateUObject(this, &AMouseDoll::AttackReadyTimer);
 		GetWorldTimerManager().SetTimer(AttackReadyTimerHandle, AttackReadyTimerDelegate, Monster_Attack_Time, false);
-//	}
+	}
 }
 
 void AMouseDoll::Attack_Melee()

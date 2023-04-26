@@ -94,7 +94,7 @@ public:
 
 private:
 
-	
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = Die, Meta = (AllowPrivateAccess = true))
 	bool isDie;
 
 

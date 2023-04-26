@@ -27,6 +27,8 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI")
 	ADoveDoll* MyDoveDoll;
+
+
 private:
 	UPROPERTY()
 		class UBehaviorTree* BTDoveDoll;
