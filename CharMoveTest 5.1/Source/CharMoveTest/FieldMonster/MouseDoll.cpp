@@ -122,6 +122,8 @@ void AMouseDoll::Attack_Melee()
 void AMouseDoll::AttackCheck()
 {
 	
+	MouseDollAttackParticle();
+
 	FHitResult HitResult;
 	TArray<FHitResult>HitResultArray;
 
