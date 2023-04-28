@@ -54,6 +54,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void MouseDollAttackParticle();
 
+	//죽었을때 더 멀리 넉백되는 함수 BP에서 정의
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MouseDollDeathKnockBack();
+
+	//피격 시 깜빡임
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MouseDollHitMaterial();
+
 	UFUNCTION(BlueprintCallable)
 	float GetMouseDollHP();
 
@@ -75,8 +83,6 @@ private:
 
 
 	bool isPlayerAttackHit;
-
-
 	bool isDie;
 	bool isAttacking;
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))

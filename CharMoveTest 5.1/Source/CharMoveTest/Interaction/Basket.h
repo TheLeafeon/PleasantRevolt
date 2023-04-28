@@ -52,6 +52,10 @@ public:
 	class AActor* StudioTargetActor;
 
 	FTimerHandle BasketMoveHandle;
+	
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BasketRotationChange();
 
 private:
 	bool firstIn;

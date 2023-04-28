@@ -53,31 +53,24 @@ void ABasket::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	if (!firstIn)
 	{
 		firstIn = true;
+		FTimerHandle BasketRotationHandle;
+
 
 		//MoveBasket();
 		FTimerDelegate BasketMoveDelegate = FTimerDelegate::CreateUObject(this, &ABasket::MoveBasket);
 		GetWorldTimerManager().SetTimer(BasketMoveHandle, BasketMoveDelegate, 0.01f, true);
+
+		FTimerDelegate BasketRotationDelegate = FTimerDelegate::CreateUObject(this, &ABasket::BasketRotationChange);
+		GetWorldTimerManager().SetTimer(BasketRotationHandle, BasketRotationDelegate, 3.0f, true);
+
+
 	}
 
 }
 
 void ABasket::MoveBasket()
 {
-	//FVector BasketLocation = GetActorLocation();
-	//TargetActorLocation = TargetActor->GetActorLocation();
-	//float Speed = 0.15f; // 이동 속도 (1초에 1000만큼 이동)
 
-	//float DeltaZ = Speed * GetWorld()->GetDeltaSeconds();
-	//FVector NewLocation = FMath::VInterpTo(BasketLocation, TargetActorLocation, GetWorld()->GetDeltaSeconds(), Speed);
-	//BasketLocation = NewLocation;
-
-	//SetActorLocation(BasketLocation);
-
-	//if (FMath::IsNearlyEqual(NewLocation.X, TargetActorLocation.X,500) && FMath::IsNearlyEqual(NewLocation.Y, TargetActorLocation.Y,500) && FMath::IsNearlyEqual(NewLocation.Z, TargetActorLocation.Z,500)) // 목표 위치에 도달했을 때 타이머 종료
-	//{
-	//	StudioTeleport();
-	//	GetWorld()->GetTimerManager().ClearTimer(BasketMoveHandle);
-	//}
 
 	FVector BasketLocation = GetActorLocation();
 	FVector TargetLocation = TargetActor->GetActorLocation();
@@ -94,19 +87,6 @@ void ABasket::MoveBasket()
 		GetWorld()->GetTimerManager().ClearTimer(BasketMoveHandle);
 	}
 
-	//float MoveDistnace = FVector::Dist(BasketLocation, TargetLocation);
-
-	//float MoveTime = MoveDistnace / 10.0f;
-
-	//float ElapsedTime = 0.0f;
-	//while (ElapsedTime < MoveTime)
-	//{
-	//	float Alpha = ElapsedTime / MoveTime;
-
-	//	FVector NewLocation = FMath::Lerp(BasketLocation, TargetLocation, Alpha);
-	//	SetActorLocation(NewLocation);
-	//	ElapsedTime += DeltaTime;
-	//}
 
 	
 }
