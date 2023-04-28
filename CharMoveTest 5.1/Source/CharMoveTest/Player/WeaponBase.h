@@ -51,7 +51,7 @@ private :
 	
 	bool isAttacking;
 
-	TArray<AActor*> DetectedActors;
+	TArray<ACharacter*> DetectedActors;
 	FCollisionQueryParams CollisionParams;
 	float TraceRadius;
 

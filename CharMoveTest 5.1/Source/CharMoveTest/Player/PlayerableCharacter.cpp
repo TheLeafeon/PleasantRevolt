@@ -579,6 +579,8 @@ void APlayerableCharacter::Rolling()
 		return;
 
 	bIsRolling = true;
+
+	LookMousePosition();
 	/*
 	PlayerController->SetInputMode(FInputModeUIOnly());
 	//PlayerController->DisableInput(PlayerController);

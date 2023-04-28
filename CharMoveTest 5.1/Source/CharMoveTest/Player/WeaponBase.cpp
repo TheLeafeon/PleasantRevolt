@@ -4,6 +4,7 @@
 #include "WeaponBase.h"
 #include "PlayerableCharacter.h"
 #include "SampleEnemy.h"
+#include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -80,21 +81,27 @@ void AWeaponBase::WeaponTrace()
 
 	//bool isHit =  GetWorld()->LineTraceMultiByChannel(HitResults, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams);
 
-	bool isHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(TraceRadius), CollisionParams);
+	bool isHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Camera, FCollisionShape::MakeSphere(TraceRadius), CollisionParams);
 
 	if (isHit)
 	{
 		for (const FHitResult& HitResult : HitResults)
 		{
-			AActor* HitActor = HitResult.GetActor();
-			ASampleEnemy* HitEnemy = Cast<ASampleEnemy>(HitActor);
-			
-			if (!HitEnemy || DetectedActors.Contains(HitEnemy))
+			UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+			AMonsterBase* HitMonster = nullptr;
+
+			if (HitComponent)
+			{
+				HitMonster = Cast<AMonsterBase>(HitComponent->GetOwner());
+			}
+
+			if (!HitMonster || DetectedActors.Contains(HitMonster))
 				continue;
 			else
 			{
-				DetectedActors.Add(HitEnemy);
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, "Bot Damage");
+				DetectedActors.Add(HitMonster);
+
+				UGameplayStatics::ApplyDamage(HitMonster, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
 			}
 		}
 	}
