@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Boss_Character.generated.h"
 
 UCLASS()
@@ -50,7 +51,10 @@ private:
 
 	AActor* SpawnDanger; //소환한 장판 소환기
 
+	//액터의 파티클 시스템 컴포넌트에 대한 참조 얻기
+	TArray<UParticleSystemComponent*> ParticleSystemComponents;
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-	void HitAni();
+	void HitEffect();
 };

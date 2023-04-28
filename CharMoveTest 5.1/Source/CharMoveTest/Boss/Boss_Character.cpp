@@ -70,7 +70,7 @@ void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, 
 		//데미지 받고 뒤로 밀림?
 		//ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
 
-		HitAni();
+		HitEffect();
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("!"));
 
 		if ((BossHP <= MaxBossHP / 2) && isSpawn == false)
@@ -85,6 +85,13 @@ void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, 
 {
 	//ABossAIController::PauseBehaviorTree();
 	SetActorTickEnabled(false); //비헤이비어 트리를 중지
+
+	//파티클 삭제
+	GetComponents<UParticleSystemComponent>(ParticleSystemComponents);
+	for (UParticleSystemComponent* ParticleSystemComponent : ParticleSystemComponents)
+	{
+		ParticleSystemComponent->DestroyComponent();
+	}
 
 	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
 	GetMesh()->SetSimulatePhysics(true);

@@ -29,6 +29,10 @@ public:
 	float Rush_Delay;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Rotation_Delay;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Follow_Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Follow_Time;
 
 	//BearDoll FallObj
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
