@@ -3,6 +3,7 @@
 
 #include "WeaponBase.h"
 #include "PlayerableCharacter.h"
+#include "SampleEnemy.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -17,10 +18,6 @@ AWeaponBase::AWeaponBase()
 	NearWeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SampleMesh"));
 	NearWeaponMesh->SetupAttachment(RootComponent);
 
-	WeaponCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollision"));
-	WeaponCollision->SetBoxExtent(FVector(3.f, 3.f, 3.f));
-	WeaponCollision->SetupAttachment(NearWeaponMesh);
-
 	PlayerAttackPower = 0.0f;
 	WeaponMaxCombo = 0;
 	WeaponAttackNearDistance = 0.0f;
@@ -28,14 +25,23 @@ AWeaponBase::AWeaponBase()
 	WeaponName = "";
 	isAttacking = false;
 
+	TraceInterval = 0.02f;
+	TraceLastTime = TraceInterval;
+
 	MyPawn = Cast<APlayerableCharacter>(StaticClass());
+
+	TraceRadius = 120.0f;
+
+	CollisionParams.bTraceComplex = true;
+	CollisionParams.bReturnPhysicalMaterial = false;
+	CollisionParams.AddIgnoredActor(GetOwner());
+	CollisionParams.AddIgnoredActor(MyPawn);
 }
 
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -43,6 +49,16 @@ void AWeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (isAttacking)
+	{
+		if (TraceLastTime >= TraceInterval)
+		{
+			WeaponTrace();
+			TraceLastTime = 0.0f;
+		}
+		else
+			TraceLastTime += DeltaTime;
+	}
 }
 
 void AWeaponBase::Enable_Attack_Enemy()
@@ -53,20 +69,33 @@ void AWeaponBase::Enable_Attack_Enemy()
 void AWeaponBase::Disable_Attack_Enemy()
 {
 	isAttacking = false;
+	DetectedActors.Empty();
 }
 
-void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
+void AWeaponBase::WeaponTrace()
 {
-	Super::NotifyActorBeginOverlap(OtherActor);
+	TArray<FHitResult> HitResults;
+	FVector StartLocation = NearWeaponMesh->GetSocketLocation("StartSocket");
+	FVector EndLocation = NearWeaponMesh->GetSocketLocation("EndSocket");
 
-	if (isAttacking)
+	//bool isHit =  GetWorld()->LineTraceMultiByChannel(HitResults, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams);
+
+	bool isHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(TraceRadius), CollisionParams);
+
+	if (isHit)
 	{
-		APlayerableCharacter* MyPlayer = Cast<APlayerableCharacter>(StaticClass());
-
-		if (OtherActor->IsA(AActor::StaticClass()) && !OtherActor->IsA(APlayerableCharacter::StaticClass()))
+		for (const FHitResult& HitResult : HitResults)
 		{
-			UGameplayStatics::ApplyDamage(OtherActor, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Bot Damage");
+			AActor* HitActor = HitResult.GetActor();
+			ASampleEnemy* HitEnemy = Cast<ASampleEnemy>(HitActor);
+			
+			if (!HitEnemy || DetectedActors.Contains(HitEnemy))
+				continue;
+			else
+			{
+				DetectedActors.Add(HitEnemy);
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, "Bot Damage");
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "PlayerableCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -16,12 +17,8 @@ APlayerableCharacter::APlayerableCharacter()
 	: LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false)
 {
 	// Set size for collision capsule
-	//GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-	CapsualComp = GetCapsuleComponent();
-	CapsualComp->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	Radius = CapsualComp->GetUnscaledCapsuleRadius();
-	HalfHeight = CapsualComp->GetUnscaledCapsuleHalfHeight();
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -39,9 +36,11 @@ APlayerableCharacter::APlayerableCharacter()
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->SetupAttachment(GetMesh());
 	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+
+	CameraBoom->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -55,6 +54,8 @@ APlayerableCharacter::APlayerableCharacter()
 		RollCurve = RollCurveObj.Object;
 	}
 
+	bIsRolling = false;
+	bisHit = false;
 	// Timer 남은 시간 확인용
 	RemainingTime = 0.0f;
 
@@ -67,7 +68,7 @@ APlayerableCharacter::APlayerableCharacter()
 	isDodge = false;
 
 	// Check Player Die
-	isDie = false;
+	bisDie = false;
 
 	// Player Melee
 	bisAttack = false;
@@ -85,7 +86,7 @@ APlayerableCharacter::APlayerableCharacter()
 // Called to bind functionality to input
 void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	//Super::SetupPlayerInputComponent(PlayerInputComponent);
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 
@@ -173,6 +174,39 @@ void APlayerableCharacter::MoveRight(float Value)
 	}
 }
 
+bool APlayerableCharacter::bCanAction()
+{
+	bool result = true;
+
+	for (auto element : actions)
+	{
+		if (element)
+			result = false;
+	}
+
+	actions.clear();
+
+	return result;
+}
+
+void APlayerableCharacter::LookMousePosition()
+{
+	FHitResult HitResult;
+	bool isHitResult = PlayerController->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, HitResult);
+
+	if (isHitResult)
+	{
+		FVector MouseLocation = HitResult.Location;
+		MouseLocation *= FVector(1.0f, 1.0f, 0.0f);
+		FVector ActorLocation = GetActorLocation();
+		ActorLocation *= FVector(1.0f, 1.0f, 0.0f);
+
+		FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(ActorLocation, MouseLocation);
+
+		SetActorRotation(Rotator);
+	}
+}
+
 void APlayerableCharacter::TimelineProgress(float Value)
 {
 	// Interpolate between the start and end rotations based on the current value of the timeline
@@ -185,7 +219,6 @@ void APlayerableCharacter::TimelineProgress(float Value)
 
 	// Set the rotation of your character to the interpolated value
 	SetActorRotation(NewRotation);
-
 }
 
 void APlayerableCharacter::BeginPlay()
@@ -244,7 +277,7 @@ void APlayerableCharacter::Tick(float DeltaTime)
 	if (GetWorld()->GetTimerManager().IsTimerActive(RollTimerHandle))
 	{
 		RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(RollTimerHandle);
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, FString::Printf(TEXT("Debug : %f"), RemainingTime));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Debug : %f"), RemainingTime));
 		if (RemainingTime <= 0.0f)
 		{
 			EnableInputAfterRoll();
@@ -288,13 +321,13 @@ void APlayerableCharacter::Increase_Player_HP(float val)
 }
 
 //===============  Player Dodge =============== //
-void APlayerableCharacter::DodgeStart(const float& time)
+void APlayerableCharacter::DodgeStart(const float& timer)
 {
 	if (!isDodge)
 	{
 		isDodge = true;
 
-		GetWorld()->GetTimerManager().SetTimer(DodgeTimerHandle, this, &APlayerableCharacter::DodgeEnd, time, false);
+		GetWorld()->GetTimerManager().SetTimer(DodgeTimerHandle, this, &APlayerableCharacter::DodgeEnd, timer, false);
 	}
 }
 
@@ -330,7 +363,7 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 			Player_HP -= getDamage;
 		}
 
-		if (!isDie)
+		if (!bisDie)
 		{
 			if (Player_HP <= 0)
 			{
@@ -350,7 +383,7 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
 	Player_HP = FMath::Min(0.f, Player_HP);
-	isDie = true;
+	bisDie = true;
 
 	HitDrop();
 
@@ -393,7 +426,7 @@ void APlayerableCharacter::DeathEnd()
 
 void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 {
-	if (CurrentWeapon)
+	if (CurrentWeapon && !AnimInstance->IsAnyMontagePlaying())
 	{
 		if (MeleeWeaponsArray[WeaponIndex] == NULL)
 			return;
@@ -432,6 +465,7 @@ void APlayerableCharacter::UnEquipSubWeapon()
 {
 	CurrentSubWeapon->GetWeponMesh()->SetHiddenInGame(true);
 }
+
 void APlayerableCharacter::FirstMeleeWeapon()
 {
 	SwitchWeapon(FIRST_WEAPON);
@@ -447,13 +481,19 @@ void APlayerableCharacter::ThirdMeleeWeapon()
 	EquipSubWeapon();
 }
 //===============  Player Melee Attack =============== //
-
 void APlayerableCharacter::Attack_Melee()
 {
 	if (!bisAttack)
 	{
+		actions.push_back(bIsRolling);
+		actions.push_back(bisHit);
+
+		if (!bCanAction())
+			return;
+
 		if (currentCombo < maxCombo)
 		{
+			LookMousePosition();
 			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
 			PlayAnimMontage(CurrentWeaponComboAnim, 1.0f, FName(*PlayerSection));
 			currentCombo++;
@@ -515,33 +555,17 @@ float APlayerableCharacter::UpdateRollCurve(float Value)
 
 void APlayerableCharacter::EnableInputAfterRoll()
 {
-	GetCharacterMovement()->StopMovementImmediately();
-	GetCharacterMovement()->Velocity = FVector::ZeroVector;
+	//GetCharacterMovement()->StopMovementImmediately();
+	//GetCharacterMovement()->Velocity = FVector::ZeroVector;
 	// Re-enable input after rolling
-	PlayerController->SetInputMode(FInputModeGameOnly());
+	//PlayerController->SetInputMode(FInputModeGameOnly());
 
-	PlayerController->EnableInput(PlayerController);
-	PlayerController->FlushPressedKeys();
-	RollingCollision(false);
-
+	//PlayerController->EnableInput(PlayerController);
+	//PlayerController->FlushPressedKeys();
+	//RollingCollision(false);
+	UnCrouch();
 	bIsRolling = false;
-}
-
-void APlayerableCharacter::RollingCollision(bool bRolling)
-{
-
-	if (bRolling)
-	{
-		float newHalfHeight = HalfHeight * 0.5f;
-		CapsualComp->SetCapsuleSize(Radius, newHalfHeight);
-		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
-
-	}
-	else
-	{
-		CapsualComp->SetCapsuleSize(Radius, HalfHeight);
-		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-	}
+	bisAttack = false;
 }
 
 void APlayerableCharacter::Rolling()
@@ -551,11 +575,13 @@ void APlayerableCharacter::Rolling()
 		return;
 	}
 
-	bIsRolling = true;
+	if (!bCanAction())
+		return;
 
-	
+	bIsRolling = true;
+	/*
 	PlayerController->SetInputMode(FInputModeUIOnly());
-	PlayerController->DisableInput(PlayerController);
+	//PlayerController->DisableInput(PlayerController);
 
 	RollTimeline = FTimeline{};
 	FOnTimelineFloat RollCurveUpdate;
@@ -575,15 +601,15 @@ void APlayerableCharacter::Rolling()
 	
 	RollTimeline.PlayFromStart();
 	GetCharacterMovement()->Velocity = RollDirection;
-
+	*/
 	AnimInstance->PlayRollingMontage();
-	float timer = AnimInstance->Rolling_AnimMontage->GetPlayLength() / AnimInstance->Roll_Animation_Speed;
+	float timer = AnimInstance->Rolling_AnimMontage->GetPlayLength() * abs(1 - AnimInstance->Roll_Animation_Speed);
 
-	GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, timer, false);
-	
+	Crouch();
+
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf( TEXT("Debug : %f"), timer ));
 
-	RollingCollision(true);
+	GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, timer, false);
 	DodgeStart(timer);
 }
 

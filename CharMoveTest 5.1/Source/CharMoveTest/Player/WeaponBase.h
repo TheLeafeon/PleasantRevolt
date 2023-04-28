@@ -42,18 +42,23 @@ protected :
 
 	FString WeaponName;
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-
 	class APlayerableCharacter* MyPawn;
 private :
 	UPROPERTY(EditAnywhere)
 		USceneComponent* _RootComponent;
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* NearWeaponMesh;
-	UPROPERTY(EditAnywhere)
-		class UBoxComponent* WeaponCollision;
-
+	
 	bool isAttacking;
+
+	TArray<AActor*> DetectedActors;
+	FCollisionQueryParams CollisionParams;
+	float TraceRadius;
+
+	float TraceLastTime;
+	float TraceInterval;
+	void WeaponTrace();
+
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }
 	int32 GetMaxCombo() { return WeaponMaxCombo; }
