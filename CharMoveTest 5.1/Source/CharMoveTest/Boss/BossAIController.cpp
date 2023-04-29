@@ -55,5 +55,5 @@ void ABossAIController::SetEnemy(AActor* enemy)
 void ABossAIController::SetStop(bool stop)
 {
 	BlackboardComp->SetValueAsBool(bossKey::keyStop, stop);
-	BlackboardComp->SetValueAsBool(bossKey::see, false);
+	BlackboardComp->SetValueAsBool(bossKey::see, stop);
 }

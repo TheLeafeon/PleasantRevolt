@@ -110,7 +110,7 @@ void ABoss_Character::HPHalf()
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Owner = this;
 			FRotator rotator;
-			FVector  SpawnLocation = GetActorLocation(); //보스 스폰 액터 자리에 소환? 아님 보스 근처에서 소환?
+			FVector  SpawnLocation = FVector(7970.0f, 10270.0f, -6741.8f);//GetActorLocation(); //보스 스폰 액터 자리에 소환? 아님 보스 근처에서 소환?
 
 			SpawnDanger = world->SpawnActor<AActor>(FallObj_Spawn_Blueprint, SpawnLocation, rotator, SpawnParams);
 		}
