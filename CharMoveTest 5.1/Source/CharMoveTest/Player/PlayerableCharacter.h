@@ -24,7 +24,6 @@ class CHARMOVETEST_API APlayerableCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
-
 public:
 	APlayerableCharacter();
 
@@ -59,6 +58,27 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
+//**************** bool 변수들 ***********************//
+private :
+	bool bisHit;
+	bool bisDie;
+	bool isWeaponChanging;
+	bool bIsRolling;
+	bool isDodge;
+public :
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
+		bool bisAttack;
+//****************************************************//
+
+//************** 행동중인지 판단  *******************//
+private :
+	std::vector<bool> actions;
+	bool bCanAction();
+//****************************************************//
+
+private :
+	void LookMousePosition();
+
 private :
 	// 플레이어의 애니메이션을 저장해둔 것
 	UPlayerAnimInstnce* AnimInstance;
@@ -66,14 +86,7 @@ private :
 	// Timer남은시간
 	float RemainingTime;
 /* Player Rolling */
-private :
-	UCapsuleComponent* CapsualComp;
-	float Radius;
-	float HalfHeight;
-
-	FVector MeshLocation;
 protected :
-	void RollingCollision(bool bRolling);
 	// Player Roll Function
 	void Rolling();
 
@@ -100,8 +113,6 @@ protected :
 	FTimerHandle RollTimerHandle;
 	
 	float UpdateRollCurve(float Value);
-	// 구르는 상태인지 확인
-	bool bIsRolling = false;
 public :
 	// 플레이어 구르기 종료 후
 	void EnableInputAfterRoll();
@@ -121,10 +132,8 @@ private :
 
 	void DodgeStart(const float& time);
 	void DodgeEnd();
-	bool isDodge;
+	
 /* Player Get Damage & Die 관련 */
-private :
-	bool isDie;
 public :
 	// 플레이어의 체력을 밖으로 보내기 위위해서 작성
 	UFUNCTION(BlueprintCallable, Category = "Status")
@@ -146,8 +155,6 @@ public :
 
 /* Player Attack 관련 */
 public :
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
-		bool bisAttack;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
 		int32 currentCombo;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
@@ -242,6 +249,7 @@ public:
 	void HitDrop();
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetAnimIsDrop(bool IsDrop);
+
 private:
 	//Ladder관련
 	UPROPERTY()
