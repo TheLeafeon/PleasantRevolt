@@ -31,6 +31,12 @@ void AInteractMonsterSpawnActor::BeginPlay()
 void AInteractMonsterSpawnActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+
+	if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == SpawnMonsterArray.Num())
+	{
+		AreaClear = true;
+	}
 
 }
 

@@ -34,6 +34,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = "SpawnMonster")
 		TArray<AMonsterSpawnActor*> SpawnMonsterArray;
 
+
+
+
+	//Area몬스터 다 잡았는지
+	UPROPERTY(BlueprintReadOnly)
+	bool AreaClear;
+
+	//처치된 몬스터 수
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int numberOfMonstersDefeafed;
+
 private:
 	bool bIsOn;
 
