@@ -220,6 +220,7 @@ float AMouseDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 {
 	const float getDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
+	MouseDollHitMaterial();
 	if (Monster_HP <= 0.0f)
 	{
 		return 0.0f;
@@ -254,7 +255,7 @@ void AMouseDoll::OnHit(float DamageTaken, FDamageEvent const& DamageEvent, APawn
 	if (DamageTaken > 0.0f)
 	{
 		isPlayerAttackHit = true;
-		MouseDollHitMaterial();
+		
 		MouseDollKnockBack();
 		AnimInstance->PlayHitMontage();
 
