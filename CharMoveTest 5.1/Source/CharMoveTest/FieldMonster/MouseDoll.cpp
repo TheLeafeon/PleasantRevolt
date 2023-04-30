@@ -49,8 +49,6 @@ void AMouseDoll::BeginPlay()
 	MyAreaLocation = MyArea->GetActorLocation();
 
 	AnimInstance->OnAttackHitCheck.AddUObject(this, &AMouseDoll::AttackCheck);
-
-	//AnimInstance->OnMontageEnded.AddDynamic(this, &AMouseDoll::OnAttackMontageEnded);
 }
 
 void AMouseDoll::PostInitializeComponents()
@@ -167,18 +165,6 @@ void AMouseDoll::AttackCheck()
 
 	if (bResult)//뭔가 충돌이 있었는가?
 	{
-		/*if (HitResult.GetActor()->IsA(APlayerableCharacter::StaticClass()))
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("MouseDollAttack Hit"));
-
-			APlayerableCharacter* OtherActor = Cast<APlayerableCharacter>(HitResult.GetActor());
-			if (OtherActor)
-			{
-				isPlayerAttackHit = true;
-				MouseDollApplyDamageEvent();
-			}
-		}*/
-
 		for (const FHitResult& HitResults : HitResultArray)
 		{
 			AActor* HitActor = HitResults.GetActor();
@@ -215,15 +201,26 @@ float AMouseDoll::GetMouseDollHP()
 
 void AMouseDoll::DeathTimer()
 {
-	Destroy();
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->StopMovementImmediately();
+		GetCharacterMovement()->DisableMovement();
+	}
+	if (GetCapsuleComponent())
+	{
+		GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_Pawn, ECR_Ignore);
+		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
+	}
+
+
 }
 
 float AMouseDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float getDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-
-
+	MouseDollHitMaterial();
 	if (Monster_HP <= 0.0f)
 	{
 		return 0.0f;
@@ -239,11 +236,10 @@ float AMouseDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 		isPlayerAttackHit = true;
 		if (Monster_HP <= 0)
 		{
-			//Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
 			MyArea->numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed + 1;
 			
+			MouseDollDeathKnockBack();
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
-			//Destroy();
 		}
 		else
 		{
@@ -259,6 +255,7 @@ void AMouseDoll::OnHit(float DamageTaken, FDamageEvent const& DamageEvent, APawn
 	if (DamageTaken > 0.0f)
 	{
 		isPlayerAttackHit = true;
+		
 		MouseDollKnockBack();
 		AnimInstance->PlayHitMontage();
 
@@ -275,20 +272,8 @@ void AMouseDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, ACont
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 
-	if (GetCapsuleComponent())
-	{
-		GetCapsuleComponent()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_Pawn, ECR_Ignore);
-		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
-	}
-	if (GetCharacterMovement())
-	{
-		GetCharacterMovement()->StopMovementImmediately();
-		GetCharacterMovement()->DisableMovement();
-	}
 	AnimInstance->PlayDeathMontage();
 	FTimerHandle DeathTimerHandle;
 	FTimerDelegate DeathTimerDelegate = FTimerDelegate::CreateUObject(this, &AMouseDoll::DeathTimer);
 	GetWorldTimerManager().SetTimer(DeathTimerHandle, DeathTimerDelegate, 1.0f, false);
-
 }
