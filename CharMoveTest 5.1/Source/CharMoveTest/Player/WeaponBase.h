@@ -58,6 +58,7 @@ private :
 	float TraceLastTime;
 	float TraceInterval;
 	void WeaponTrace();
+	void DuplicationEnemy(ACharacter* Enemy);
 
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }

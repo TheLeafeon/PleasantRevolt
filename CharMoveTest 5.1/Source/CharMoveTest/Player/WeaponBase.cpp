@@ -5,6 +5,7 @@
 #include "PlayerableCharacter.h"
 #include "SampleEnemy.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
+#include "CharMoveTest/Boss/Boss_Character.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -79,8 +80,6 @@ void AWeaponBase::WeaponTrace()
 	FVector StartLocation = NearWeaponMesh->GetSocketLocation("StartSocket");
 	FVector EndLocation = NearWeaponMesh->GetSocketLocation("EndSocket");
 
-	//bool isHit =  GetWorld()->LineTraceMultiByChannel(HitResults, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams);
-
 	bool isHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Camera, FCollisionShape::MakeSphere(TraceRadius), CollisionParams);
 
 	if (isHit)
@@ -89,20 +88,30 @@ void AWeaponBase::WeaponTrace()
 		{
 			UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 			AMonsterBase* HitMonster = nullptr;
+			ABoss_Character* HitBoss = nullptr;
 
 			if (HitComponent)
 			{
 				HitMonster = Cast<AMonsterBase>(HitComponent->GetOwner());
+				HitBoss = Cast<ABoss_Character>(HitComponent->GetOwner());
 			}
 
-			if (!HitMonster || DetectedActors.Contains(HitMonster))
-				continue;
-			else
-			{
-				DetectedActors.Add(HitMonster);
-
-				UGameplayStatics::ApplyDamage(HitMonster, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
-			}
+			if(HitMonster)
+				DuplicationEnemy(HitMonster);
+			if (HitBoss)
+				DuplicationEnemy(HitBoss);
 		}
+	}
+}
+
+void AWeaponBase::DuplicationEnemy(ACharacter* Enemy)
+{
+	if (!Enemy || DetectedActors.Contains(Enemy))
+		return;
+	else
+	{
+		DetectedActors.Add(Enemy);
+
+		UGameplayStatics::ApplyDamage(Enemy, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
 	}
 }
