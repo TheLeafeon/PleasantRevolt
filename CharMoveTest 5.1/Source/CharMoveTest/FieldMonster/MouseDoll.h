@@ -62,6 +62,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void MouseDollHitMaterial();
 
+	//플레이어 따라가기
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MouseDollMoveToTarget();
+
 	UFUNCTION(BlueprintCallable)
 	float GetMouseDollHP();
 
@@ -78,12 +82,15 @@ public:
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 
+	UPROPERTY(BlueprintReadOnly)
+	bool isDie;
+
 private:
 	UMouseDollAnimInstance* AnimInstance;
 
 
 	bool isPlayerAttackHit;
-	bool isDie;
+	
 	bool isAttacking;
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		float AttackRange;

@@ -33,7 +33,7 @@ public:
 		class UBoxComponent* CollisionBox;
 
 	UPROPERTY(EditAnywhere, Category = "SpawnMonster")
-		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArray;
+	TArray<AMonsterSpawnActor*> AreaSpawnMonsterArray;
 
 	UPROPERTY(EditAnywhere, Category = "SpawnMonsterWave2")
 		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArrayWave2;

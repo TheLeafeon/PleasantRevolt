@@ -420,6 +420,7 @@ void APlayerableCharacter::DeathEnd()
 {
 	//this->SetActorHiddenInGame(this);
 	//SetLifeSpan(0.1f);
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("PlayerDeathEnd"));
 }
 
 //=============== Weapon & Switching System =============== //
