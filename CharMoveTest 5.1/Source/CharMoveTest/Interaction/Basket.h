@@ -52,6 +52,16 @@ public:
 	class AActor* StudioTargetActor;
 
 	FTimerHandle BasketMoveHandle;
+	
+
+	//Basket 1회 크게 움직임
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BasketRotationChange();
+
+
+	//Bakset 흔들거림 반복
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BasketShakeLoop();
 
 private:
 	bool firstIn;
