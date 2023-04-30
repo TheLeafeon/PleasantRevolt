@@ -21,7 +21,7 @@ public:
 	/* Interaction Interface 속 함수 재정의  */
 	virtual void InteractWithMe() override;
 	virtual void ShowInteractionWidget() override;
-
+	virtual void HideInteractionWidget() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -56,7 +56,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* InteractionSampleMesh;
+	UPROPERTY(EditAnywhere)
+		UWidgetComponent* InteractionWidget;
 
-
-
+public:
+	UFUNCTION(BlueprintImplementableEvent, Category = "InteractionObj")
+	void BattleStart();
+	UFUNCTION(BlueprintImplementableEvent, Category = "InteractionObj")
+	void BattleEnd();
 };
