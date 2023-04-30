@@ -10,6 +10,7 @@
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Engine/Public/TimerManager.h"
 #include "CharMoveTest/Player/PlayerAnimInstnce.h"
+#include "Components/WidgetComponent.h"
 #include "HandUP.generated.h"
 
 UCLASS()
@@ -65,4 +66,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
 	void DestroyMirrorHandUp();
 	*/
+
+	UPROPERTY(BlueprintReadWrite)
+	UWidgetComponent* InteractionWidget;
 };

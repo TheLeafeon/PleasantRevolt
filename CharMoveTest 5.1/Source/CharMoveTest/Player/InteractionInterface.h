@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "Components/WidgetComponent.h"
 #include "InteractionInterface.generated.h"
 
 // This class does not need to be modified.
