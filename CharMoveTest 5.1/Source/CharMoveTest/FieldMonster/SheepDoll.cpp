@@ -43,6 +43,8 @@ void ASheepDoll::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SpawnParticle();
+
 	AnimInstance = Cast<USheepDollAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
 		return;

@@ -66,6 +66,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void MouseDollMoveToTarget();
 
+	//스폰 파티클 출력
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SpawnParticle ();
+
 	UFUNCTION(BlueprintCallable)
 	float GetMouseDollHP();
 

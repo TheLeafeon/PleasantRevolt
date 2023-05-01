@@ -91,6 +91,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SheepDollHitMaterial();
 
+	//스폰 파티클 출력
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void SpawnParticle();
+
 	//죽고 사라지는 시간
 	void DeathTimer();
 

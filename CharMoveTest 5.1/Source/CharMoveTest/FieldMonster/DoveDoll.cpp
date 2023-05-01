@@ -42,6 +42,8 @@ ADoveDoll::ADoveDoll()
 void ADoveDoll::BeginPlay()
 {
     Super::BeginPlay();
+
+	SpawnParticle();
     int TestNum = 100;
 
 	AnimInstance = Cast<UDoveDollAnimInstance>(GetMesh()->GetAnimInstance());
