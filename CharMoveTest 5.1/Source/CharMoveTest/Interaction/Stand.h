@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CharMoveTest/Interaction/DollRabbit.h"
+#include "CharMoveTest/Player/InteractionInterface.h"
 #include "Stand.generated.h"
 
 UCLASS()
-class CHARMOVETEST_API AStand : public AActor
+class CHARMOVETEST_API AStand : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 	
@@ -16,21 +17,26 @@ public:
 	// Sets default values for this actor's properties
 	AStand();
 
+	/* Interaction Interface 속 함수 재정의  */
+	virtual void InteractWithMe() override;
+	virtual void ShowInteractionWidget() override;
 
-	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMeshComponent* InteractionSampleMesh;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* _RootComponent;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RotationStand();
 
-	int StandState;
-
-	UPROPERTY(EditAnywhere, Category = "DollRabbit")
-	class ADollRabbit* DollRabbit;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnyWhere)
+	bool StandMove;
 
 public:	
 	// Called every frame

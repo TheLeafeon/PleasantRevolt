@@ -24,6 +24,12 @@ public:
 	virtual void ShowInteractionWidget() override;
 	virtual void HideInteractionWidget() override;
 
+	////가까운 FieldArea 찾기
+	//AFieldArea* FindClosestMonsterArea();
+	UPROPERTY(EditAnywhere, Category = "MyArea")
+	AFieldArea* MyArea;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,7 +48,7 @@ public:
 	AFieldArea* MyArea;
 
 	//Area몬스터 다 잡았는지
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool AreaClear;
 
 	//처치된 몬스터 수

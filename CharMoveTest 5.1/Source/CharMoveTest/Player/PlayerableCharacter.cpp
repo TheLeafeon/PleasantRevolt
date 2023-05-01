@@ -411,9 +411,13 @@ void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEv
 	{
 	}
 
-	//float DeathAnimDuration = PlayAnimMontage(AnimInstance->Death_AnimMontage);
+	float DeathAnimDuration = AnimInstance->Death_AnimMontage->GetPlayLength();
 
-	//GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
+	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
+
+
+	
+	
 }
 
 void APlayerableCharacter::DeathEnd()
@@ -421,6 +425,7 @@ void APlayerableCharacter::DeathEnd()
 	//this->SetActorHiddenInGame(this);
 	//SetLifeSpan(0.1f);
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("PlayerDeathEnd"));
+	PlayerDeathLevelReStart();
 }
 
 //=============== Weapon & Switching System =============== //
