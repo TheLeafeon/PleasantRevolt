@@ -128,7 +128,7 @@ float ADoveDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 	const float getDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
 
-
+	DoveDollHitMaterial();
 	if (Monster_HP <= 0.0f)
 	{
 		return 0.0f;
