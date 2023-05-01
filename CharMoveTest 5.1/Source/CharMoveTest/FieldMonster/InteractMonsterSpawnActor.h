@@ -42,10 +42,7 @@ public:
 		TArray<AMonsterSpawnActor*> SpawnMonsterArray;
 
 
-	////가까운 FieldArea 찾기
-	//AFieldArea* FindClosestMonsterArea();
-	UPROPERTY(EditAnywhere, Category = "MyArea")
-	AFieldArea* MyArea;
+
 
 	//Area몬스터 다 잡았는지
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

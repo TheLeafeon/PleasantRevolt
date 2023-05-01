@@ -54,6 +54,11 @@ public:
 	//MonsterArea
 	AFieldArea* FindClosestMonsterArea();
 
+	//피격 시 깜빡임
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void DoveDollHitMaterial();
+
+
 	//스폰 타이머
 	FTimerHandle DoveDollSpawnMoveUpHandle;
 
@@ -69,6 +74,9 @@ public:
 	FVector MyAreaLocation;
 	FVector MyAreaSize;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool isDie;
+
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
@@ -77,5 +85,5 @@ private:
 	UDoveDollAnimInstance* AnimInstance;
 
 	bool isPlayerAttackHit;
-	bool isDie;
+	
 };

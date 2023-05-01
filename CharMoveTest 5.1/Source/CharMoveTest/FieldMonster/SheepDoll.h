@@ -87,6 +87,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SheepDollRushParticle();
 
+	//피격 시 깜빡임
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SheepDollHitMaterial();
+
 	//죽고 사라지는 시간
 	void DeathTimer();
 

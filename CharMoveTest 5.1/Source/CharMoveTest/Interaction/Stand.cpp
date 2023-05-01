@@ -3,14 +3,11 @@
 
 #include "CharMoveTest/Interaction/Stand.h"
 
-
 // Sets default values
 AStand::AStand()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	StandMove = false;
 
 	_RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root component"));
 	RootComponent = _RootComponent;
@@ -18,15 +15,16 @@ AStand::AStand()
 	InteractionSampleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SampleMesh"));
 	InteractionSampleMesh->SetupAttachment(RootComponent);
 
+	StandMove = false;
 }
 
 void AStand::InteractWithMe()
 {
-
 	if (!StandMove)
 	{
 		StandMove = true;
-		RotationStand();
+		StandRotation();
+		DuckDoll->FallDoll();
 	}
 }
 

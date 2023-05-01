@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "DollRabbit.generated.h"
+#include "GameFramework/Actor.h"
+#include "BigDoll.generated.h"
 
 UCLASS()
-class CHARMOVETEST_API ADollRabbit : public APawn
+class CHARMOVETEST_API ABigDoll : public AActor
 {
 	GENERATED_BODY()
-
-public:
-	// Sets default values for this pawn's properties
-	ADollRabbit();
+	
+public:	
+	// Sets default values for this actor's properties
+	ABigDoll();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,10 +23,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void FallRabbit();
+	void FallDoll();
 
 };

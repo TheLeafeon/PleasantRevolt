@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CharMoveTest/Interaction/DollRabbit.h"
 #include "CharMoveTest/Player/InteractionInterface.h"
+#include "CharMoveTest/Interaction/BigDoll.h"
 #include "Stand.generated.h"
 
 UCLASS()
-class CHARMOVETEST_API AStand : public AActor, public IInteractionInterface
+class CHARMOVETEST_API AStand : public AActor , public IInteractionInterface
 {
 	GENERATED_BODY()
 	
@@ -21,21 +21,22 @@ public:
 	virtual void InteractWithMe() override;
 	virtual void ShowInteractionWidget() override;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* InteractionSampleMesh;
+		UStaticMeshComponent* InteractionSampleMesh;
 
 	UPROPERTY(EditAnywhere)
-	USceneComponent* _RootComponent;
+		USceneComponent* _RootComponent;
+
+	UPROPERTY(EditAnywhere, Category = "DuckDoll")
+	class ABigDoll* DuckDoll;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void RotationStand();
+	void StandRotation();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnyWhere)
 	bool StandMove;
 
 public:	

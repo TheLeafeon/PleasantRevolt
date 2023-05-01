@@ -142,6 +142,8 @@ float ASheepDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 {
 	const float getDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
+
+	SheepDollHitMaterial();
 	if (Monster_HP <= 0.0f)
 	{
 		return 0.0f;
