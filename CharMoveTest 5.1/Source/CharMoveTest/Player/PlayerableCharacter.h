@@ -79,9 +79,23 @@ private :
 private :
 	void LookMousePosition();
 
-private :
+//**************  Widget  *******************//
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+		TSubclassOf<UUserWidget> UiClass;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "UI")
+		class UUserWidget* CurrentWidget;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+		void IncreaseHP_UI();
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+		void GetDamage_UI();
+
+public :
 	// 플레이어의 애니메이션을 저장해둔 것
-	UPlayerAnimInstnce* AnimInstance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+		UPlayerAnimInstnce* AnimInstance;
+private :
 	APlayerController* PlayerController;
 	// Timer남은시간
 	float RemainingTime;
@@ -150,9 +164,8 @@ public :
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	// 플레이어 사망 애니메이션 종료 시 발생하는 함수
 	void DeathEnd();
-
+private :
 	FTimerHandle DeathTimerHandle;
-
 /* Player Attack 관련 */
 public :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
