@@ -6,6 +6,7 @@
 #include "CharMoveTest/Player/InteractionInterface.h"
 #include "GameFramework/Actor.h"
 #include "CharMoveTest/FieldMonster/MonsterSpawnActor.h"
+#include "Engine/DirectionalLight.h"
 #include "PowerButton.generated.h"
 
 UCLASS()
@@ -26,6 +27,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	USceneComponent* _RootComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		ADirectionalLight* StudioLight;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void PowerButtonInteraction();
