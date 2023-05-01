@@ -74,4 +74,7 @@ private:
 
 	bool bSpawn;
 
+public:
+	UFUNCTION(BlueprintImplementableEvent, Category = "InteractionObj")
+	void BattleEnd();
 };

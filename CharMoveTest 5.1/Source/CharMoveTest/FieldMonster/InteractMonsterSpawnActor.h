@@ -6,6 +6,7 @@
 #include "CharMoveTest/Player/InteractionInterface.h"
 #include "Components/WidgetComponent.h"
 #include "CharMoveTest/FieldMonster/MonsterSpawnActor.h"
+#include "CharMoveTest/FieldMonster/FieldArea.h"
 #include "GameFramework/Actor.h"
 #include "InteractMonsterSpawnActor.generated.h"
 
@@ -35,7 +36,10 @@ public:
 		TArray<AMonsterSpawnActor*> SpawnMonsterArray;
 
 
-
+	////가까운 FieldArea 찾기
+	//AFieldArea* FindClosestMonsterArea();
+	UPROPERTY(EditAnywhere, Category = "MyArea")
+	AFieldArea* MyArea;
 
 	//Area몬스터 다 잡았는지
 	UPROPERTY(BlueprintReadOnly)

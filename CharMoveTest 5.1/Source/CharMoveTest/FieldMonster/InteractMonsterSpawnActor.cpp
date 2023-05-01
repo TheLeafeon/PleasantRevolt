@@ -2,6 +2,7 @@
 
 
 #include "CharMoveTest/FieldMonster/InteractMonsterSpawnActor.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AInteractMonsterSpawnActor::AInteractMonsterSpawnActor() : AreaClear(false), numberOfMonstersDefeafed(0)
@@ -35,10 +36,9 @@ void AInteractMonsterSpawnActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-
+	numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed;
 	if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == SpawnMonsterArray.Num() && AreaClear == false)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("end"));
 		BattleEnd();
 
 		AreaClear = true;

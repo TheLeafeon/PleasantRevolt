@@ -59,15 +59,21 @@ void AFieldArea::Tick(float DeltaTime)
 
 	if (thisAreaWaveNumber == 1)
 	{
-		if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num())
+		if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num() && AreaClear == false)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("end"));
+			BattleEnd();
+
 			AreaClear = true;
 		}
 	}
 	if (thisAreaWaveNumber == 2)
 	{
-		if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num() + AreaSpawnMonsterArrayWave2.Num())
+		if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num() + AreaSpawnMonsterArrayWave2.Num() && AreaClear == false)
 		{
+			//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("end"));
+			//BattleEnd();
+
 			AreaClear = true;
 		}
 	}
