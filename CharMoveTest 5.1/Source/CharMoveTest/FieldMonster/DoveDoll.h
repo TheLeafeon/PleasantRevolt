@@ -58,6 +58,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void DoveDollHitMaterial();
 
+	//맞을 때 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void DoveDollHitSound();
+
+	//죽을 때 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void DoveDollDeathSound();
+
 
 	//스폰 타이머
 	FTimerHandle DoveDollSpawnMoveUpHandle;

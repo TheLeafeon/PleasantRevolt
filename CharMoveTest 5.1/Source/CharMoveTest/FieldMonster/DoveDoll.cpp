@@ -153,6 +153,7 @@ float ADoveDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 		}
 		else
 		{
+			DoveDollHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}
@@ -180,7 +181,7 @@ void ADoveDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, AContr
 		GetCharacterMovement()->DisableMovement();
 	}
 
-
+	DoveDollDeathSound();
 	AnimInstance->PlayDeathMontage();
 	FTimerHandle DeathTimerHandle;
 	FTimerDelegate DeathTimerDelegate = FTimerDelegate::CreateUObject(this, &ADoveDoll::DeathTimer);
