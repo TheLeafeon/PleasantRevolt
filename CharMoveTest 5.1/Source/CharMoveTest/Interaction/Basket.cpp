@@ -61,7 +61,7 @@ void ABasket::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		GetWorldTimerManager().SetTimer(BasketMoveHandle, BasketMoveDelegate, 0.01f, true);
 
 		FTimerDelegate BasketRotationDelegate = FTimerDelegate::CreateUObject(this, &ABasket::BasketRotationChange);
-		GetWorldTimerManager().SetTimer(BasketRotationHandle, BasketRotationDelegate, 3.0f, false);
+		GetWorldTimerManager().SetTimer(BasketRotationHandle, BasketRotationDelegate, 5.0f, false);
 
 
 	}
