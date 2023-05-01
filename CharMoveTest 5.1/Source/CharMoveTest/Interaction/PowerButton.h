@@ -24,22 +24,21 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UStaticMeshComponent* InteractionSampleMesh;
 
+	UPROPERTY(EditAnywhere)
+	USceneComponent* _RootComponent;
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void PowerButtonInteraction();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnyWhere)
 	bool PowerOn;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(EditAnywhere)
-		USceneComponent* _RootComponent;
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void PowerButtonInteraction();
-
-
 
 };

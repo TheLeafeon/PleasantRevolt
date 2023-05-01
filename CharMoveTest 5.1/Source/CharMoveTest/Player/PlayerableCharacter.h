@@ -150,7 +150,7 @@ public :
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	// 플레이어 사망 애니메이션 종료 시 발생하는 함수
 	void DeathEnd();
-
+	//플레이어 사망 애니메이션 이후 레벨 재시작 하는 함수
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void PlayerDeathLevelReStart();
 
