@@ -131,6 +131,11 @@ void ASheepDoll::DeathTimer()
 		GetCharacterMovement()->StopMovementImmediately();
 		GetCharacterMovement()->DisableMovement();
 	}
+	GetComponents<UParticleSystemComponent>(ParticleSystemComponents);
+	for (UParticleSystemComponent* ParticleSystemComponent : ParticleSystemComponents)
+	{
+		ParticleSystemComponent->DestroyComponent();
+	}
 }
 
 float ASheepDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -186,6 +191,8 @@ void ASheepDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, ACont
 	isDie = true;
 
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
+
+
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 
