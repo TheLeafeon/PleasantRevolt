@@ -3,7 +3,6 @@
 #include "PlayerableCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Blueprint/UserWidget.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -53,18 +52,6 @@ APlayerableCharacter::APlayerableCharacter()
 	if (RollCurveObj.Succeeded())
 	{
 		RollCurve = RollCurveObj.Object;
-	}
-
-	static ConstructorHelpers::FClassFinder<UUserWidget> PLAYER_UI(TEXT("/Game/PlayerTest/Player/Player_UMG/UMG_PlayerHealth"));
-	if (PLAYER_UI.Succeeded())
-	{
-		UiClass = PLAYER_UI.Class;
-	}
-
-	static ConstructorHelpers::FObjectFinder<UPlayerAnimInstnce> PLAYER_ANIMINSTANCE(TEXT("/Game/PlayerTest/Player/Animations/ABP_Player"));
-	if (PLAYER_ANIMINSTANCE.Succeeded())
-	{
-		AnimInstance = PLAYER_ANIMINSTANCE.Object;
 	}
 
 	bIsRolling = false;
@@ -245,11 +232,6 @@ void APlayerableCharacter::BeginPlay()
 	if (nullptr == AnimInstance)
 		return;
 
-	//CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UiClass);
-	//CurrentWidget->AddToViewport();
-
-	//InitHp();
-
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 
@@ -336,7 +318,6 @@ float APlayerableCharacter::Get_Player_HP()
 void APlayerableCharacter::Increase_Player_HP(float val)
 {
 	Player_HP += val;
-	IncreaseHP_UI();
 }
 
 //===============  Player Dodge =============== //
@@ -381,8 +362,6 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 		{
 			Player_HP -= getDamage;
 		}
-
-		GetDamage_UI();
 
 		if (!bisDie)
 		{
