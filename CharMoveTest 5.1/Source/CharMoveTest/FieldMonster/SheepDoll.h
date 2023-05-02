@@ -87,6 +87,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SheepDollRushParticle();
 
+	//피격 시 깜빡임
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SheepDollHitMaterial();
+
+	//스폰 파티클 출력
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void SpawnParticle();
+
 	//죽고 사라지는 시간
 	void DeathTimer();
 
@@ -96,6 +104,9 @@ public:
 
 
 	USheepDollAnimInstance* AnimInstance;
+
+	//액터의 파티클 시스템 컴포넌트에 대한 참조 얻기
+	TArray<UParticleSystemComponent*> ParticleSystemComponents;
 
 	
 

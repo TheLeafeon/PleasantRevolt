@@ -33,7 +33,7 @@ public:
 		class UBoxComponent* CollisionBox;
 
 	UPROPERTY(EditAnywhere, Category = "SpawnMonster")
-		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArray;
+	TArray<AMonsterSpawnActor*> AreaSpawnMonsterArray;
 
 	UPROPERTY(EditAnywhere, Category = "SpawnMonsterWave2")
 		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArrayWave2;
@@ -59,6 +59,8 @@ public:
 	//Wave3가 시작되었는지
 	bool Wave3Start;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool AreaClear;
 
 	//Area의 Wave 수 설정
 	UPROPERTY(EditAnywhere)
@@ -72,4 +74,7 @@ private:
 
 	bool bSpawn;
 
+public:
+	UFUNCTION(BlueprintImplementableEvent, Category = "InteractionObj")
+	void BattleEnd();
 };

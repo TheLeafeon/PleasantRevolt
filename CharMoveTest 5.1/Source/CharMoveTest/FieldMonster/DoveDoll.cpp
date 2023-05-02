@@ -42,6 +42,8 @@ ADoveDoll::ADoveDoll()
 void ADoveDoll::BeginPlay()
 {
     Super::BeginPlay();
+
+	SpawnParticle();
     int TestNum = 100;
 
 	AnimInstance = Cast<UDoveDollAnimInstance>(GetMesh()->GetAnimInstance());
@@ -128,7 +130,7 @@ float ADoveDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 	const float getDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
 
-
+	DoveDollHitMaterial();
 	if (Monster_HP <= 0.0f)
 	{
 		return 0.0f;
@@ -153,6 +155,7 @@ float ADoveDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACont
 		}
 		else
 		{
+			DoveDollHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}
@@ -180,7 +183,7 @@ void ADoveDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, AContr
 		GetCharacterMovement()->DisableMovement();
 	}
 
-
+	DoveDollDeathSound();
 	AnimInstance->PlayDeathMontage();
 	FTimerHandle DeathTimerHandle;
 	FTimerDelegate DeathTimerDelegate = FTimerDelegate::CreateUObject(this, &ADoveDoll::DeathTimer);

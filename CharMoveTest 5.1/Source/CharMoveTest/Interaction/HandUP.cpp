@@ -88,21 +88,25 @@ void AHandUP::InteractWithMe()
 		{
 			DestroyMirrorHandUp();
 		}*/
+
+		HideInteractionWidget();
 	}
 	
 }
 
 void AHandUP::ShowInteractionWidget()
 {
-	//InteractionWidget->SetVisibility(true);
+	if (!IsHandUp)
+	{
+		InteractionWidget->SetVisibility(true);
+	}
 
 	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("You press E"));
-
 }
 
 void AHandUP::HideInteractionWidget()
 {
-	//InteractionWidget->SetVisibility(false);
+	InteractionWidget->SetVisibility(false);
 }
 
 void AHandUP::SetFalsePhysics()

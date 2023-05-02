@@ -7,11 +7,14 @@
 
 void IInteractionInterface::InteractWithMe()
 {
+
 }
 
 void IInteractionInterface::ShowInteractionWidget()
 {
+	
 }
 void IInteractionInterface::HideInteractionWidget()
 {
+	
 }

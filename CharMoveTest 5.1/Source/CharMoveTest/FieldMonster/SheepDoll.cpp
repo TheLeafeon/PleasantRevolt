@@ -43,6 +43,8 @@ void ASheepDoll::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SpawnParticle();
+
 	AnimInstance = Cast<USheepDollAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
 		return;
@@ -131,12 +133,19 @@ void ASheepDoll::DeathTimer()
 		GetCharacterMovement()->StopMovementImmediately();
 		GetCharacterMovement()->DisableMovement();
 	}
+	GetComponents<UParticleSystemComponent>(ParticleSystemComponents);
+	for (UParticleSystemComponent* ParticleSystemComponent : ParticleSystemComponents)
+	{
+		ParticleSystemComponent->DestroyComponent();
+	}
 }
 
 float ASheepDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float getDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
+
+	SheepDollHitMaterial();
 	if (Monster_HP <= 0.0f)
 	{
 		return 0.0f;
@@ -186,6 +195,8 @@ void ASheepDoll::Die(float KillingDamage, FDamageEvent const& DamageEvent, ACont
 	isDie = true;
 
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
+
+
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 

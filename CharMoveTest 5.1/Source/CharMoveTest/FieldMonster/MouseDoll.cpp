@@ -40,6 +40,7 @@ void AMouseDoll::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SpawnParticle();
 	AnimInstance = Cast<UMouseDollAnimInstance>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
 		return;

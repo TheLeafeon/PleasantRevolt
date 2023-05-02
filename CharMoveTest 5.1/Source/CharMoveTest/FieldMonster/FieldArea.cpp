@@ -18,6 +18,7 @@ AFieldArea::AFieldArea()
 	Wave2Start = false;
 	Wave3Start = false;
 	bSpawn = false;
+	AreaClear = false;
 
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnPointCom"));
 	CollisionBox->SetBoxExtent(FVector(100.0f, 100.0f, 100.0f));
@@ -53,9 +54,30 @@ void AFieldArea::Tick(float DeltaTime)
 				Wave3Spawn();
 			}
 		}
-
-
 	}
+
+
+	if (thisAreaWaveNumber == 1)
+	{
+		if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num() && AreaClear == false)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("end"));
+			BattleEnd();
+
+			AreaClear = true;
+		}
+	}
+	if (thisAreaWaveNumber == 2)
+	{
+		if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num() + AreaSpawnMonsterArrayWave2.Num() && AreaClear == false)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("end"));
+			BattleEnd();
+
+			AreaClear = true;
+		}
+	}
+
 }
 
 void AFieldArea::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
