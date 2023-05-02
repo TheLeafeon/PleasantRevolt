@@ -91,11 +91,8 @@ public :
 	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
 		void GetDamage_UI();
 
-public :
-	// 플레이어의 애니메이션을 저장해둔 것
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-		UPlayerAnimInstnce* AnimInstance;
 private :
+	UPlayerAnimInstnce* AnimInstance;
 	APlayerController* PlayerController;
 	// Timer남은시간
 	float RemainingTime;

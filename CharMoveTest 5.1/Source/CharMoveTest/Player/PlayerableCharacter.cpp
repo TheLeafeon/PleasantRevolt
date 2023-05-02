@@ -61,12 +61,6 @@ APlayerableCharacter::APlayerableCharacter()
 		UiClass = PLAYER_UI.Class;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UPlayerAnimInstnce> PLAYER_ANIMINSTANCE(TEXT("/Game/PlayerTest/Player/Animations/ABP_Player"));
-	if (PLAYER_ANIMINSTANCE.Succeeded())
-	{
-		AnimInstance = PLAYER_ANIMINSTANCE.Object;
-	}
-
 	bIsRolling = false;
 	bisHit = false;
 	// Timer 남은 시간 확인용
