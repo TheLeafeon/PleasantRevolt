@@ -245,10 +245,8 @@ void APlayerableCharacter::BeginPlay()
 	if (nullptr == AnimInstance)
 		return;
 
-	//CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UiClass);
-	//CurrentWidget->AddToViewport();
-
-	//InitHp();
+	CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UiClass);
+	CurrentWidget->AddToViewport();
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
