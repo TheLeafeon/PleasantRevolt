@@ -14,7 +14,7 @@
 
 // Sets default values
 APlayerableCharacter::APlayerableCharacter()
-	: LadderMoveSpeed(3.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false), WeaponNumber(0)
+	: LadderMoveSpeed(5.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false), WeaponNumber(0)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
