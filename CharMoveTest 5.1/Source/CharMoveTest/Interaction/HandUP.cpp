@@ -27,13 +27,12 @@ void AHandUP::Tick(float DeltaTime)
 
 void AHandUP::InteractWithMe()
 {
-	if (IsHandUp)
+	if (PlayerCharacter->IsHandUp && IsHandUp)
 	{
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		//거울 핸드업 생성
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-			{
-				DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-				
+			{	
 				//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
 				BlockCollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
 
@@ -44,9 +43,8 @@ void AHandUP::InteractWithMe()
 				const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 150;
 				
 				SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
-				SetActorRotation(FRotator(0, 0, GetActorRotation().Yaw));
+				SetActorRotation(FRotator(0, 0, GetActorRotation().Pitch));
 
-				
 				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
@@ -65,13 +63,14 @@ void AHandUP::InteractWithMe()
 
 								GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 							}), 1.5f, false);
-					}), 0.2f, false);
+					}), 0.15f, false);
 					
 			}), 0.65f, false);
 			
 		HandUpAni(false);
 
 		IsHandUp = false;
+		PlayerCharacter->SetIsHandUp(false);
 	}
 	else
 	{	
@@ -79,6 +78,7 @@ void AHandUP::InteractWithMe()
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		CollisionComponent->SetSimulatePhysics(false);
 		PlayerCharacter->PlayerHandUp(this);
+		PlayerCharacter->SetIsHandUp(true);
 
 		HandUpAni(true);
 

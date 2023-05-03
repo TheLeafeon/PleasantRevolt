@@ -651,14 +651,41 @@ void APlayerableCharacter::OnInteract()
 
 void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 {
-	if (OtherActor)
+	if (OtherActor && !IsHandUp)
 	{
-		HandUpObj = OtherActor;
-		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
+		FVector CurrentActorLocation = GetActorLocation();
+
+		// Find the closest overlapping actor
+		float ClosestDistance = FLT_MAX;
+
+		TArray<AActor*> OverlappingActors;
+		GetOverlappingActors(OverlappingActors);
+
+		AActor* ClosestActor = nullptr;
+
+		for (AActor* Actor : OverlappingActors)
+		{
+			float Distance = (Actor->GetActorLocation() - CurrentActorLocation).Size();
+
+			if (Distance < ClosestDistance)
+			{
+				ClosestDistance = Distance;
+				ClosestActor = Actor;
+			}
+		}
+
+		HandUpObj = ClosestActor;
+		ClosestActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
 		SetAnimIsDrop(false);
+
 		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}
 
+}
+
+void APlayerableCharacter::SetIsHandUp(bool value)
+{
+	IsHandUp = value;
 }
 
 void APlayerableCharacter::LadderMove(float Value)

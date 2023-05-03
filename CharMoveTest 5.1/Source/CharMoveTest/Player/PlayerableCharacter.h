@@ -252,7 +252,9 @@ public:
 	void HitDrop();
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetAnimIsDrop(bool IsDrop);
-
+	UFUNCTION()
+	void SetIsHandUp(bool value);
+	bool IsHandUp;
 private:
 	//Ladder°ü·Ã
 	UPROPERTY()
