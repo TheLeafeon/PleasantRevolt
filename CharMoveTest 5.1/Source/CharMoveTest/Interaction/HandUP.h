@@ -42,6 +42,7 @@ public:
 private:
 	bool IsHandUp;
 	FTimerHandle TimerHandle;
+	AActor* IsUpActor;
 
 	virtual void InteractWithMe() override;
 	virtual void ShowInteractionWidget() override;

@@ -27,7 +27,7 @@ void AHandUP::Tick(float DeltaTime)
 
 void AHandUP::InteractWithMe()
 {
-	if (PlayerCharacter->IsHandUp && IsHandUp)
+	if (PlayerCharacter->IsHandUp && IsHandUp && IsUpActor == this)
 	{
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
@@ -71,13 +71,14 @@ void AHandUP::InteractWithMe()
 		IsHandUp = false;
 		PlayerCharacter->SetIsHandUp(false);
 	}
-	else
+	else if (PlayerCharacter->IsHandUp == false && !IsHandUp)
 	{	
 		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		CollisionComponent->SetSimulatePhysics(false);
 		PlayerCharacter->PlayerHandUp(this);
 		PlayerCharacter->SetIsHandUp(true);
+		IsUpActor = PlayerCharacter->HandUpObj;
 
 		HandUpAni(true);
 
@@ -141,11 +142,11 @@ void AHandUP::Drop()
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
 						CollisionComponent->SetSimulatePhysics(false);
-						/*
+						
 						if (IsMirror)
 						{
 							SetMirrorHandUp();
-						}*/
+						}
 
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 					}), 1.5f, false);
@@ -185,11 +186,11 @@ void AHandUP::BackDrop()
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
 						CollisionComponent->SetSimulatePhysics(false);
-						/*
+						
 						if (IsMirror)
 						{
 							SetMirrorHandUp();
-						}*/
+						}
 
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 					}), 1.5f, false);

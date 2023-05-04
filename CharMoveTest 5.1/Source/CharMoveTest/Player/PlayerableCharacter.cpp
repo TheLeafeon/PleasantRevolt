@@ -680,7 +680,6 @@ void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}
-
 }
 
 void APlayerableCharacter::SetIsHandUp(bool value)

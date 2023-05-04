@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Sound/SoundBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Boss_Character.generated.h"
 

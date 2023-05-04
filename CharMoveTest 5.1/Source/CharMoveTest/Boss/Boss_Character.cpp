@@ -93,6 +93,9 @@ void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, 
 		ParticleSystemComponent->DestroyComponent();
 	}
 
+	USoundBase* Sound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Sound/BGM/Stage1/Boss/bear_scream.bear_scream"), nullptr, LOAD_None, nullptr);
+	UGameplayStatics::PlaySoundAtLocation(this, Sound, GetActorLocation());
+
 	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
 	GetMesh()->SetSimulatePhysics(true);
 	SpawnDanger->Destroy();
