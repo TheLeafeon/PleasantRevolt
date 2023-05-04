@@ -142,6 +142,11 @@ public :
 	UFUNCTION(BlueprintCallable, Category = "Status")
 		void Increase_Player_HP(float val);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
+		void AddPlayerHp();
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
+		void RemovePlayerHp();
+
 	// 히트 판정
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 	// Get Damage

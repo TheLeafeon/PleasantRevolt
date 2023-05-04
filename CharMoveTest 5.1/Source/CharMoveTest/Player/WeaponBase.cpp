@@ -4,6 +4,7 @@
 #include "WeaponBase.h"
 #include "PlayerableCharacter.h"
 #include "SampleEnemy.h"
+#include "NiagaraFunctionLibrary.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "CharMoveTest/Boss/Boss_Character.h"
 #include "Kismet/GameplayStatics.h"
@@ -13,6 +14,12 @@ AWeaponBase::AWeaponBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> ATTACKENEMYPARTICLE(TEXT("/Game/PlayerTest/PlayerFX/Particles/UPDATE_1_3/P_Web_Hit_05.P_Web_Hit_05"));
+	if(ATTACKENEMYPARTICLE.Succeeded())
+	{
+		AttackEnemyParticle = ATTACKENEMYPARTICLE.Object;
+	}
 
 	_RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root component"));
 	RootComponent = _RootComponent;
@@ -32,7 +39,7 @@ AWeaponBase::AWeaponBase()
 
 	MyPawn = Cast<APlayerableCharacter>(StaticClass());
 
-	TraceRadius = 120.0f;
+	TraceRadius = 60.0f;
 
 	CollisionParams.bTraceComplex = true;
 	CollisionParams.bReturnPhysicalMaterial = false;
@@ -95,7 +102,7 @@ void AWeaponBase::WeaponTrace()
 				HitMonster = Cast<AMonsterBase>(HitComponent->GetOwner());
 				HitBoss = Cast<ABoss_Character>(HitComponent->GetOwner());
 			}
-
+			
 			if(HitMonster)
 				DuplicationEnemy(HitMonster);
 			if (HitBoss)
@@ -113,5 +120,6 @@ void AWeaponBase::DuplicationEnemy(ACharacter* Enemy)
 		DetectedActors.Add(Enemy);
 
 		UGameplayStatics::ApplyDamage(Enemy, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), AttackEnemyParticle, GetActorLocation());
 	}
 }
