@@ -4,7 +4,7 @@
 #include "CharMoveTest/Interaction/HandUP.h"
 
 // Sets default values
-AHandUP::AHandUP() : IsHandUp(false)
+AHandUP::AHandUP() : IsHandUp(false), IsMirror(false)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -30,7 +30,7 @@ void AHandUP::InteractWithMe()
 	if (PlayerCharacter->IsHandUp && IsHandUp)
 	{
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		//거울 핸드업 생성
+
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 			{	
 				//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
@@ -54,12 +54,11 @@ void AHandUP::InteractWithMe()
 						GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 							{
 								CollisionComponent->SetSimulatePhysics(false);
-	
-								/*
-								if (IsMirror)IsMirror
+								
+								if (IsMirror)
 								{
 									SetMirrorHandUp();
-								}*/
+								}
 
 								GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 							}), 1.5f, false);
@@ -83,11 +82,11 @@ void AHandUP::InteractWithMe()
 		HandUpAni(true);
 
 		IsHandUp = true;
-		/*
+		
 		if (IsMirror)
 		{
 			DestroyMirrorHandUp();
-		}*/
+		}
 
 		HideInteractionWidget();
 	}
