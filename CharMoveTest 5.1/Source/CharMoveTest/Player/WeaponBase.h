@@ -56,6 +56,7 @@ private :
 	bool isAttacking;
 
 	TArray<ACharacter*> DetectedActors;
+	TArray<APawn*> DetectedActors2;
 	FCollisionQueryParams CollisionParams;
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
@@ -65,6 +66,7 @@ private :
 	float TraceInterval;
 	void WeaponTrace();
 	void DuplicationEnemy(ACharacter* Enemy);
+	void DuplicationEnemy(APawn* Enemy);
 
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }

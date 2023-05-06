@@ -4,7 +4,7 @@
 #include "CharMoveTest/Boss/PD_RightArm.h"
 
 // Sets default values
-APD_RightArm::APD_RightArm() : Smash_TotalTime(1.0f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0), RightArmHP(10.0f)
+APD_RightArm::APD_RightArm() : Smash_TotalTime(1.0f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0), RightArmHP(10.0f), IsAttack(false)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -15,6 +15,8 @@ void APD_RightArm::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
+	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &APD_RightArm::OnOverlapBegin);
 }
 
 // Called every frame
@@ -39,6 +41,7 @@ void APD_RightArm::Tick(float DeltaTime)
 		if (GetActorLocation().Equals(TargetLocation, 0.1))
 		{
 			IsSmash = false;
+			IsAttack = true;
 		}
 	}
 	else
@@ -76,6 +79,8 @@ void APD_RightArm::Smash()
 	StartTime = GetWorld()->GetTimeSeconds();
 
 	IsSmash = true;
+
+	CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }
 
 void APD_RightArm::SmashWait()
@@ -94,6 +99,8 @@ void APD_RightArm::BackSmash()
 	StartTime = GetWorld()->GetTimeSeconds();
 
 	Restoration = true;
+
+	CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 }
 
 void APD_RightArm::SetFallDecalPawn(APawn* Pawn)
@@ -113,11 +120,13 @@ float APD_RightArm::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, AC
 	if (getDamage > 0.0f)
 	{
 		RightArmHP -= getDamage;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("hit"));
 	}
 
 	if (RightArmHP <= 0)
 	{
 		Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Die"));
 	}
 	else
 	{
@@ -133,7 +142,6 @@ void APD_RightArm::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APa
 
 	if (DamageTaken > 0.0f)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("hit"));
 		//ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
 	}
 }
@@ -141,4 +149,18 @@ void APD_RightArm::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APa
 void APD_RightArm::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
 	Destroy();
+}
+
+void APD_RightArm::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Attack"));
+	if (OtherActor == Player)
+	{
+		if (IsSmash && IsAttack)
+		{
+			UGameplayStatics::ApplyDamage(Player, 1, NULL, this, UDamageType::StaticClass());
+			IsAttack = false;
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Attack"));
+		}
+	}
 }
