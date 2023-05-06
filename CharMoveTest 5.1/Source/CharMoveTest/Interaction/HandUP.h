@@ -11,6 +11,7 @@
 #include "Engine/Public/TimerManager.h"
 #include "CharMoveTest/Player/PlayerAnimInstnce.h"
 #include "Components/WidgetComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "HandUP.generated.h"
 
 UCLASS()
@@ -42,6 +43,7 @@ public:
 private:
 	bool IsHandUp;
 	FTimerHandle TimerHandle;
+	AActor* IsUpActor;
 
 	virtual void InteractWithMe() override;
 	virtual void ShowInteractionWidget() override;

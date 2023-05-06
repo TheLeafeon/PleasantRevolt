@@ -318,6 +318,8 @@ float APlayerableCharacter::Get_Player_HP()
 void APlayerableCharacter::Increase_Player_HP(float val)
 {
 	Player_HP += val;
+
+	AddPlayerHp();
 }
 
 //===============  Player Dodge =============== //
@@ -362,6 +364,8 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 		{
 			Player_HP -= getDamage;
 		}
+
+		RemovePlayerHp();
 
 		if (!bisDie)
 		{
@@ -680,7 +684,6 @@ void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}
-
 }
 
 void APlayerableCharacter::SetIsHandUp(bool value)

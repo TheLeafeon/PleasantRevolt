@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "WeaponInterface.h"
+#include "NiagaraSystem.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
@@ -43,6 +44,9 @@ protected :
 	FString WeaponName;
 
 	class APlayerableCharacter* MyPawn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
+		UNiagaraSystem* AttackEnemyParticle;
 private :
 	UPROPERTY(EditAnywhere)
 		USceneComponent* _RootComponent;
@@ -52,13 +56,17 @@ private :
 	bool isAttacking;
 
 	TArray<ACharacter*> DetectedActors;
+	TArray<APawn*> DetectedActors2;
 	FCollisionQueryParams CollisionParams;
-	float TraceRadius;
+
+	UPROPERTY(EditAnywhere, Category = "Trace")
+		float TraceRadius;
 
 	float TraceLastTime;
 	float TraceInterval;
 	void WeaponTrace();
 	void DuplicationEnemy(ACharacter* Enemy);
+	void DuplicationEnemy(APawn* Enemy);
 
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }

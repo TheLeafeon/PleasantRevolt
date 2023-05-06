@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "CharMoveTest/Boss/PD_FallDecal_Pawn.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/PrimitiveComponent.h"
 #include "PD_RightArm.generated.h"
 
 UCLASS()
-class CHARMOVETEST_API APD_RightArm : public AActor
+class CHARMOVETEST_API APD_RightArm : public APawn
 {
 	GENERATED_BODY()
 	
@@ -48,7 +50,15 @@ private:
 	float RightArmHP;
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION()
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	APawn* Player;
+	bool IsAttack;
+
 public:
-	UFUNCTION(BlueprintCallable)
-		virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	UPROPERTY(BlueprintReadWrite)
+	UPrimitiveComponent* CollisionComponent;
 };

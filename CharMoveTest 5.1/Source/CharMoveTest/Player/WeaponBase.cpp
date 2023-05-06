@@ -4,8 +4,12 @@
 #include "WeaponBase.h"
 #include "PlayerableCharacter.h"
 #include "SampleEnemy.h"
+#include "NiagaraFunctionLibrary.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "CharMoveTest/Boss/Boss_Character.h"
+#include "CharMoveTest/Boss/PD_LeftArm.h"
+#include "CharMoveTest/Boss/PD_RightArm.h"
+#include "CharMoveTest/Boss/PD_Body_Character.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -13,6 +17,12 @@ AWeaponBase::AWeaponBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> ATTACKENEMYPARTICLE(TEXT("/Game/PlayerTest/PlayerFX/Particles/UPDATE_1_3/P_Web_Hit_05.P_Web_Hit_05"));
+	if(ATTACKENEMYPARTICLE.Succeeded())
+	{
+		AttackEnemyParticle = ATTACKENEMYPARTICLE.Object;
+	}
 
 	_RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root component"));
 	RootComponent = _RootComponent;
@@ -32,7 +42,7 @@ AWeaponBase::AWeaponBase()
 
 	MyPawn = Cast<APlayerableCharacter>(StaticClass());
 
-	TraceRadius = 120.0f;
+	TraceRadius = 60.0f;
 
 	CollisionParams.bTraceComplex = true;
 	CollisionParams.bReturnPhysicalMaterial = false;
@@ -72,6 +82,7 @@ void AWeaponBase::Disable_Attack_Enemy()
 {
 	isAttacking = false;
 	DetectedActors.Empty();
+	DetectedActors2.Empty();
 }
 
 void AWeaponBase::WeaponTrace()
@@ -89,17 +100,29 @@ void AWeaponBase::WeaponTrace()
 			UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 			AMonsterBase* HitMonster = nullptr;
 			ABoss_Character* HitBoss = nullptr;
+			APD_LeftArm* HitBoss2_LeftArm = nullptr;
+			APD_RightArm* HitBoss2_RightArm = nullptr;
+			APD_Body_Character* HitBoss2_Body = nullptr;
 
 			if (HitComponent)
 			{
 				HitMonster = Cast<AMonsterBase>(HitComponent->GetOwner());
 				HitBoss = Cast<ABoss_Character>(HitComponent->GetOwner());
+				HitBoss2_LeftArm = Cast<APD_LeftArm>(HitComponent->GetOwner());
+				HitBoss2_RightArm = Cast<APD_RightArm>(HitComponent->GetOwner());
+				HitBoss2_Body = Cast<APD_Body_Character>(HitComponent->GetOwner());
 			}
-
+			
 			if(HitMonster)
 				DuplicationEnemy(HitMonster);
 			if (HitBoss)
 				DuplicationEnemy(HitBoss);
+			if (HitBoss2_LeftArm)
+				DuplicationEnemy(HitBoss2_LeftArm);
+			if (HitBoss2_RightArm)
+				DuplicationEnemy(HitBoss2_RightArm);
+			if (HitBoss2_Body)
+				DuplicationEnemy(HitBoss2_Body);
 		}
 	}
 }
@@ -113,5 +136,21 @@ void AWeaponBase::DuplicationEnemy(ACharacter* Enemy)
 		DetectedActors.Add(Enemy);
 
 		UGameplayStatics::ApplyDamage(Enemy, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), AttackEnemyParticle, GetActorLocation());
+	}
+}
+
+void AWeaponBase::DuplicationEnemy(APawn* Enemy)
+{
+	if (!Enemy || DetectedActors2.Contains(Enemy))
+	{
+		return;
+	}	
+	else
+	{
+		DetectedActors2.Add(Enemy);
+
+		UGameplayStatics::ApplyDamage(Enemy, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), AttackEnemyParticle, GetActorLocation());
 	}
 }

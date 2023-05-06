@@ -27,7 +27,7 @@ void AHandUP::Tick(float DeltaTime)
 
 void AHandUP::InteractWithMe()
 {
-	if (PlayerCharacter->IsHandUp && IsHandUp)
+	if (PlayerCharacter->IsHandUp && IsHandUp && IsUpActor == this)
 	{
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
@@ -43,12 +43,14 @@ void AHandUP::InteractWithMe()
 				const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 150;
 				
 				SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
-				SetActorRotation(FRotator(0, 0, GetActorRotation().Pitch));
+				SetActorRotation(/*FRotator(0, 0, GetActorRotation().Pitch)*/ PlayerCharacter->GetActorRotation());
 
 				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
 						CollisionComponent->SetSimulatePhysics(true);
+
+						CollisionComponent->AddImpulse(GetActorForwardVector() * 300, "None", true);
 
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 						GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
@@ -71,13 +73,14 @@ void AHandUP::InteractWithMe()
 		IsHandUp = false;
 		PlayerCharacter->SetIsHandUp(false);
 	}
-	else
+	else if (PlayerCharacter->IsHandUp == false && !IsHandUp)
 	{	
 		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		CollisionComponent->SetSimulatePhysics(false);
 		PlayerCharacter->PlayerHandUp(this);
 		PlayerCharacter->SetIsHandUp(true);
+		IsUpActor = PlayerCharacter->HandUpObj;
 
 		HandUpAni(true);
 
@@ -141,11 +144,11 @@ void AHandUP::Drop()
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
 						CollisionComponent->SetSimulatePhysics(false);
-						/*
+						
 						if (IsMirror)
 						{
 							SetMirrorHandUp();
-						}*/
+						}
 
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 					}), 1.5f, false);
@@ -185,11 +188,11 @@ void AHandUP::BackDrop()
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
 						CollisionComponent->SetSimulatePhysics(false);
-						/*
+						
 						if (IsMirror)
 						{
 							SetMirrorHandUp();
-						}*/
+						}
 
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 					}), 1.5f, false);
