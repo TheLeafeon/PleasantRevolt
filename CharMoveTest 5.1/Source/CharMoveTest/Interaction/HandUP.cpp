@@ -43,12 +43,14 @@ void AHandUP::InteractWithMe()
 				const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 150;
 				
 				SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
-				SetActorRotation(FRotator(0, 0, GetActorRotation().Pitch));
+				SetActorRotation(/*FRotator(0, 0, GetActorRotation().Pitch)*/ PlayerCharacter->GetActorRotation());
 
 				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
 						CollisionComponent->SetSimulatePhysics(true);
+
+						CollisionComponent->AddImpulse(GetActorForwardVector() * 300, "None", true);
 
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 						GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
