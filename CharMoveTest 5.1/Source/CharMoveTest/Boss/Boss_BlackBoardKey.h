@@ -28,4 +28,5 @@ namespace bossKey2
 	TCHAR const* const rightArm = TEXT("RightArm");
 	TCHAR const* const randomArm = TEXT("RandomArm");
 	TCHAR const* const keyTrue = TEXT("True");
+	TCHAR const* const isArmLive = TEXT("IsArmLive");
 }

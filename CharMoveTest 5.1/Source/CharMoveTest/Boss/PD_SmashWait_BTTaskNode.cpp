@@ -17,7 +17,14 @@ UPD_SmashWait_BTTaskNode::UPD_SmashWait_BTTaskNode()
 
 EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr)
+	if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
+	{
+		//3페로 넘어가기
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey2::isArmLive, false);
+
+		return EBTNodeResult::Failed;
+	}
+	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr)
 	{
 		RandomValue = 0.6;
 	}

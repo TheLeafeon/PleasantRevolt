@@ -55,7 +55,7 @@ void AHandUP::InteractWithMe()
 						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 						GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 							{
-								CollisionComponent->SetSimulatePhysics(false);
+								//CollisionComponent->SetSimulatePhysics(false);
 								
 								if (IsMirror)
 								{

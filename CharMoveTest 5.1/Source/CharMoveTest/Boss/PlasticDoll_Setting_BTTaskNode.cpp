@@ -13,7 +13,8 @@ EBTNodeResult::Type UPlasticDoll_Setting_BTTaskNode::ExecuteTask(UBehaviorTreeCo
 {
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey2::player, PlayerPawn);
-	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey2::keyTrue, true);
+	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey2::keyTrue, true); 
+	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey2::isArmLive, true);
 
 	return EBTNodeResult::Succeeded;
 }

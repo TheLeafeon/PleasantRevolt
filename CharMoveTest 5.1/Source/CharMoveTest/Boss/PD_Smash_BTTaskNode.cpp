@@ -13,6 +13,14 @@ EBTNodeResult::Type UPD_Smash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& Ow
 	//OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm);
 	//OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm);
 
+	if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
+	{
+		//3페로 넘어가기
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey2::isArmLive, false);
+
+		return EBTNodeResult::Failed;
+	}
+
 	RandomValue = OwnerComp.GetBlackboardComponent()->GetValueAsFloat(bossKey2::randomArm);
 
 	if (RandomValue <= 0.5)
