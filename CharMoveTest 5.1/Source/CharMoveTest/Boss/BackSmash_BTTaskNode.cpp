@@ -17,6 +17,14 @@ EBTNodeResult::Type UBackSmash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& O
 
 		return EBTNodeResult::Failed;
 	}
+	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr)
+	{
+		RandomValue = 0.6;
+	}
+	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
+	{
+		RandomValue = 0.1;
+	}
 
 	RandomValue = OwnerComp.GetBlackboardComponent()->GetValueAsFloat(bossKey2::randomArm);
 

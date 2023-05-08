@@ -63,6 +63,7 @@ void APD_LeftArm::Tick(float DeltaTime)
 			if (GetActorLocation().Equals(StartLocation, 0.1))
 			{
 				Restoration = false;
+				CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 			}
 		}
 	}
@@ -98,8 +99,6 @@ void APD_LeftArm::BackSmash()
 	StartTime = GetWorld()->GetTimeSeconds();
 
 	Restoration = true;
-
-	CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 }
 
 void APD_LeftArm::SetFallDecalPawn(APawn* Pawn)
