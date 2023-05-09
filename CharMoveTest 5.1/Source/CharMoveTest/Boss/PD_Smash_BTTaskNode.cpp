@@ -12,6 +12,7 @@ EBTNodeResult::Type UPD_Smash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& Ow
 {
 	//OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm);
 	//OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm);
+	RandomValue = OwnerComp.GetBlackboardComponent()->GetValueAsFloat(bossKey2::randomArm);
 
 	if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
 	{
@@ -28,8 +29,6 @@ EBTNodeResult::Type UPD_Smash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& Ow
 	{
 		RandomValue = 0.1;
 	}
-
-	RandomValue = OwnerComp.GetBlackboardComponent()->GetValueAsFloat(bossKey2::randomArm);
 
 	if (RandomValue <= 0.5)
 	{

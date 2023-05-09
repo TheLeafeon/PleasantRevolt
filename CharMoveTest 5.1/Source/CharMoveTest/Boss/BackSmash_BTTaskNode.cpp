@@ -10,6 +10,8 @@ UBackSmash_BTTaskNode::UBackSmash_BTTaskNode() : RandomValue(0)
 
 EBTNodeResult::Type UBackSmash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	RandomValue = OwnerComp.GetBlackboardComponent()->GetValueAsFloat(bossKey2::randomArm);
+
 	if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
 	{
 		//3페로 넘어가기
@@ -25,8 +27,6 @@ EBTNodeResult::Type UBackSmash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& O
 	{
 		RandomValue = 0.1;
 	}
-
-	RandomValue = OwnerComp.GetBlackboardComponent()->GetValueAsFloat(bossKey2::randomArm);
 
 	if (RandomValue <= 0.5)
 	{
