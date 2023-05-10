@@ -72,6 +72,7 @@ APlayerableCharacter::APlayerableCharacter()
 
 	// Player Melee
 	bisAttack = false;
+	currentWeaponIndex = 0;
 	currentCombo = 0;
 	maxCombo = 0;
 	comboCoolTime = 5.0f;
@@ -104,6 +105,7 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("FirstMeleeWeapon", IE_Released, this, &APlayerableCharacter::FirstMeleeWeapon);
 	PlayerInputComponent->BindAction("SecondMeleeWeapon", IE_Released, this, &APlayerableCharacter::SecondMeleeWeapon);
 	PlayerInputComponent->BindAction("ThirdMeleeWeapon", IE_Released, this, &APlayerableCharacter::ThirdMeleeWeapon);
+	PlayerInputComponent->BindAction("SwapWeapon", IE_Released, this, &APlayerableCharacter::SwapWeapon);
 	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &APlayerableCharacter::Attack_Melee);
 	
 	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
@@ -319,7 +321,7 @@ void APlayerableCharacter::Increase_Player_HP(float val)
 {
 	Player_HP += val;
 
-	AddPlayerHp();
+	UMG_AddPlayerHp();
 }
 
 //===============  Player Dodge =============== //
@@ -365,7 +367,7 @@ float APlayerableCharacter::TakeDamage(float Damage, FDamageEvent const& DamgaeE
 			Player_HP -= getDamage;
 		}
 
-		RemovePlayerHp();
+		UMG_RemovePlayerHp();
 
 		if (!bisDie)
 		{
@@ -418,10 +420,6 @@ void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEv
 	float DeathAnimDuration = AnimInstance->Death_AnimMontage->GetPlayLength();
 
 	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
-
-
-	
-	
 }
 
 void APlayerableCharacter::DeathEnd()
@@ -447,9 +445,13 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		WeaponNumber = WeaponIndex; //어떤 무기인지 보스에게 전달
 
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(true);
-		UnEquipSubWeapon();
 		CurrentWeapon = NextWeapon;
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
+
+		if (WeaponIndex == THIRD_WEAPON)
+			EquipSubWeapon();
+		else
+			UnEquipSubWeapon();
 
 		if (WeaponIndex == FIRST_WEAPON)
 		{
@@ -467,6 +469,21 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		maxCombo = CurrentWeapon->GetMaxCombo();
 		currentCombo = 0;
 	}
+}
+void APlayerableCharacter::SwapWeapon()
+{
+	actions.push_back(bIsRolling);
+	actions.push_back(bisHit);
+
+	if (!bCanAction())
+		return;
+
+	UMG_SwapWeapon();
+	currentWeaponIndex++;
+	if (currentWeaponIndex >= MeleeWeaponsArray.Num())
+		currentWeaponIndex = 0;
+
+	SwitchWeapon(currentWeaponIndex);
 }
 void APlayerableCharacter::EquipSubWeapon()
 {
@@ -496,12 +513,6 @@ void APlayerableCharacter::Attack_Melee()
 {
 	if (!bisAttack)
 	{
-		actions.push_back(bIsRolling);
-		actions.push_back(bisHit);
-
-		if (!bCanAction())
-			return;
-
 		if (currentCombo < maxCombo)
 		{
 			LookMousePosition();

@@ -132,7 +132,15 @@ private :
 
 	void DodgeStart(const float& time);
 	void DodgeEnd();
-	
+	/*PlayerUI관련 기능들*/
+public :
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
+		void UMG_AddPlayerHp();
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
+		void UMG_RemovePlayerHp();
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
+		void UMG_SwapWeapon();
+
 /* Player Get Damage & Die 관련 */
 public :
 	// 플레이어의 체력을 밖으로 보내기 위위해서 작성
@@ -141,11 +149,6 @@ public :
 	// 플레이어의 체력이 증가하는지 확인
 	UFUNCTION(BlueprintCallable, Category = "Status")
 		void Increase_Player_HP(float val);
-
-	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
-		void AddPlayerHp();
-	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
-		void RemovePlayerHp();
 
 	// 히트 판정
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
@@ -186,6 +189,8 @@ private :
 	const int32 SECOND_WEAPON = 1;
 	const int32 THIRD_WEAPON = 2;
 
+	int32 currentWeaponIndex;
+
 	// Weapon 1, 2, 3
 	UPROPERTY(EditAnywhere, Category = "Weapons")
 		TSubclassOf<class AWeaponBase> FirstWeapon;
@@ -205,6 +210,7 @@ private :
 	class UAnimMontage* CurrentWeaponComboAnim;
 
 	void SwitchWeapon(int32 WeaponIndex);
+	void SwapWeapon();
 	void FirstMeleeWeapon();
 	void SecondMeleeWeapon();
 	void ThirdMeleeWeapon();
