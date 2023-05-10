@@ -28,12 +28,12 @@ EBTNodeResult::Type UBackSmash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& O
 		RandomValue = 0.1;
 	}
 
-	if (RandomValue <= 0.5)
+	if (RandomValue <= 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) != nullptr)
 	{
 		LArm = Cast<APD_LeftArm>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm));
 		LArm->BackSmash();
 	}
-	else
+	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) != nullptr)
 	{
 		RArm = Cast<APD_RightArm>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm));
 		RArm->BackSmash();

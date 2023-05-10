@@ -48,13 +48,13 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 	
 	//만약 어느 한 쪽이 박살났으면 한 쪽으로 고정 시켜줘야함
 
-	if (RandomValue <= 0.5)
+	if (RandomValue <= 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) != nullptr)
 	{
 		LArm = Cast<APD_LeftArm>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm));
 		LArm->SmashWait();
 		LArm->SetFallDecalPawn(SpawnedPawn);
 	}
-	else
+	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) != nullptr)
 	{
 		RArm = Cast<APD_RightArm>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm));
 		RArm->SmashWait();
