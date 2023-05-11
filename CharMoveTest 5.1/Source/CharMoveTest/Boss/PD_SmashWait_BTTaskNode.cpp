@@ -22,7 +22,7 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 		//3페로 넘어가기
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey2::isArmLive, false);
 
-		return EBTNodeResult::Failed;
+		return EBTNodeResult::Succeeded;
 	}
 	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr)
 	{
@@ -45,8 +45,6 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 	FVector SpawnLocation = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 
 	APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PD_FallDecal, SpawnLocation, Rotator);
-	
-	//만약 어느 한 쪽이 박살났으면 한 쪽으로 고정 시켜줘야함
 
 	if (RandomValue <= 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) != nullptr)
 	{
