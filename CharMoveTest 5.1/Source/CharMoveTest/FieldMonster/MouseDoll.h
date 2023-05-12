@@ -36,9 +36,6 @@ public:
 	void Attack_Melee();
 	void AttackCheck();
 
-	/*UFUNCTION()
-	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);*/
-
 	//Attack Task 완료 델리케이트
 	FOnAttackEndDelegate MouseDollOnAttackEnd;
 	

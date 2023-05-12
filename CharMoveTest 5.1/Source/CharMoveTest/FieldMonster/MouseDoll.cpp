@@ -181,8 +181,6 @@ void AMouseDoll::AttackCheck()
 	}
 }
 
-
-
 void AMouseDoll::AttackTimer()
 {
 	isAttacking = false;

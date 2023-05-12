@@ -28,7 +28,7 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void Fire();
+	void Fire();
 
 	void Attack();
 
@@ -41,11 +41,11 @@ public:
 
 	// 카메라 위치에서의 총구 오프셋
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		FVector MuzzleOffset;
+	FVector MuzzleOffset;
 
 	// 스폰시킬 프로젝타일 클래스
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class AFPSProjectile> ProjectileClass;
+	TSubclassOf<class AFPSProjectile> ProjectileClass;
 
 	// 구체 발사지점
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -65,7 +65,6 @@ public:
 	//죽을 때 소리
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void DoveDollDeathSound();
-
 
 	//스폰 타이머
 	FTimerHandle DoveDollSpawnMoveUpHandle;

@@ -90,9 +90,7 @@ void ADoveDoll::AttackTimer()
 
 void ADoveDoll::DeathTimer()
 {
-
 	Destroy();
-	
 }
 
 AFieldArea* ADoveDoll::FindClosestMonsterArea()

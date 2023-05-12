@@ -50,9 +50,6 @@ void UBTService_MouseDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AMouseDollAIController::TargetKey, PlayerableCharacter);
 
-
-				//DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
-				//DrawDebugLine(World, ControllingPawn->GetActorLocation(), PlayerableCharacter->GetActorLocation(), FColor::Blue, false, 0.27f);
 				return;
 			}
 		}
