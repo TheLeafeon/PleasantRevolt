@@ -23,6 +23,9 @@ protected:
 
 public:	
 	
+	UFUNCTION(BlueprintCallable)
+	void FarmannequinProjectile();
+
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -32,7 +35,7 @@ public:
 		USphereComponent* CollisionComponent;
 
 	// 프로젝타일 무브먼트 컴포넌트
-	UPROPERTY(VisibleAnywhere, Category = Movement)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite ,Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;
 
 	// 발사체의 속도를 발사 방향으로 초기화시킵니다.
