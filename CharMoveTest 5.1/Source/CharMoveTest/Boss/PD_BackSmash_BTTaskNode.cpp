@@ -22,12 +22,12 @@ EBTNodeResult::Type UPD_BackSmash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr)
 	{
 		RandomValue = 0.6;
-		return EBTNodeResult::Succeeded;
+		//return EBTNodeResult::Succeeded;
 	}
 	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
 	{
 		RandomValue = 0.1;
-		return EBTNodeResult::Succeeded;
+		//return EBTNodeResult::Succeeded;
 	}
 
 	if (RandomValue <= 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) != nullptr)
