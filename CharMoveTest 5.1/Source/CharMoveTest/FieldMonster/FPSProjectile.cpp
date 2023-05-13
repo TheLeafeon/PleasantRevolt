@@ -43,6 +43,12 @@ void AFPSProjectile::BeginPlay()
 	
 }
 
+void AFPSProjectile::FarmannequinProjectile()
+{
+    ProjectileMovementComponent->MaxSpeed = 1500.0f;
+    ProjectileMovementComponent->ProjectileGravityScale = 0.2;
+}
+
 // Called every frame
 void AFPSProjectile::Tick(float DeltaTime)
 {
