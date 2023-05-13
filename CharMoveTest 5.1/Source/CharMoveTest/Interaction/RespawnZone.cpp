@@ -2,6 +2,7 @@
 
 
 #include "CharMoveTest/Interaction/RespawnZone.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 ARespawnZone::ARespawnZone()

@@ -43,6 +43,9 @@ private:
 	float CurrentTime;
 	float Alpha;
 	FVector NewLocation;
+	FRotator StartRotator;
+	FRotator NewRotator;
+	FRotator r;
 
 	APD_FallDecal_Pawn* FallDecalPawn;
 
@@ -61,4 +64,8 @@ private:
 public:
 	UPROPERTY(BlueprintReadWrite)
 	UPrimitiveComponent* CollisionComponent;
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetWaitAni(bool value);
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetAttackAni(bool value);
 };

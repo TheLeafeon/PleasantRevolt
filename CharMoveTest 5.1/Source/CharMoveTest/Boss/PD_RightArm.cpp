@@ -2,6 +2,7 @@
 
 
 #include "CharMoveTest/Boss/PD_RightArm.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 APD_RightArm::APD_RightArm() : Smash_TotalTime(1.0f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0), RightArmHP(10.0f), IsAttack(false)
@@ -26,6 +27,9 @@ void APD_RightArm::Tick(float DeltaTime)
 
 	if (IsSmash)
 	{
+		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Player->GetActorLocation());
+		SetActorRotation(LookAtRotation + FRotator(-50.0f, 50.0f, -50.0f));
+
 		// 현재 시간을 계산합니다.
 		CurrentTime = GetWorld()->GetTimeSeconds() - StartTime;
 
@@ -34,14 +38,17 @@ void APD_RightArm::Tick(float DeltaTime)
 
 		// 보간된 위치를 계산합니다.
 		NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
+		//NewRotator = FMath::Lerp(StartRotator, FRotator(0.0f, 90.0f, 0.0f), Alpha);
 
 		// 액터의 위치를 업데이트합니다.
 		SetActorLocation(NewLocation);
+		//SetActorRotation(NewRotator);
 
 		if (GetActorLocation().Equals(TargetLocation, 0.1))
 		{
 			IsSmash = false;
 			IsAttack = true;
+			r = GetActorRotation();
 		}
 	}
 	else
@@ -54,17 +61,21 @@ void APD_RightArm::Tick(float DeltaTime)
 
 			// 보간 계산을 위한 알파 값을 계산합니다.
 			Alpha = FMath::Clamp(CurrentTime / Restoration_TotalTime, 0.0f, 1.0f);
+			NewRotator = FMath::Lerp(r, StartRotator, Alpha);
 
 			// 보간된 위치를 계산합니다.
 			NewLocation = FMath::Lerp(TargetLocation, StartLocation, Alpha);
 
 			// 액터의 위치를 업데이트합니다.
 			SetActorLocation(NewLocation);
+			SetActorRotation(NewRotator);
 
 			if (GetActorLocation().Equals(StartLocation, 0.1))
 			{
 				Restoration = false;
 				CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+				SetWaitAni(false);
+				SetAttackAni(false);
 			}
 		}
 	}
@@ -78,15 +89,18 @@ void APD_RightArm::Smash()
 	StartLocation = GetActorLocation();
 	TargetLocation = FallDecalPawn->GetFallDecalPos();
 	StartTime = GetWorld()->GetTimeSeconds();
+	StartRotator = GetActorRotation();
 
 	IsSmash = true;
 
 	CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	SetAttackAni(true);
 }
 
 void APD_RightArm::SmashWait()
 {
 	//들어올리는 애니메이션
+	SetWaitAni(true);
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Right SmashWait"));
 }
 
