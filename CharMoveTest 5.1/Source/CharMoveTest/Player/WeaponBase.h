@@ -13,15 +13,12 @@ UCLASS()
 class CHARMOVETEST_API AWeaponBase : public AActor, public IWeaponInterface
 {
 	GENERATED_BODY()
-	
 public:	
 	// Sets default values for this actor's properties
 	AWeaponBase();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -32,6 +29,8 @@ public:
 		virtual void Disable_Attack_Enemy() override;
 
 protected :
+	AWeaponBase* Self;
+
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
 		float PlayerAttackPower;
 	UPROPERTY(EditAnywhere, Category = "WeaponInfo")
@@ -47,6 +46,8 @@ protected :
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
 		UNiagaraSystem* AttackEnemyParticle;
+
+	void EquireWeapon() override;
 private :
 	UPROPERTY(EditAnywhere)
 		USceneComponent* _RootComponent;
@@ -65,7 +66,6 @@ private :
 	float TraceInterval;
 	void WeaponTrace();
 	void DuplicationEnemy(ACharacter* Enemy);
-
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }
 	int32 GetMaxCombo() { return WeaponMaxCombo; }

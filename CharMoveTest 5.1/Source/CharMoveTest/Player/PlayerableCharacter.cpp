@@ -108,7 +108,7 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("SwapWeapon", IE_Released, this, &APlayerableCharacter::SwapWeapon);
 	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &APlayerableCharacter::Attack_Melee);
 	
-	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::Attack_Shooting);
+	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::addWeapons);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -234,9 +234,23 @@ void APlayerableCharacter::BeginPlay()
 	if (nullptr == AnimInstance)
 		return;
 
-	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 
+	gissPlayer = GetGameInstance()->GetSubsystem<UGISS_Player>();
+	//addWeapons();
+	MeleeWeaponsArray = gissPlayer->WeaponInventory;
+	//if (MeleeWeaponsArray.Num() != 0)
+	//{
+	//	for (auto element : MeleeWeaponsArray)
+	//	{
+	//		AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(element->GetClass(), SpawnParams);
+
+	//		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
+	//		Weapon->GetWeponMesh()->SetHiddenInGame(true);
+	//	}
+	//}
+	//
+	/*
 	CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(FirstWeapon, SpawnParams);
 	if (CurrentWeapon)
 	{
@@ -263,6 +277,8 @@ void APlayerableCharacter::BeginPlay()
 		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_l"));
 		CurrentSubWeapon = Weapon;
 	}
+	*/
+	
 	// initialize the timeline and the curve float
 	RollTimeline.SetLooping(false);
 	RollTimeline.SetTimelineLength(RollAnimationLength);
@@ -432,6 +448,27 @@ void APlayerableCharacter::DeathEnd()
 
 //=============== Weapon & Switching System =============== //
 
+void APlayerableCharacter::addWeapons()
+{
+	if (gissPlayer)
+	{
+		MeleeWeaponsArray = gissPlayer->WeaponInventory;
+
+		for (auto element : gissPlayer->WeaponInventory)
+		{
+			element->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
+			
+		}
+		if (MeleeWeaponsArray.Num() != 0)
+		{
+			CurrentWeapon = MeleeWeaponsArray[0];
+			SwitchWeapon(0);
+			CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
+		}
+
+	}
+}
+
 void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 {
 	if (CurrentWeapon && !AnimInstance->IsAnyMontagePlaying())
@@ -448,10 +485,10 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		CurrentWeapon = NextWeapon;
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
 
-		if (WeaponIndex == THIRD_WEAPON)
-			EquipSubWeapon();
-		else
-			UnEquipSubWeapon();
+		//if (WeaponIndex == THIRD_WEAPON)
+		//	EquipSubWeapon();
+		//else
+		//	UnEquipSubWeapon();
 
 		if (WeaponIndex == FIRST_WEAPON)
 		{
@@ -475,7 +512,7 @@ void APlayerableCharacter::SwapWeapon()
 	actions.push_back(bIsRolling);
 	actions.push_back(bisHit);
 
-	if (!bCanAction())
+	if (!bCanAction() && CurrentWeapon == NULL)
 		return;
 
 	UMG_SwapWeapon();
@@ -496,21 +533,24 @@ void APlayerableCharacter::UnEquipSubWeapon()
 
 void APlayerableCharacter::FirstMeleeWeapon()
 {
-	SwitchWeapon(FIRST_WEAPON);
+	//SwitchWeapon(FIRST_WEAPON);
 }
 void APlayerableCharacter::SecondMeleeWeapon()
 {
-	SwitchWeapon(SECOND_WEAPON);
+	//SwitchWeapon(SECOND_WEAPON);
 }
 
 void APlayerableCharacter::ThirdMeleeWeapon()
 {
-	SwitchWeapon(THIRD_WEAPON);
-	EquipSubWeapon();
+	//SwitchWeapon(THIRD_WEAPON);
+	//EquipSubWeapon();
 }
 //===============  Player Melee Attack =============== //
 void APlayerableCharacter::Attack_Melee()
 {
+	if (CurrentWeapon == NULL)
+		return;
+
 	if (!bisAttack)
 	{
 		if (currentCombo < maxCombo)

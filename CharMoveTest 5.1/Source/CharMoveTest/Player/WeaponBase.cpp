@@ -2,8 +2,8 @@
 
 
 #include "WeaponBase.h"
-#include "PlayerableCharacter.h"
 #include "SampleEnemy.h"
+#include "PlayerableCharacter.h"
 #include "NiagaraFunctionLibrary.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "CharMoveTest/Boss/Boss_Character.h"
@@ -14,6 +14,8 @@ AWeaponBase::AWeaponBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	Self = this;
 
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> ATTACKENEMYPARTICLE(TEXT("/Game/PlayerTest/PlayerFX/Particles/UPDATE_1_3/P_Web_Hit_05.P_Web_Hit_05"));
 	if(ATTACKENEMYPARTICLE.Succeeded())
@@ -122,4 +124,9 @@ void AWeaponBase::DuplicationEnemy(ACharacter* Enemy)
 		UGameplayStatics::ApplyDamage(Enemy, PlayerAttackPower, NULL, this, UDamageType::StaticClass());
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), AttackEnemyParticle, GetActorLocation());
 	}
+}
+
+void AWeaponBase::EquireWeapon()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("getWeapon"));
 }

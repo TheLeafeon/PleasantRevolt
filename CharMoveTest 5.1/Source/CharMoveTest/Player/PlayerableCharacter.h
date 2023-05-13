@@ -7,6 +7,7 @@
 #include "InteractionInterface.h"
 #include "WeaponInterface.h"
 #include "WeaponBase.h"
+#include "GISS_Player.h"
 #include "Components/BoxComponent.h"
 #include "Components/TimeLineComponent.h"
 #include "GameFramework/Character.h"
@@ -69,7 +70,8 @@ public :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
 		bool bisAttack;
 //****************************************************//
-
+private :
+	UGISS_Player* gissPlayer;
 //************** 행동중인지 판단  *******************//
 private :
 	std::vector<bool> actions;
@@ -177,6 +179,9 @@ public :
 		void Enable_Attack_Enemy();
 	UFUNCTION(BlueprintCallable)
 		void Disable_Attack_Enemy();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapons")
+		void addWeapons();
 private :
 	// Weapon관련 interface
 	IWeaponInterface* WeaponInterface;
@@ -208,6 +213,8 @@ private :
 		class AWeaponBase* CurrentSubWeapon;
 
 	class UAnimMontage* CurrentWeaponComboAnim;
+
+	FActorSpawnParameters SpawnParams;
 
 	void SwitchWeapon(int32 WeaponIndex);
 	void SwapWeapon();
