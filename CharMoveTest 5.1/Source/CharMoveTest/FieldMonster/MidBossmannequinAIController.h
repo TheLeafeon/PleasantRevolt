@@ -32,6 +32,8 @@ public:
 	static const FName AreaSizeKey;
 	static const FName InRangeKey;
 	static const FName IsSeeKey;
+	static const FName TargetLocationKey;
+	static const FName LastTargetLocationKey;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI")
 		AMidBossmannequin* MyMidBossmannequin;

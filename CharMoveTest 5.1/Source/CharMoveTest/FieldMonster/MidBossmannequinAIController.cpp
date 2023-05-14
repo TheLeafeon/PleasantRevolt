@@ -17,6 +17,8 @@ const FName AMidBossmannequinAIController::AreaPosKey(TEXT("AreaPos"));
 const FName AMidBossmannequinAIController::AreaSizeKey(TEXT("AreaSize"));
 const FName AMidBossmannequinAIController::InRangeKey(TEXT("InRange"));
 const FName AMidBossmannequinAIController::IsSeeKey(TEXT("IsSee"));
+const FName AMidBossmannequinAIController::TargetLocationKey(TEXT("TargetLocation"));
+const FName AMidBossmannequinAIController::LastTargetLocationKey(TEXT("LastTargetLocation"));
 
 AMidBossmannequinAIController::AMidBossmannequinAIController()
 {

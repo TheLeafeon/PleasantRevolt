@@ -90,7 +90,7 @@ void AMidBossmannequin::InRangeAttack()
 	AnimInstance->PlayInRangeAttackMontage();
 
 	FTimerHandle AttackTimerHandle;
-	FTimerDelegate AttackTimerDelegate = FTimerDelegate::CreateUObject(this, &AMidBossmannequin::InRangeAttackCheck);
+	FTimerDelegate AttackTimerDelegate = FTimerDelegate::CreateUObject(this, &AMidBossmannequin::InRangeAttackEnd);
 	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimerDelegate, Monster_Attack_Delay, false);
 }
 
@@ -101,5 +101,6 @@ void AMidBossmannequin::InRangeAttackCheck()
 
 void AMidBossmannequin::InRangeAttackEnd()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("MidBossmannequin InRange Attack end"));
 	MidBossOnAttackEnd.Broadcast();
 }

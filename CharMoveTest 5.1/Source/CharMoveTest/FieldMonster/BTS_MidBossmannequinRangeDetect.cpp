@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharMoveTest/Boss/BTS_MidBossmannequinRangeDetect.h"
+#include "CharMoveTest/FieldMonster/BTS_MidBossmannequinRangeDetect.h"
 #include "CharMoveTest/FieldMonster/MidBossmannequinAIController.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
