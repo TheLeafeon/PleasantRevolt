@@ -51,6 +51,9 @@ void UBTS_MidBossmannequinDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AMidBossmannequinAIController::TargetKey, PlayerableCharacter);
+				OwnerComp.GetBlackboardComponent()->SetValueAsVector(AMidBossmannequinAIController::TargetLocationKey, PlayerableCharacter->GetActorLocation());
+
+
 
 				return;
 			}

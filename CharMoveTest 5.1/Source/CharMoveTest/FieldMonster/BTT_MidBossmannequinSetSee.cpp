@@ -4,6 +4,7 @@
 #include "CharMoveTest/FieldMonster/BTT_MidBossmannequinSetSee.h"
 #include "CharMoveTest/FieldMonster/MidBossmannequinAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "CharMoveTest/FieldMonster/MidBossmannequin.h"
 
@@ -14,20 +15,13 @@ UBTT_MidBossmannequinSetSee::UBTT_MidBossmannequinSetSee()
 
 EBTNodeResult::Type UBTT_MidBossmannequinSetSee::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(AMidBossmannequinAIController::IsSeeKey, true);
+	OwnerComp.GetBlackboardComponent()->SetValueAsVector(AMidBossmannequinAIController::LastTargetLocationKey, BlackboardComp->GetValueAsVector("TargetLocation"));
+	
+	
 
-	FTimerHandle TimerHandle;
-	FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &UBTT_MidBossmannequinSetSee::SetSeeTimer, &OwnerComp, EBTNodeResult::Succeeded);
-	float TimerDelay = 1.0f;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, TimerDelay, false);
-
-
-	return EBTNodeResult::InProgress;
+	return EBTNodeResult::Succeeded;
 
 }
 
-void UBTT_MidBossmannequinSetSee::SetSeeTimer(UBehaviorTreeComponent* OwnerComp, EBTNodeResult::Type TaskResult)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Set See Timer"));
-	OwnerComp->RequestExecution(TaskResult);
-}
