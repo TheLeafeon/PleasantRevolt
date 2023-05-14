@@ -61,6 +61,7 @@ float APD_Body_Character::TakeDamage(float Damage, FDamageEvent const& DamgaeEve
 void APD_Body_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APawn* PawnInstigator, AActor* DamageCauser)
 {
 	//애니메이션 들어갈 곳
+	HitEffect();
 
 	if (DamageTaken > 0.0f)
 	{

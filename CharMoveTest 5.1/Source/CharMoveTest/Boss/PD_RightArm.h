@@ -43,9 +43,7 @@ private:
 	float CurrentTime;
 	float Alpha;
 	FVector NewLocation;
-	FRotator StartRotator;
-	FRotator NewRotator;
-	FRotator r;
+	FVector EndLocation;
 
 	APD_FallDecal_Pawn* FallDecalPawn;
 
@@ -55,8 +53,8 @@ private:
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	UFUNCTION()
-	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	//UFUNCTION()
+	//void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	APawn* Player;
 	bool IsAttack;
@@ -68,4 +66,6 @@ public:
 	void SetWaitAni(bool value);
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetAttackAni(bool value);
+	UFUNCTION(BlueprintImplementableEvent)
+	void HitEffect();
 };

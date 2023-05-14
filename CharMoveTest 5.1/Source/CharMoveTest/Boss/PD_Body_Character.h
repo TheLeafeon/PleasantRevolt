@@ -35,4 +35,7 @@ private:
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void HitEffect();
 };

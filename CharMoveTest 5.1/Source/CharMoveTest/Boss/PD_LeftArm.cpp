@@ -2,7 +2,6 @@
 
 
 #include "CharMoveTest/Boss/PD_LeftArm.h"
-#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 APD_LeftArm::APD_LeftArm() : Smash_TotalTime(0.5f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0), LeftArmHP(10.0f), IsAttack(false)
@@ -17,7 +16,7 @@ void APD_LeftArm::BeginPlay()
 	Super::BeginPlay();
 
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
-	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &APD_LeftArm::OnOverlapBegin);
+	//CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &APD_LeftArm::OnOverlapBegin);
 }
 
 // Called every frame
@@ -27,9 +26,6 @@ void APD_LeftArm::Tick(float DeltaTime)
 
 	if (IsSmash)
 	{
-		//FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Player->GetActorLocation());
-		//SetActorRotation(LookAtRotation);
-
 		// 현재 시간을 계산합니다.
 		CurrentTime = GetWorld()->GetTimeSeconds() - StartTime;
 
@@ -38,11 +34,11 @@ void APD_LeftArm::Tick(float DeltaTime)
 
 		// 보간된 위치를 계산합니다.
 		NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
-		NewRotator = FMath::Lerp(StartRotator, FRotator(0.0f, 90.0f, 105.0f), Alpha);
+		//NewRotator = FMath::Lerp(StartRotator, FRotator(0.0f, 90.0f, 105.0f), Alpha);
 
 		// 액터의 위치를 업데이트합니다.
 		SetActorLocation(NewLocation);
-		SetActorRotation(NewRotator);
+		//SetActorRotation(NewRotator);
 
 		if (GetActorLocation().Equals(TargetLocation, 0.1))
 		{
@@ -62,18 +58,16 @@ void APD_LeftArm::Tick(float DeltaTime)
 
 			// 보간된 위치를 계산합니다.
 			NewLocation = FMath::Lerp(TargetLocation, EndLocation, Alpha);
-			NewRotator = FMath::Lerp(FRotator(0.0f, 90.0f, 105.0f), StartRotator, Alpha);
+			//NewRotator = FMath::Lerp(FRotator(0.0f, 90.0f, 105.0f), StartRotator, Alpha);
 
 			// 액터의 위치를 업데이트합니다.
 			SetActorLocation(NewLocation);
-			SetActorRotation(NewRotator);
+			//SetActorRotation(NewRotator);
 
 			if (GetActorLocation().Equals(EndLocation, 0.1))
 			{
 				Restoration = false;
-				CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
-				SetWaitAni(false);
-				SetAttackAni(false);
+				CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 			}
 		}
 	}
@@ -86,9 +80,9 @@ void APD_LeftArm::Smash()
 
 	StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, 1600.0f);
 	EndLocation = GetActorLocation();
-	TargetLocation = FallDecalPawn->GetFallDecalPos() + FVector(0.0f, 0.0f, 1600.0f);
+	TargetLocation = FallDecalPawn->GetFallDecalPos() + FVector(1050.0f, 550.0f, 620.0f);
 	StartTime = GetWorld()->GetTimeSeconds();
-	StartRotator = GetActorRotation();
+	//StartRotator = GetActorRotation();
 
 	IsSmash = true;
 	
@@ -113,6 +107,8 @@ void APD_LeftArm::BackSmash()
 	StartTime = GetWorld()->GetTimeSeconds();
 
 	Restoration = true;
+	SetWaitAni(false);
+	SetAttackAni(false);
 }
 
 void APD_LeftArm::SetFallDecalPawn(APawn* Pawn)
@@ -151,7 +147,7 @@ float APD_LeftArm::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, ACo
 void APD_LeftArm::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APawn* PawnInstigator, AActor* DamageCauser)
 {
 	//애니메이션 들어갈 곳
-
+	HitEffect();
 	if (DamageTaken > 0.0f)
 	{
 		
@@ -163,7 +159,7 @@ void APD_LeftArm::Die(float KillingDamage, FDamageEvent const& DamageEvent, ACon
 {
 	Destroy();
 }
-
+/*
 void APD_LeftArm::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Attack"));
@@ -177,3 +173,4 @@ void APD_LeftArm::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, clas
 		}
 	}
 }
+*/
