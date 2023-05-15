@@ -24,12 +24,12 @@ EBTNodeResult::Type UPD_Smash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& Ow
 	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr)
 	{
 		RandomValue = 0.6;
-		//return EBTNodeResult::Succeeded;
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey2::isLeftArm, false);
 	}
 	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
 	{
 		RandomValue = 0.1;
-		//return EBTNodeResult::Succeeded;
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey2::isLeftArm, true);
 	}
 
 	if (RandomValue <= 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) != nullptr)
