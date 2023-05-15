@@ -19,11 +19,15 @@ public :
 	UGISS_Player();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapons")
-		void getWeapon(AWeaponBase* weapon);
+		void GetWeapon(TSubclassOf<class AWeaponBase> weapon);
+	UFUNCTION(BlueprintCallable, Category = "Weapons")
+		void GetWeaponActor(AWeaponBase* weapon);
+	void ResetWeaponActors();
 
 	UPROPERTY(EditAnywhere, Category = "Weapons")
-		TArray<AWeaponBase*> WeaponInventory;
-
+		TArray<TSubclassOf<class AWeaponBase>> WeaponInventory;
+	UPROPERTY(EditAnywhere, Category = "Weapons")
+		TArray<class AWeaponBase*> WeaponActors;
 private :
 	IWeaponInterface* weaponInterface;
 	class APlayerableCharacter* player;

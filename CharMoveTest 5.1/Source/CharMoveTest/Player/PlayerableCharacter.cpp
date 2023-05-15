@@ -107,8 +107,6 @@ void APlayerableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("ThirdMeleeWeapon", IE_Released, this, &APlayerableCharacter::ThirdMeleeWeapon);
 	PlayerInputComponent->BindAction("SwapWeapon", IE_Released, this, &APlayerableCharacter::SwapWeapon);
 	PlayerInputComponent->BindAction("MeleeAttack", IE_Pressed, this, &APlayerableCharacter::Attack_Melee);
-	
-	PlayerInputComponent->BindAction("ShootingAttack", IE_Released, this, &APlayerableCharacter::addWeapons);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -236,49 +234,15 @@ void APlayerableCharacter::BeginPlay()
 
 	SpawnParams.Owner = this;
 
-	gissPlayer = GetGameInstance()->GetSubsystem<UGISS_Player>();
-	//addWeapons();
-	MeleeWeaponsArray = gissPlayer->WeaponInventory;
-	//if (MeleeWeaponsArray.Num() != 0)
-	//{
-	//	for (auto element : MeleeWeaponsArray)
-	//	{
-	//		AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(element->GetClass(), SpawnParams);
+	MeleeWeaponsArray.Empty();
 
-	//		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
-	//		Weapon->GetWeponMesh()->SetHiddenInGame(true);
-	//	}
-	//}
-	//
-	/*
-	CurrentWeapon = GetWorld()->SpawnActor<AWeaponBase>(FirstWeapon, SpawnParams);
-	if (CurrentWeapon)
-	{
-		MeleeWeaponsArray.Add(CurrentWeapon);
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
-		CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
-		maxCombo = CurrentWeapon->GetMaxCombo();
-	}
-	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SecondWeapon, SpawnParams))
-	{
-		Weapon->GetWeponMesh()->SetHiddenInGame(true);
-		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
-		MeleeWeaponsArray.Add(Weapon);
-	}
-	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(ThirdWeapon, SpawnParams))
-	{
-		Weapon->GetWeponMesh()->SetHiddenInGame(true);
-		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
-		MeleeWeaponsArray.Add(Weapon);
-	}
-	if (AWeaponBase* Weapon = GetWorld()->SpawnActor<AWeaponBase>(SubWeapon, SpawnParams))
-	{
-		Weapon->GetWeponMesh()->SetHiddenInGame(true);
-		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_l"));
-		CurrentSubWeapon = Weapon;
-	}
-	*/
-	
+	gissPlayer = GetGameInstance()->GetSubsystem<UGISS_Player>();
+
+	WeaponInventorys = gissPlayer->WeaponInventory;
+	MeleeWeaponsArray = gissPlayer->WeaponActors;
+
+	AddWeapons();
+
 	// initialize the timeline and the curve float
 	RollTimeline.SetLooping(false);
 	RollTimeline.SetTimelineLength(RollAnimationLength);
@@ -448,24 +412,31 @@ void APlayerableCharacter::DeathEnd()
 
 //=============== Weapon & Switching System =============== //
 
-void APlayerableCharacter::addWeapons()
+void APlayerableCharacter::AddWeapons()
 {
 	if (gissPlayer)
 	{
-		MeleeWeaponsArray = gissPlayer->WeaponInventory;
+		WeaponInventorys = gissPlayer->WeaponInventory;
 
-		for (auto element : gissPlayer->WeaponInventory)
+		MeleeWeaponsArray = gissPlayer->WeaponActors;
+		for (auto weapons : MeleeWeaponsArray)
 		{
-			element->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
-			
-		}
-		if (MeleeWeaponsArray.Num() != 0)
-		{
-			CurrentWeapon = MeleeWeaponsArray[0];
-			SwitchWeapon(0);
-			CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
-		}
+			weapons->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_r"));
 
+			if (CurrentWeapon == nullptr)
+			{
+				CurrentWeapon = weapons;
+				CurrentWeaponComboAnim = AnimInstance->NearWeapon1_AnimMontage;
+				maxCombo = CurrentWeapon->GetMaxCombo();
+				continue;
+			}
+			if (weapons == CurrentWeapon)
+			{
+				continue;
+			}
+			else
+				weapons->GetWeponMesh()->SetHiddenInGame(true);
+		}
 	}
 }
 
@@ -596,10 +567,6 @@ void APlayerableCharacter::Attack_Melee_End()
 	bisAttack = false;
 }
 
-void APlayerableCharacter::Attack_Shooting()
-{
-}
-
 //=============== Player Roll =============== //
 // 추후 문제 시 수정
 float APlayerableCharacter::UpdateRollCurve(float Value)
@@ -617,14 +584,6 @@ float APlayerableCharacter::UpdateRollCurve(float Value)
 
 void APlayerableCharacter::EnableInputAfterRoll()
 {
-	//GetCharacterMovement()->StopMovementImmediately();
-	//GetCharacterMovement()->Velocity = FVector::ZeroVector;
-	// Re-enable input after rolling
-	//PlayerController->SetInputMode(FInputModeGameOnly());
-
-	//PlayerController->EnableInput(PlayerController);
-	//PlayerController->FlushPressedKeys();
-	//RollingCollision(false);
 	UnCrouch();
 	bIsRolling = false;
 	bisAttack = false;
@@ -643,29 +602,7 @@ void APlayerableCharacter::Rolling()
 	bIsRolling = true;
 
 	LookMousePosition();
-	/*
-	PlayerController->SetInputMode(FInputModeUIOnly());
-	//PlayerController->DisableInput(PlayerController);
-
-	RollTimeline = FTimeline{};
-	FOnTimelineFloat RollCurveUpdate;
-
-	//RollTimeline.AddInterpFloat(RollCurve, FOnTimelineFloat::CreateUObject(this, &APlayerableCharacter::TimelineProgress));
 	
-	RollCurveUpdate.BindUFunction(this, "TimelineProgress");
-	RollTimeline.AddInterpFloat(RollCurve, RollCurveUpdate);
-
-	StartRotation = GetActorRotation();
-	EndRotation = GetActorRotation() + FRotator(0.0f, 90.0f, 0.0f);
-
-	RollCurveUpdate.BindUFunction(this, "UpdateRollCurve");
-	RollTimeline.AddInterpFloat(RollCurve, RollCurveUpdate);
-
-	FVector RollDirection = GetActorForwardVector().RotateAngleAxis(UpdateRollCurve(RollTimeline.GetPlaybackPosition()), FVector{ 0.0f, 0.0f, 1.0f });
-	
-	RollTimeline.PlayFromStart();
-	GetCharacterMovement()->Velocity = RollDirection;
-	*/
 	AnimInstance->PlayRollingMontage();
 	float timer = AnimInstance->Rolling_AnimMontage->GetPlayLength() * abs(1 - AnimInstance->Roll_Animation_Speed);
 

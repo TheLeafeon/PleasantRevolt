@@ -181,7 +181,7 @@ public :
 		void Disable_Attack_Enemy();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapons")
-		void addWeapons();
+		void AddWeapons();
 private :
 	// Weapon관련 interface
 	IWeaponInterface* WeaponInterface;
@@ -189,6 +189,8 @@ private :
 	// Weapon 객체 보관 배열
 	UPROPERTY(EditAnywhere, Category = "Weapons")
 		TArray<AWeaponBase*> MeleeWeaponsArray;
+	UPROPERTY(EditAnywhere, Category = "Weapons")
+		TArray<TSubclassOf<class AWeaponBase>> WeaponInventorys;
 
 	const int32 FIRST_WEAPON = 0;
 	const int32 SECOND_WEAPON = 1;
@@ -228,8 +230,6 @@ private :
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee();
-	UFUNCTION(BlueprintCallable)
-		void Attack_Shooting();
 
 /* Interaction System 관련 */
 private :
