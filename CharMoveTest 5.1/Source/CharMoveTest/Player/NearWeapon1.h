@@ -15,10 +15,11 @@ class CHARMOVETEST_API ANearWeapon1 : public AWeaponBase
 	GENERATED_BODY()
 public :
 	ANearWeapon1();
+private:
+	ANearWeapon1* Self;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

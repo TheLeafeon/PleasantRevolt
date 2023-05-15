@@ -23,4 +23,5 @@ class CHARMOVETEST_API IWeaponInterface
 public:
 	virtual void Enable_Attack_Enemy();
 	virtual void Disable_Attack_Enemy();
+	virtual void EquireWeapon();
 };

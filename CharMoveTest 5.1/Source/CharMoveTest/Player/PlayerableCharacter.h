@@ -7,6 +7,7 @@
 #include "InteractionInterface.h"
 #include "WeaponInterface.h"
 #include "WeaponBase.h"
+#include "GISS_Player.h"
 #include "Components/BoxComponent.h"
 #include "Components/TimeLineComponent.h"
 #include "GameFramework/Character.h"
@@ -69,7 +70,8 @@ public :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
 		bool bisAttack;
 //****************************************************//
-
+private :
+	UGISS_Player* gissPlayer;
 //************** 행동중인지 판단  *******************//
 private :
 	std::vector<bool> actions;
@@ -132,7 +134,15 @@ private :
 
 	void DodgeStart(const float& time);
 	void DodgeEnd();
-	
+	/*PlayerUI관련 기능들*/
+public :
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
+		void UMG_AddPlayerHp();
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
+		void UMG_RemovePlayerHp();
+	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
+		void UMG_SwapWeapon();
+
 /* Player Get Damage & Die 관련 */
 public :
 	// 플레이어의 체력을 밖으로 보내기 위위해서 작성
@@ -141,11 +151,6 @@ public :
 	// 플레이어의 체력이 증가하는지 확인
 	UFUNCTION(BlueprintCallable, Category = "Status")
 		void Increase_Player_HP(float val);
-
-	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
-		void AddPlayerHp();
-	UFUNCTION(BlueprintImplementableEvent, Category = "PlayerUI")
-		void RemovePlayerHp();
 
 	// 히트 판정
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
@@ -174,6 +179,9 @@ public :
 		void Enable_Attack_Enemy();
 	UFUNCTION(BlueprintCallable)
 		void Disable_Attack_Enemy();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapons")
+		void AddWeapons();
 private :
 	// Weapon관련 interface
 	IWeaponInterface* WeaponInterface;
@@ -181,10 +189,14 @@ private :
 	// Weapon 객체 보관 배열
 	UPROPERTY(EditAnywhere, Category = "Weapons")
 		TArray<AWeaponBase*> MeleeWeaponsArray;
+	UPROPERTY(EditAnywhere, Category = "Weapons")
+		TArray<TSubclassOf<class AWeaponBase>> WeaponInventorys;
 
 	const int32 FIRST_WEAPON = 0;
 	const int32 SECOND_WEAPON = 1;
 	const int32 THIRD_WEAPON = 2;
+
+	int32 currentWeaponIndex;
 
 	// Weapon 1, 2, 3
 	UPROPERTY(EditAnywhere, Category = "Weapons")
@@ -204,7 +216,10 @@ private :
 
 	class UAnimMontage* CurrentWeaponComboAnim;
 
+	FActorSpawnParameters SpawnParams;
+
 	void SwitchWeapon(int32 WeaponIndex);
+	void SwapWeapon();
 	void FirstMeleeWeapon();
 	void SecondMeleeWeapon();
 	void ThirdMeleeWeapon();
@@ -215,8 +230,6 @@ private :
 
 	UFUNCTION(BlueprintCallable)
 		void Attack_Melee();
-	UFUNCTION(BlueprintCallable)
-		void Attack_Shooting();
 
 /* Interaction System 관련 */
 private :

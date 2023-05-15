@@ -12,3 +12,7 @@ void IWeaponInterface::Enable_Attack_Enemy()
 void IWeaponInterface::Disable_Attack_Enemy()
 {
 }
+
+void IWeaponInterface::EquireWeapon()
+{
+}

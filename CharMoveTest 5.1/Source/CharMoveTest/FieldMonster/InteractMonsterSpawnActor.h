@@ -68,4 +68,10 @@ public:
 	void BattleStart();
 	UFUNCTION(BlueprintImplementableEvent, Category = "InteractionObj")
 	void BattleEnd();
+
+public :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
+		TSubclassOf<class AWeaponBase> Weapon;
+	UFUNCTION(BlueprintImplementableEvent, Category = "Weapon")
+		void giveWeaponToPlayer();
 };
