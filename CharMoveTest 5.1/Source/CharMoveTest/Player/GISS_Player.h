@@ -24,7 +24,7 @@ public :
 		void GetWeaponActor(AWeaponBase* weapon);
 	void ResetWeaponActors();
 
-	UPROPERTY(EditAnywhere, Category = "Weapons")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
 		TArray<TSubclassOf<class AWeaponBase>> WeaponInventory;
 	UPROPERTY(EditAnywhere, Category = "Weapons")
 		TArray<class AWeaponBase*> WeaponActors;
