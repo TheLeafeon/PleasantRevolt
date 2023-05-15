@@ -16,7 +16,11 @@ void AHandUP::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerCharacter = Cast<APlayerableCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	AnimInstance = Cast<UPlayerAnimInstnce>(PlayerCharacter->GetMesh()->GetAnimInstance());
+	if (PlayerCharacter != nullptr)
+	{
+		AnimInstance = Cast<UPlayerAnimInstnce>(PlayerCharacter->GetMesh()->GetAnimInstance());
+	}
+
 }
 
 // Called every frame
