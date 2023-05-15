@@ -20,10 +20,11 @@ void APlayerTestMapGM::SpawnWeapon(TSubclassOf<class AWeaponBase> weapon)
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AWeaponBase* weaponActor = GetWorld()->SpawnActor<AWeaponBase>(weapon, SpawnParams);
-	// ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+	// °ÔÀÓ ÀÎ½ºÅÏ½º ¼­ºê ½Ã½ºÅÛ¿¡ ¾×ÅÍ¸¦ ÀúÀåÇÕ´Ï´Ù.
 	if (GameInstanceSubsystem)
 	{
 		GameInstanceSubsystem->GetWeaponActor(weaponActor);
+	}
 }
 
 void APlayerTestMapGM::BeginPlay()
