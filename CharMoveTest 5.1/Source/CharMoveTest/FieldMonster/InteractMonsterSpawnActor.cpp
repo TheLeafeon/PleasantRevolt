@@ -20,7 +20,7 @@ AInteractMonsterSpawnActor::AInteractMonsterSpawnActor() : AreaClear(false), num
 	InteractionWidget->SetupAttachment(RootComponent);
 	
 	bIsMonsterSpawned = false;
-
+	Weapon = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -62,6 +62,11 @@ void AInteractMonsterSpawnActor::InteractWithMe()
 		for (int ArrayCount = 0; ArrayCount < SpawnMonsterArray.Num(); ArrayCount++)
 		{
 			SpawnMonsterArray[ArrayCount]->MonsterSpawn();
+		}
+
+		if (Weapon != nullptr)
+		{
+			giveWeaponToPlayer();
 		}
 
 		BattleStart();

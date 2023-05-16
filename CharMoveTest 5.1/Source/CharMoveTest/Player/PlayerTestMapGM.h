@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GISS_Player.h"
+#include "PlayerableCharacter.h"
 #include "GameFramework/GameModeBase.h"
 #include "PlayerTestMapGM.generated.h"
 
@@ -16,4 +18,14 @@ class CHARMOVETEST_API APlayerTestMapGM : public AGameModeBase
 
 public:
 	APlayerTestMapGM();
+	
+	void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable, Category = "GM")
+		void SpawnWeapon(TSubclassOf<class AWeaponBase> weapon);
+private :
+	UGISS_Player* GameInstanceSubsystem;
+	APlayerableCharacter* player;
+
+	void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };
