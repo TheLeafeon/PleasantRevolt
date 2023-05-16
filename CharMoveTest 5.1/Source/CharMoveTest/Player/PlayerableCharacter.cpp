@@ -449,6 +449,7 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		
 		AWeaponBase* NextWeapon = MeleeWeaponsArray[WeaponIndex];
 
+		UMG_SwapWeapon();
 		HitDrop(); //핸드업 오브젝트 떨어트림
 		WeaponNumber = WeaponIndex; //어떤 무기인지 보스에게 전달
 
@@ -486,7 +487,11 @@ void APlayerableCharacter::SwapWeapon()
 	if (!bCanAction() && CurrentWeapon == NULL)
 		return;
 
-	UMG_SwapWeapon();
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Debug : %f"),
+		MeleeWeaponsArray.Num()));
+	if (MeleeWeaponsArray.Num() == 1)
+		return;
+
 	currentWeaponIndex++;
 	if (currentWeaponIndex >= MeleeWeaponsArray.Num())
 		currentWeaponIndex = 0;
