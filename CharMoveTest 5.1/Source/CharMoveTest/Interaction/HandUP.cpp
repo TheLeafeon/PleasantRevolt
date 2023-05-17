@@ -161,6 +161,7 @@ void AHandUP::Drop()
 		HandUpAni(false);
 
 		IsHandUp = false;
+		PlayerCharacter->SetIsHandUp(false);
 	}
 }
 
@@ -205,5 +206,6 @@ void AHandUP::BackDrop()
 		HandUpAni(false);
 
 		IsHandUp = false;
+		PlayerCharacter->SetIsHandUp(false);
 	}
 }
