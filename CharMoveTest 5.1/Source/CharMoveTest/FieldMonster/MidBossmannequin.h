@@ -12,6 +12,7 @@
  * 
  */
 DECLARE_MULTICAST_DELEGATE(FOnAttackEndDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnJumpAttackEndDelegate);
 
 UCLASS()
 class CHARMOVETEST_API AMidBossmannequin : public AMonsterBase
@@ -22,6 +23,7 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaTime) override;
 
 	//가까운 FieldArea 찾기
 	AFieldArea* FindClosestMonsterArea();
@@ -29,23 +31,69 @@ public:
 	FVector MyAreaLocation;
 	FVector MyAreaSize;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UBoxComponent* DamageRegion;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector DamageRegionBoxSize;
+
 	//Attack Task 완료 델리케이트
-	FOnAttackEndDelegate MidBossOnAttackEnd;
+	FOnAttackEndDelegate MidBossmannequinOnAttackEnd;
 
+	void OutRangeAttack(FVector TargetLocation);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void OutRangeAttack_Rush();
 
-	void OutRangeAttack();
-	void OutRangeAttackCheck();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void OutRangeAttack_Jump(FVector TargetLocation);
+
+	//데미지 주는 함수 BP에서 정의
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequinApplyDamageEvent();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequinInRangeAttackParticle();
+
+	void OutRangeAttackEnd();
+
 
 	void InRangeAttack();
 	void InRangeAttackCheck();
 	void InRangeAttackEnd();
 
+	UPROPERTY(BlueprintReadWrite)
+	bool isRush;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isAttacking;
+
+	UPROPERTY(BlueprintReadWrite)
+	FVector MidPoint;
+
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
+	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool testRightDamage;
+
+
+	//죽고 사라지는 시간
+	void DeathTimer();
 private:
 	UMidBossmannequinAnimInstance* AnimInstance;
 
+	UPROPERTY(BlueprintReadOnly, Meta = (AllowPrivateAccess = true))
+	bool isDie;
 
-	
+	bool bIsJumping;
 
+	//공격범위
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		float AttackRange;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		float AttackRadius;
 	
 };

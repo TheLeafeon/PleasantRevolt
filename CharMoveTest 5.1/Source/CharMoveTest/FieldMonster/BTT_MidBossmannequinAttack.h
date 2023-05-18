@@ -23,4 +23,5 @@ protected:
 private:
 	bool IsAttacking = false;
 	bool InRange ;
+	FVector LastTargetLocation;
 };

@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "Delegates/DelegateSignatureImpl.inl"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "CharMoveTest/FieldMonster/FarmannequinAnimInstance.h"
 #include "Components/BoxComponent.h"
 #include "TimerManager.h"
 #include "Components/CapsuleComponent.h"
@@ -34,6 +35,12 @@ void AFarmannequin::BeginPlay()
     MyArea = FindClosestMonsterArea();
     MyAreaSize = MyArea->CollisionBox->GetScaledBoxExtent();
     MyAreaLocation = MyArea->GetActorLocation();
+
+	AnimInstance = Cast<UFarmannequinAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr == AnimInstance)
+		return;
+
+	AnimInstance->OnShotting.AddUObject(this, &AFarmannequin::ShottingCheck);
 }
 
 void AFarmannequin::Attack()
@@ -42,7 +49,10 @@ void AFarmannequin::Attack()
 	{
 
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack"));
-		Fire();
+		
+		AnimInstance->PlayAttackMontage();
+
+		
 
 	}
 	isPlayerAttackHit = false;
@@ -56,6 +66,11 @@ void AFarmannequin::AttackTimer()
 {
 	FarmannequinOnAttackEnd.Broadcast();
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Fire"));
+}
+
+void AFarmannequin::ShottingCheck()
+{
+	Fire();
 }
 
 void AFarmannequin::DeathTimer()

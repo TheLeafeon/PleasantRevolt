@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
+#include "CharMoveTest/FieldMonster/FarmannequinAnimInstance.h"
 #include "CharMoveTest/FieldMonster/FieldArea.h"
 #include "Farmannequin.generated.h"
 
@@ -28,6 +29,7 @@ public:
 
 	void Attack();
 	void AttackTimer();
+	void ShottingCheck();
 
 	//죽고 사라지는 시간
 	void DeathTimer();
@@ -52,6 +54,8 @@ public:
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamageEvent, class APawn* PawnInstigator, class AActor* DamageCauser);
 
 private:
+	UFarmannequinAnimInstance* AnimInstance;
+
 
 	bool isPlayerAttackHit;
 
