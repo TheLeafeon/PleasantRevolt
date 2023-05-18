@@ -12,6 +12,8 @@ UMidBossmannequinAnimInstance::UMidBossmannequinAnimInstance()
 	}
 }
 
+
+
 void UMidBossmannequinAnimInstance::PlayInRangeAttackMontage()
 {
 	Montage_Play(InRangeAttackMontage, 1.0f);
