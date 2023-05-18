@@ -19,8 +19,9 @@ const FName AMidBossmannequinAIController::InRangeKey(TEXT("InRange"));
 const FName AMidBossmannequinAIController::IsSeeKey(TEXT("IsSee"));
 const FName AMidBossmannequinAIController::TargetLocationKey(TEXT("TargetLocation"));
 const FName AMidBossmannequinAIController::LastTargetLocationKey(TEXT("LastTargetLocation"));
+const FName AMidBossmannequinAIController::RushHitKey(TEXT("RushHit"));
 
-AMidBossmannequinAIController::AMidBossmannequinAIController()
+AMidBossmannequinAIController::AMidBossmannequinAIController() : BlackboardComp(Blackboard)
 {
 	static ConstructorHelpers::FObjectFinder<UBlackboardData>BBObject(TEXT("/Game/Monster/AI/BB_MidBossmannequin.BB_MidBossmannequin"));
 	if (BBObject.Succeeded())
@@ -59,7 +60,7 @@ void AMidBossmannequinAIController::OnPossessDelayed(APawn* InPawn)
 		return;
 	}
 
-	UBlackboardComponent* BlackboardComp = Blackboard.Get();
+	//UBlackboardComponent* BlackboardComp = Blackboard.Get();
 	if (UseBlackboard(BBMidBossmannequin, BlackboardComp) && MyMidBossmannequin != nullptr)
 	{
 		BlackboardComp->SetValueAsVector(HomePosKey, InPawn->GetActorLocation());
@@ -82,4 +83,14 @@ void AMidBossmannequinAIController::PauseBehaviorTree()
 void AMidBossmannequinAIController::ResumeBehaviorTree()
 {
 	SetActorTickEnabled(true); //비헤이비어 트리를 다시 실행
+}
+
+FVector AMidBossmannequinAIController::GetLastTargetLocation()
+{
+	return BlackboardComp->GetValueAsVector(LastTargetLocationKey);
+}
+
+void AMidBossmannequinAIController::SetRushStop()
+{
+	BlackboardComp->SetValueAsBool(RushHitKey, true);
 }

@@ -21,6 +21,7 @@ EBTNodeResult::Type UBTT_MidBossmannequinAttack::ExecuteTask(UBehaviorTreeCompon
 	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
 	InRange= OwnerComp.GetBlackboardComponent()->GetValueAsBool(AMidBossmannequinAIController::InRangeKey);
+	LastTargetLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(AMidBossmannequinAIController::LastTargetLocationKey);
 
 	auto MidBossmannequin = Cast<AMidBossmannequin>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == MidBossmannequin)
@@ -29,7 +30,7 @@ EBTNodeResult::Type UBTT_MidBossmannequinAttack::ExecuteTask(UBehaviorTreeCompon
 	if (!InRange)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("OutRange"));
-		MidBossmannequin->OutRangeAttack();
+		MidBossmannequin->OutRangeAttack(LastTargetLocation);
 	}
 	else
 	{
@@ -38,6 +39,9 @@ EBTNodeResult::Type UBTT_MidBossmannequinAttack::ExecuteTask(UBehaviorTreeCompon
 	}
 
 
+	MidBossmannequin->MidBossmannequinOnAttackEnd.AddLambda([this]() -> void {
+		IsAttacking = false;
+	});
 
 
 	return EBTNodeResult::InProgress;
@@ -46,6 +50,7 @@ EBTNodeResult::Type UBTT_MidBossmannequinAttack::ExecuteTask(UBehaviorTreeCompon
 void UBTT_MidBossmannequinAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSecondes)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSecondes);
+
 
 	if (!IsAttacking)
 	{
