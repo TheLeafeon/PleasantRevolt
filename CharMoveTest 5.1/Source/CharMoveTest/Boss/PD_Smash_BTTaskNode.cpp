@@ -38,7 +38,7 @@ EBTNodeResult::Type UPD_Smash_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& Ow
 		LArm->Smash();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("?"));
 	}
-	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) != nullptr)
+	else if (RandomValue > 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) != nullptr)
 	{
 		RArm = Cast<APD_RightArm>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm));
 		RArm->Smash();

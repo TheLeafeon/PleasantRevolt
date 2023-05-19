@@ -54,7 +54,7 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 		LArm->SmashWait();
 		LArm->SetFallDecalPawn(SpawnedPawn);
 	}
-	else if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) != nullptr)
+	else if (RandomValue > 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) != nullptr)
 	{
 		RArm = Cast<APD_RightArm>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm));
 		RArm->SmashWait();
