@@ -34,9 +34,20 @@ public:
 	static const FName IsSeeKey;
 	static const FName TargetLocationKey;
 	static const FName LastTargetLocationKey;
+	static const FName RushHitKey;
+
+	UPROPERTY()
+		UBlackboardComponent* BlackboardComp;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI")
 		AMidBossmannequin* MyMidBossmannequin;
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetLastTargetLocation();
+
+	UFUNCTION(BlueprintCallable)
+	void SetRushStop();
+	
 private:
 	UPROPERTY()
 		class UBehaviorTree* BTMidBossmannequin;
