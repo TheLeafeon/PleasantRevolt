@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "CharMoveTest/Boss/PD_FallDecal_Pawn.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Components/PrimitiveComponent.h"
 #include "PD_LeftArm.generated.h"
 
@@ -58,6 +59,8 @@ private:
 
 	APawn* Player;
 	bool IsAttack;
+
+	TArray<UParticleSystemComponent*> ParticleSystemComponents;
 
 public:
 	UPROPERTY(BlueprintReadWrite)

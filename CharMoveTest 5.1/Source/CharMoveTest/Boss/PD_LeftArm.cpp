@@ -157,20 +157,11 @@ void APD_LeftArm::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APaw
 
 void APD_LeftArm::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
+	GetComponents<UParticleSystemComponent>(ParticleSystemComponents);
+	for (UParticleSystemComponent* ParticleSystemComponent : ParticleSystemComponents)
+	{
+		ParticleSystemComponent->DestroyComponent();
+	}
+
 	Destroy();
 }
-/*
-void APD_LeftArm::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Attack"));
-	if (OtherActor == Player)
-	{
-		if (IsSmash && IsAttack)
-		{
-			UGameplayStatics::ApplyDamage(Player, 1, NULL, this, UDamageType::StaticClass());
-			IsAttack = false;
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Attack"));
-		}
-	}
-}
-*/

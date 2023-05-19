@@ -60,6 +60,6 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 		RArm->SmashWait();
 		RArm->SetFallDecalPawn(SpawnedPawn);
 	}
-	
+
 	return EBTNodeResult::Succeeded;
 }

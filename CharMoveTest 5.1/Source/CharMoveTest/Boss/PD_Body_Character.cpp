@@ -71,6 +71,13 @@ void APD_Body_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEven
 
 void APD_Body_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
+	GetComponents<UParticleSystemComponent>(ParticleSystemComponents);
+	for (UParticleSystemComponent* ParticleSystemComponent : ParticleSystemComponents)
+	{
+		ParticleSystemComponent->DestroyComponent();
+	}
+
+
 	//ABossAIController::PauseBehaviorTree();
 	SetActorTickEnabled(false); //비헤이비어 트리를 중지
 
