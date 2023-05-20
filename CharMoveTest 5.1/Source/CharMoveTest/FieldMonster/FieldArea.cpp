@@ -77,6 +77,16 @@ void AFieldArea::Tick(float DeltaTime)
 			AreaClear = true;
 		}
 	}
+	if (thisAreaWaveNumber == 3)
+	{
+		if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == AreaSpawnMonsterArray.Num() + AreaSpawnMonsterArrayWave3.Num() && AreaClear == false)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("end"));
+			BattleEnd();
+
+			AreaClear = true;
+		}
+	}
 
 }
 

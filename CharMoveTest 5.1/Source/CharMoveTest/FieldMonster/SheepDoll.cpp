@@ -131,8 +131,8 @@ void ASheepDoll::DeathTimer()
 		GetCharacterMovement()->StopMovementImmediately();
 		GetCharacterMovement()->DisableMovement();
 	}
-	GetComponents<UParticleSystemComponent>(ParticleSystemComponents);
-	for (UParticleSystemComponent* ParticleSystemComponent : ParticleSystemComponents)
+	GetComponents<UParticleSystemComponent>(SheepDollParticleSystemComponents);
+	for (UParticleSystemComponent* ParticleSystemComponent : SheepDollParticleSystemComponents)
 	{
 		ParticleSystemComponent->DestroyComponent();
 	}

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CharMoveTest/FieldMonster/MonsterSpawnActor.h"
+#include "CharMoveTest/FieldMonster/FieldArea.h"
 #include "GameFramework/Actor.h"
 #include "SpawnArea.generated.h"
 
@@ -25,6 +26,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "SpawnMonster")
 		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArray;
 
+	UPROPERTY(EditAnywhere, Category = "FieldArea")
+	AFieldArea* MyFieldArea;
+
+	UPROPERTY(EditAnywhere, Category = "When Spawn?")
+		bool isBeginOverlapMonsterSpawn;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,6 +41,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+
 
 	bool firstIn;
 
