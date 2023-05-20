@@ -15,7 +15,6 @@ APD_Body_Character::APD_Body_Character() : BodyHP(10.0f)
 void APD_Body_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

@@ -20,7 +20,7 @@ class CHARMOVETEST_API APlasticDoll_AIController : public AAIController
 private:
 	APlasticDoll_AIController();
 
-	virtual void OnPossess(APawn* InPawn) override;
+	//virtual void OnPossess(APawn* InPawn) override;
 
 	UPROPERTY()
 	class UBehaviorTree* BTAsset;
@@ -28,4 +28,8 @@ private:
 	class UBlackboardData* BBAsset;
 	UPROPERTY()
 	UBlackboardComponent* BlackboardComp;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetBehaviorTree();
 };

@@ -5,6 +5,11 @@
 
 APlasticDoll_AIController::APlasticDoll_AIController() : BlackboardComp(Blackboard)
 {
+
+}
+
+void APlasticDoll_AIController::SetBehaviorTree()
+{
 	static ConstructorHelpers::FObjectFinder<UBlackboardData> BBObject(TEXT("/Game/Boss/2Stage/PlasticDoll_BlackboardData.PlasticDoll_BlackboardData"));
 	if (BBObject.Succeeded())
 	{
@@ -16,12 +21,6 @@ APlasticDoll_AIController::APlasticDoll_AIController() : BlackboardComp(Blackboa
 	{
 		BTAsset = BTObject.Object;
 	}
-}
-
-void APlasticDoll_AIController::OnPossess(APawn* InPawn)
-{
-	Super::OnPossess(InPawn);
-
 
 	if (UseBlackboard(BBAsset, BlackboardComp))
 	{
