@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "CharMoveTest/FieldMonster/SheepDollAnimInstance.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "CharMoveTest/FieldMonster/FieldArea.h"
 #include "SheepDoll.generated.h"
 
@@ -102,7 +103,7 @@ public:
 	USheepDollAnimInstance* AnimInstance;
 
 	//액터의 파티클 시스템 컴포넌트에 대한 참조 얻기
-	TArray<UParticleSystemComponent*> ParticleSystemComponents;
+	TArray<UParticleSystemComponent*> SheepDollParticleSystemComponents;
 
 	
 

@@ -26,7 +26,24 @@ ASpawnArea::ASpawnArea()
 
 void ASpawnArea::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!firstIn)
+	if (!firstIn && isBeginOverlapMonsterSpawn)
+	{
+		firstIn = true;
+
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Overlap"));
+
+
+		if (AreaSpawnMonsterArray.Num() == 0)
+		{
+			return;
+		}
+		for (int ArrayCount = 0; ArrayCount < AreaSpawnMonsterArray.Num(); ArrayCount++)
+		{
+			AreaSpawnMonsterArray[ArrayCount]->MonsterSpawn();
+		}
+	}
+
+	if (!firstIn && MyFieldArea->AreaClear)
 	{
 		firstIn = true;
 
