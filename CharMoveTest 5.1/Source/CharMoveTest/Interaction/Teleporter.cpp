@@ -59,8 +59,6 @@ void ATeleporter::ActorTeleport(AActor* target)
 
 void ATeleporter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red,TEXT("Debug"));
 	if (!TargetTeleporter)
 		return;
 	if (!OtherActor->ActorHasTag("Player"))
