@@ -6,6 +6,7 @@
 #include "CharMoveTest/FieldMonster/SheepDollAIController.h"
 #include "CharMoveTest/FieldMonster/SheepDollAnimInstance.h"
 #include "TimerManager.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Delegates/DelegateSignatureImpl.inl"
