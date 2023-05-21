@@ -43,6 +43,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ExplosionmannequinApplyDamageEvent();
 
+
+	//스폰 시 파티클 출력 함수 BP에서 정의
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ExplosionmannequinSpawnParticle();
+
 	//터짐
 	void Explosion();
 

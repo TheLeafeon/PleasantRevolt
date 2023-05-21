@@ -51,6 +51,8 @@ void ANearmannequin::BeginPlay()
 		return;
 
 	AnimInstance->OnAttackHitCheck.AddUObject(this, &ANearmannequin::AttackCheck);
+
+	NearmannequinSpawnParticle();
 }
 
 AFieldArea* ANearmannequin::FindClosestMonsterArea()

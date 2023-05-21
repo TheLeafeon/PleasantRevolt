@@ -41,6 +41,8 @@ void AFarmannequin::BeginPlay()
 		return;
 
 	AnimInstance->OnShotting.AddUObject(this, &AFarmannequin::ShottingCheck);
+
+	FarmannequinSpawnParticle();
 }
 
 void AFarmannequin::Attack()

@@ -38,6 +38,7 @@ void AExplosionmannequin::BeginPlay()
 	MyAreaSize = MyArea->CollisionBox->GetScaledBoxExtent();
 	MyAreaLocation = MyArea->GetActorLocation();
 
+	ExplosionmannequinSpawnParticle();
 }
 
 AFieldArea* AExplosionmannequin::FindClosestMonsterArea()

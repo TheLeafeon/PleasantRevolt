@@ -52,6 +52,7 @@ void ADoveDoll::BeginPlay()
     MyAreaSize = MyArea->CollisionBox->GetScaledBoxExtent();
     MyAreaLocation = MyArea->GetActorLocation();
     
+	DoveDollSpawnParticle();
 }
 
 void ADoveDoll::Attack()
