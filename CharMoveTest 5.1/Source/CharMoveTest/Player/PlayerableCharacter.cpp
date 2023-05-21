@@ -620,6 +620,7 @@ void APlayerableCharacter::Rolling()
 
 void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Interaface"));
 	Interface = Cast<IInteractionInterface>(OtherActor);
 
 	if (Interface)
@@ -641,6 +642,7 @@ void APlayerableCharacter::OnInteract()
 {
 	if (Interface)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Press"));
 		Interface->InteractWithMe();
 	}
 }

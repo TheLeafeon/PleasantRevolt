@@ -18,11 +18,8 @@ APlasticDoll_AIController::APlasticDoll_AIController() : BlackboardComp(Blackboa
 	}
 }
 
-void APlasticDoll_AIController::OnPossess(APawn* InPawn)
+void APlasticDoll_AIController::SetBehaviorTree()
 {
-	Super::OnPossess(InPawn);
-
-
 	if (UseBlackboard(BBAsset, BlackboardComp))
 	{
 		if (!RunBehaviorTree(BTAsset))
