@@ -31,6 +31,7 @@ void AHandUP::Tick(float DeltaTime)
 
 void AHandUP::InteractWithMe()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("You press E"));
 	if (PlayerCharacter->IsHandUp && IsHandUp && IsUpActor == this)
 	{
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
