@@ -4,7 +4,7 @@
 #include "CharMoveTest/Interaction/HandUP.h"
 
 // Sets default values
-AHandUP::AHandUP() : IsHandUp(false), IsMirror(false)
+AHandUP::AHandUP() : IsHandUp(false), IsMirror(false), IsDown(false)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -27,13 +27,23 @@ void AHandUP::BeginPlay()
 void AHandUP::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (IsDown)
+	{
+		if (FMath::IsNearlyEqual(GetActorRotation().Roll, 0.0f, 5.0f) && FMath::IsNearlyEqual(GetActorRotation().Pitch, 0.0f, 5.0f))
+		{
+			CollisionComponent->SetSimulatePhysics(false);
+			IsDown = false;
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("!!!!!!!!!"));
+		}
+	}
 }
 
 void AHandUP::InteractWithMe()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("You press E"));
-	if (PlayerCharacter->IsHandUp && IsHandUp && IsUpActor == this)
+	if (PlayerCharacter->IsHandUp && IsHandUp /* && PlayerCharacter->HandUpObj == this*/)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("down"));
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
@@ -61,7 +71,8 @@ void AHandUP::InteractWithMe()
 						GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 							{
 								//CollisionComponent->SetSimulatePhysics(false);
-								
+								IsDown = true;
+
 								if (IsMirror)
 								{
 									SetMirrorHandUp();
@@ -77,33 +88,27 @@ void AHandUP::InteractWithMe()
 
 		IsHandUp = false;
 		PlayerCharacter->SetIsHandUp(false);
+		PlayerCharacter->SetInterface();
 	}
 	else if (PlayerCharacter->IsHandUp == false && !IsHandUp)
 	{	
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("up"));
 		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		CollisionComponent->SetSimulatePhysics(false);
 		PlayerCharacter->PlayerHandUp(this);
-		PlayerCharacter->SetIsHandUp(true);
-		IsUpActor = PlayerCharacter->HandUpObj;
+		HideInteractionWidget();
 
 		HandUpAni(true);
 
 		IsHandUp = true;
-		
-		if (IsMirror)
-		{
-			DestroyMirrorHandUp();
-		}
-
-		HideInteractionWidget();
 	}
 	
 }
 
 void AHandUP::ShowInteractionWidget()
 {
-	if (!IsHandUp)
+	if (!IsHandUp && PlayerCharacter->IsHandUp == false)
 	{
 		InteractionWidget->SetVisibility(true);
 	}

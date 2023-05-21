@@ -43,7 +43,6 @@ public:
 private:
 	bool IsHandUp;
 	FTimerHandle TimerHandle;
-	AActor* IsUpActor;
 
 	virtual void InteractWithMe() override;
 	virtual void ShowInteractionWidget() override;
@@ -53,6 +52,9 @@ private:
 
 	// 플레이어의 애니메이션을 저장해둔 것
 	UPlayerAnimInstnce* AnimInstance;
+
+	bool IsDown;
+
 public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
 	void HandUpAni(bool value);

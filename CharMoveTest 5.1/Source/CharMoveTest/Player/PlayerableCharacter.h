@@ -273,6 +273,7 @@ public:
 	UFUNCTION()
 	void SetIsHandUp(bool value);
 	bool IsHandUp;
+	void SetInterface();
 private:
 	//Ladder°ü·Ã
 	UPROPERTY()

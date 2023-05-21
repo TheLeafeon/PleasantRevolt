@@ -620,7 +620,11 @@ void APlayerableCharacter::Rolling()
 
 void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Interface = Cast<IInteractionInterface>(OtherActor);
+	//항상 첫번째로 들어온 상호작용만 반응하게
+	if (!Interface)
+	{
+		Interface = Cast<IInteractionInterface>(OtherActor);
+	}
 
 	if (Interface)
 	{
@@ -633,7 +637,10 @@ void APlayerableCharacter::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, 
 	if (Interface)
 	{
 		Interface->HideInteractionWidget();
-		Interface = nullptr;
+		if (!IsHandUp)
+		{
+			Interface = nullptr;
+		}
 	}
 }
 
@@ -645,34 +652,20 @@ void APlayerableCharacter::OnInteract()
 	}
 }
 
+void APlayerableCharacter::SetInterface()
+{
+	Interface = nullptr;
+}
+
 void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 {
 	if (OtherActor && !IsHandUp)
 	{
-		FVector CurrentActorLocation = GetActorLocation();
-
-		// Find the closest overlapping actor
-		float ClosestDistance = FLT_MAX;
-
-		TArray<AActor*> OverlappingActors;
-		GetOverlappingActors(OverlappingActors);
-
-		AActor* ClosestActor = nullptr;
-
-		for (AActor* Actor : OverlappingActors)
-		{
-			float Distance = (Actor->GetActorLocation() - CurrentActorLocation).Size();
-
-			if (Distance < ClosestDistance)
-			{
-				ClosestDistance = Distance;
-				ClosestActor = Actor;
-			}
-		}
-
-		HandUpObj = ClosestActor;
-		ClosestActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
+		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
 		SetAnimIsDrop(false);
+		HandUpObj = OtherActor;
+		
+		IsHandUp = true;
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}
