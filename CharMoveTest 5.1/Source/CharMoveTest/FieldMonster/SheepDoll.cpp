@@ -51,6 +51,8 @@ void ASheepDoll::BeginPlay()
 	MyArea = FindClosestMonsterArea();
 	MyAreaSize = MyArea->CollisionBox->GetScaledBoxExtent();
 	MyAreaLocation = MyArea->GetActorLocation();
+
+	SheepDollSpawnParticle();
 }
 
 AFieldArea* ASheepDoll::FindClosestMonsterArea()
