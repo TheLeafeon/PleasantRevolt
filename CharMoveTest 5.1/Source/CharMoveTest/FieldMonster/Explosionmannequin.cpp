@@ -100,12 +100,14 @@ void AExplosionmannequin::ExplosionReady()
 
 }
 
+
+
 void AExplosionmannequin::Explosion()
 {
 	TArray<AActor*> OverlappingActors;
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("Explosion"));
 	ExplosionParticle();
-
+	ExplosionmannequinAttackSound();
 	ExplosionRangeSphere->UpdateOverlaps();
 
 	ExplosionRangeSphere->GetOverlappingActors(OverlappingActors);
@@ -159,6 +161,7 @@ float AExplosionmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEv
 		}
 		else
 		{
+			ExplosionmannequinHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}

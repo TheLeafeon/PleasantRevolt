@@ -55,6 +55,32 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void MidBossmannequinInRangeAttackParticle();
 
+
+	//죽을때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequinDeathSound();
+
+	//맞을때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequinHitSound();
+
+	//거울에서 근접공격 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequininMirrorNearAttackSound();
+
+	//근접공격 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequinNearAttackSound();
+
+	//점프공격 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequinJumpSound();
+
+	//근접공격 바람 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequinNearAttackWindSound();
+
+
 	void OutRangeAttackEnd();
 
 
@@ -67,6 +93,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool isAttacking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isMirror;
 
 	UPROPERTY(BlueprintReadWrite)
 	FVector MidPoint;

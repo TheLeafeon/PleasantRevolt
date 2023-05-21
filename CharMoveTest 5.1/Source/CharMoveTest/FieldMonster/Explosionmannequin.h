@@ -48,6 +48,18 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ExplosionmannequinSpawnParticle();
 
+	//죽을때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ExplosionmannequinDeathSound();
+
+	//맞을때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ExplosionmannequinHitSound();
+
+	//터질때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ExplosionmannequinAttackSound();
+
 	//터짐
 	void Explosion();
 

@@ -72,6 +72,7 @@ void AFarmannequin::AttackTimer()
 
 void AFarmannequin::ShottingCheck()
 {
+	FarmannequinAttackSound();
 	Fire();
 }
 
@@ -79,6 +80,8 @@ void AFarmannequin::DeathTimer()
 {
 	Destroy();
 }
+
+
 
 AFieldArea* AFarmannequin::FindClosestMonsterArea()
 {
@@ -128,6 +131,11 @@ float AFarmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEvent, A
 		{
 			//Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
 			MyArea->numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed + 1;
+			FarmannequinDeathSound();
+
+			//기본으로 제공해주는 Ragdoll용 CollisionProfile로 설정
+			GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+			GetMesh()->SetSimulatePhysics(true);
 
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
 
@@ -135,6 +143,7 @@ float AFarmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEvent, A
 		}
 		else
 		{
+			FarmannequinHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}

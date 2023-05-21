@@ -122,6 +122,7 @@ void AMidBossmannequin::InRangeAttack()
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("MidBossmannequin InRange Attack"));
 
 	AnimInstance->PlayInRangeAttackMontage();
+	MidBossmannequinNearAttackWindSound();
 
 	FTimerHandle AttackTimerHandle;
 	FTimerDelegate AttackTimerDelegate = FTimerDelegate::CreateUObject(this, &AMidBossmannequin::InRangeAttackEnd);
@@ -133,6 +134,15 @@ void AMidBossmannequin::InRangeAttackCheck()
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("MidBossmannequin InRange Attack Hit Check"));
 
 	MidBossmannequinInRangeAttackParticle();
+
+	if (isMirror)
+	{
+		MidBossmannequininMirrorNearAttackSound();
+	}
+	else
+	{
+		MidBossmannequinNearAttackSound();
+	}
 
 	FHitResult HitResult;
 	TArray<FHitResult>HitResultArray;
@@ -253,10 +263,12 @@ float AMidBossmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEven
 		{
 			MyArea->numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed + 1;
 
+			MidBossmannequinDeathSound();
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
 		}
 		else
 		{
+			MidBossmannequinHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}
@@ -302,3 +314,4 @@ void AMidBossmannequin::DeathTimer()
 		GetCapsuleComponent()->BodyInstance.SetResponseToChannel(ECC_PhysicsBody, ECR_Ignore);
 	}
 }
+
