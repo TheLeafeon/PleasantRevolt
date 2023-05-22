@@ -240,6 +240,9 @@ float AMidBossmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEven
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("MidBoss Hit"));
 
+				MidBossmannequinHitmaterial();
+				MidBossmannequinHitSound();
+
 				if (getDamage > 0.0f)
 				{
 					Monster_HP -= getDamage;
@@ -270,7 +273,7 @@ float AMidBossmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEven
 		}
 		else
 		{
-			MidBossmannequinHitSound();
+			
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}

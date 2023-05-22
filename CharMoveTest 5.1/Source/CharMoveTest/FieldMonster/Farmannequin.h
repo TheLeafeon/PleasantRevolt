@@ -50,6 +50,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void FarmannequinAttackSound();
 
+	//피격시 머터리얼 변경
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FarmannequinHitmaterial();
+
 
 	FOnAttackEndDelegate FarmannequinOnAttackEnd;
 

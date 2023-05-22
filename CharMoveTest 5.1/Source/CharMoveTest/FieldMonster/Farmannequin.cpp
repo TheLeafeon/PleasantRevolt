@@ -138,6 +138,7 @@ float AFarmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEvent, A
 		}
 		else
 		{
+			FarmannequinHitmaterial();
 			FarmannequinHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}

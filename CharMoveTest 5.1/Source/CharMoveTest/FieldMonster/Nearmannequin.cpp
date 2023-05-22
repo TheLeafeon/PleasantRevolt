@@ -232,6 +232,7 @@ float ANearmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 		}
 		else
 		{
+			NearmannequinHitMaterial();
 			NearmannequinHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
