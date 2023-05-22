@@ -270,7 +270,7 @@ public:
 	void HitDrop();
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetAnimIsDrop(bool IsDrop);
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 	void SetIsHandUp(bool value);
 	bool IsHandUp;
 	void SetInterface();

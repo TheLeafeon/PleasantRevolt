@@ -164,6 +164,7 @@ float AExplosionmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEv
 		else
 		{
 			ExplosionmannequinHitSound();
+			ExplosionmannequinHitmaterial();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}
