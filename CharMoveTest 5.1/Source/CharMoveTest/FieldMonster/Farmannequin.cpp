@@ -47,17 +47,12 @@ void AFarmannequin::BeginPlay()
 
 void AFarmannequin::Attack()
 {
-	if (!isPlayerAttackHit)
-	{
 
 		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, TEXT("Attack"));
 		
 		AnimInstance->PlayAttackMontage();
 
-		
 
-	}
-	isPlayerAttackHit = false;
 
 	FTimerHandle AttackTimerHandle;
 	FTimerDelegate AttackTimerDelegate = FTimerDelegate::CreateUObject(this, &AFarmannequin::AttackTimer);
@@ -78,7 +73,7 @@ void AFarmannequin::ShottingCheck()
 
 void AFarmannequin::DeathTimer()
 {
-	Destroy();
+	
 }
 
 

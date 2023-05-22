@@ -107,14 +107,15 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool testRightDamage;
 
+	UPROPERTY(BlueprintReadOnly, Meta = (AllowPrivateAccess = true))
+	bool isDie;
 
 	//죽고 사라지는 시간
 	void DeathTimer();
 private:
 	UMidBossmannequinAnimInstance* AnimInstance;
 
-	UPROPERTY(BlueprintReadOnly, Meta = (AllowPrivateAccess = true))
-	bool isDie;
+
 
 	bool bIsJumping;
 

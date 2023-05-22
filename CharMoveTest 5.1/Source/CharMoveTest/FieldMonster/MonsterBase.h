@@ -15,17 +15,19 @@ public:
 	// Sets default values for this character's properties
 	AMonsterBase();
 
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//체력
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Monster_Information")
-		float Monster_HP;
-
 	//공격력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Monster_Information")
 		float Monster_Power;
+
+	//체력
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Monster_Information")
+		float Monster_HP;
 
 	//이동속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Monster_Information")
