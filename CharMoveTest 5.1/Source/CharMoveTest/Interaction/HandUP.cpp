@@ -87,7 +87,7 @@ void AHandUP::InteractWithMe()
 		HandUpAni(false);
 
 		IsHandUp = false;
-		PlayerCharacter->SetIsHandUp(false);
+		PlayerCharacter->IsHandUp = false;
 		PlayerCharacter->SetInterface();
 	}
 	else if (PlayerCharacter->IsHandUp == false && !IsHandUp)
@@ -167,7 +167,7 @@ void AHandUP::Drop()
 		HandUpAni(false);
 
 		IsHandUp = false;
-		PlayerCharacter->SetIsHandUp(false);
+		PlayerCharacter->IsHandUp = false;
 	}
 }
 
@@ -212,6 +212,6 @@ void AHandUP::BackDrop()
 		HandUpAni(false);
 
 		IsHandUp = false;
-		PlayerCharacter->SetIsHandUp(false);
+		PlayerCharacter->IsHandUp = false;
 	}
 }
