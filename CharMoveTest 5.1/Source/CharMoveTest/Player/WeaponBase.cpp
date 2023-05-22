@@ -10,6 +10,7 @@
 #include "CharMoveTest/Boss/PD_LeftArm.h"
 #include "CharMoveTest/Boss/PD_RightArm.h"
 #include "CharMoveTest/Boss/PD_Body_Character.h"
+#include "CharMoveTest/Interaction/Destruction.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -103,6 +104,7 @@ void AWeaponBase::WeaponTrace()
 			APD_LeftArm* HitBoss2_LeftArm = nullptr;
 			APD_RightArm* HitBoss2_RightArm = nullptr;
 			APD_Body_Character* HitBoss2_Body = nullptr;
+			ADestruction* Destruction = nullptr;
 
 			if (HitComponent)
 			{
@@ -111,6 +113,7 @@ void AWeaponBase::WeaponTrace()
 				HitBoss2_LeftArm = Cast<APD_LeftArm>(HitComponent->GetOwner());
 				HitBoss2_RightArm = Cast<APD_RightArm>(HitComponent->GetOwner());
 				HitBoss2_Body = Cast<APD_Body_Character>(HitComponent->GetOwner());
+				Destruction = Cast<ADestruction>(HitComponent->GetOwner());
 			}
 			
 			if(HitMonster)
@@ -123,6 +126,8 @@ void AWeaponBase::WeaponTrace()
 				DuplicationEnemy(HitBoss2_RightArm);
 			if (HitBoss2_Body)
 				DuplicationEnemy(HitBoss2_Body);
+			if (Destruction)
+				DuplicationEnemy(Destruction);
 		}
 	}
 }

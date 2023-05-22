@@ -57,6 +57,7 @@ private :
 
 	TArray<ACharacter*> DetectedActors;
 	TArray<APawn*> DetectedActors2;
+	//TArray<AActor*> DetectedActors3;
 	FCollisionQueryParams CollisionParams;
 
 	UPROPERTY(EditAnywhere, Category = "Trace")
