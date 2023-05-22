@@ -3,6 +3,7 @@
 
 #include "CharMoveTest/FieldMonster/BTS_MidBossmannequinDetect.h"
 #include "CharMoveTest/FieldMonster/MidBossmannequinAIController.h"
+#include "CharMoveTest/FieldMonster/MidBossmannequin.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
@@ -27,7 +28,7 @@ void UBTS_MidBossmannequinDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 	UWorld* World = ControllingPawn->GetWorld();
 	FVector Center = BlackboardComp->GetValueAsVector("AreaPos");
 	//FVector Center = ControllingPawn->GetActorLocation();
-
+	
 	FVector DetectRadius = BlackboardComp->GetValueAsVector("AreaSize");
 	//float DetectRadius = 600.0f;
 
@@ -48,11 +49,12 @@ void UBTS_MidBossmannequinDetect::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 		for (auto const& OverlapResult : OverlapResults)
 		{
 			APlayerableCharacter* PlayerableCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor());
+			AMidBossmannequin* MyMidBossmannequin = Cast<AMidBossmannequin>(ControllingPawn);
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AMidBossmannequinAIController::TargetKey, PlayerableCharacter);
 				OwnerComp.GetBlackboardComponent()->SetValueAsVector(AMidBossmannequinAIController::TargetLocationKey, PlayerableCharacter->GetActorLocation());
-
+				OwnerComp.GetBlackboardComponent()->SetValueAsBool(AMidBossmannequinAIController::IsDieKey, MyMidBossmannequin->isDie);
 
 
 				return;

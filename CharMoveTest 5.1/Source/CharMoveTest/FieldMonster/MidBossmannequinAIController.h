@@ -35,6 +35,7 @@ public:
 	static const FName TargetLocationKey;
 	static const FName LastTargetLocationKey;
 	static const FName RushHitKey;
+	static const FName IsDieKey;
 
 	UPROPERTY()
 		UBlackboardComponent* BlackboardComp;

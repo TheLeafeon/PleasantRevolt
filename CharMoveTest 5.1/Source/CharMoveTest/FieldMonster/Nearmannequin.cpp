@@ -32,7 +32,7 @@ ANearmannequin::ANearmannequin()
 	//몬스터가 공격중인지
 	isAttacking = false;
 
-	AttackRange = 100.0f;
+	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
 }
 
