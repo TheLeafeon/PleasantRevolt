@@ -267,11 +267,11 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AActor* HandUpObj;
 	UFUNCTION(BlueprintImplementableEvent)
-	void HitDrop();
+		void HitDrop();
 	UFUNCTION(BlueprintImplementableEvent)
-	void SetAnimIsDrop(bool IsDrop);
-	UFUNCTION()
-	void SetIsHandUp(bool value);
+		void SetAnimIsDrop(bool IsDrop);
+	UFUNCTION(BlueprintImplementableEvent)
+		void SetIsHandUp(bool value);
 	bool IsHandUp;
 	void SetInterface();
 private:
