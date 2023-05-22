@@ -20,6 +20,7 @@ const FName AMidBossmannequinAIController::IsSeeKey(TEXT("IsSee"));
 const FName AMidBossmannequinAIController::TargetLocationKey(TEXT("TargetLocation"));
 const FName AMidBossmannequinAIController::LastTargetLocationKey(TEXT("LastTargetLocation"));
 const FName AMidBossmannequinAIController::RushHitKey(TEXT("RushHit"));
+const FName AMidBossmannequinAIController::IsDieKey(TEXT("IsDie"));
 
 AMidBossmannequinAIController::AMidBossmannequinAIController() : BlackboardComp(Blackboard)
 {

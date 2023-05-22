@@ -262,7 +262,9 @@ float AMidBossmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEven
 		if (Monster_HP <= 0)
 		{
 			MyArea->numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed + 1;
-
+			//기본으로 제공해주는 Ragdoll용 CollisionProfile로 설정
+			GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+			GetMesh()->SetSimulatePhysics(true);
 			MidBossmannequinDeathSound();
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
 		}

@@ -60,6 +60,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ExplosionmannequinAttackSound();
 
+	//피격시 머터리얼 변경
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ExplosionmannequinHitmaterial();
+
 	//터짐
 	void Explosion();
 
