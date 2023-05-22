@@ -51,6 +51,8 @@ void ANearmannequin::BeginPlay()
 		return;
 
 	AnimInstance->OnAttackHitCheck.AddUObject(this, &ANearmannequin::AttackCheck);
+
+	NearmannequinSpawnParticle();
 }
 
 AFieldArea* ANearmannequin::FindClosestMonsterArea()
@@ -110,6 +112,7 @@ void ANearmannequin::Attack_Melee()
 void ANearmannequin::AttackCheck()
 {
 	NearmannequinAttackParticle();
+	NearmannequinAttackSound();
 
 	FHitResult HitResult;
 	TArray<FHitResult>HitResultArray;
@@ -170,6 +173,9 @@ void ANearmannequin::AttackCheck()
 
 }
 
+
+
+
 void ANearmannequin::AttackTimer()
 {
 	isAttacking = false;
@@ -216,11 +222,17 @@ float ANearmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 		if (Monster_HP <= 0)
 		{
 			MyArea->numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed + 1;
+			NearmannequinDeathSound();
+
+			//기본으로 제공해주는 Ragdoll용 CollisionProfile로 설정
+			GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+			GetMesh()->SetSimulatePhysics(true);
 
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
 		}
 		else
 		{
+			NearmannequinHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}

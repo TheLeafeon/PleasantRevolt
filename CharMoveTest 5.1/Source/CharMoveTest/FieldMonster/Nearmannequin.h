@@ -48,6 +48,22 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void NearmannequinHitMaterial();
 
+	//스폰 시 파티클 출력 함수 BP에서 정의
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void NearmannequinSpawnParticle();
+
+	//죽을때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void NearmannequinDeathSound();
+
+	//맞을때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void NearmannequinHitSound();
+
+	//공격시 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void NearmannequinAttackSound();
+
 	//공격 모션 시간
 	void AttackTimer();
 

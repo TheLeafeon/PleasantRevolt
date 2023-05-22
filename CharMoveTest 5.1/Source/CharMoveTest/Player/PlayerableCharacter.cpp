@@ -620,11 +620,8 @@ void APlayerableCharacter::Rolling()
 
 void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//항상 첫번째로 들어온 상호작용만 반응하게
-	if (!Interface)
-	{
-		Interface = Cast<IInteractionInterface>(OtherActor);
-	}
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("Interaface"));
+	Interface = Cast<IInteractionInterface>(OtherActor);
 
 	if (Interface)
 	{
@@ -637,10 +634,7 @@ void APlayerableCharacter::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, 
 	if (Interface)
 	{
 		Interface->HideInteractionWidget();
-		if (!IsHandUp)
-		{
-			Interface = nullptr;
-		}
+		Interface = nullptr;
 	}
 }
 
@@ -648,24 +642,39 @@ void APlayerableCharacter::OnInteract()
 {
 	if (Interface)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("Press"));
 		Interface->InteractWithMe();
 	}
-}
-
-void APlayerableCharacter::SetInterface()
-{
-	Interface = nullptr;
 }
 
 void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 {
 	if (OtherActor && !IsHandUp)
 	{
-		OtherActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
+		FVector CurrentActorLocation = GetActorLocation();
+
+		// Find the closest overlapping actor
+		float ClosestDistance = FLT_MAX;
+
+		TArray<AActor*> OverlappingActors;
+		GetOverlappingActors(OverlappingActors);
+
+		AActor* ClosestActor = nullptr;
+
+		for (AActor* Actor : OverlappingActors)
+		{
+			float Distance = (Actor->GetActorLocation() - CurrentActorLocation).Size();
+
+			if (Distance < ClosestDistance)
+			{
+				ClosestDistance = Distance;
+				ClosestActor = Actor;
+			}
+		}
+
+		HandUpObj = ClosestActor;
+		ClosestActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("handUp"));
 		SetAnimIsDrop(false);
-		HandUpObj = OtherActor;
-		
-		IsHandUp = true;
 
 		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
 	}

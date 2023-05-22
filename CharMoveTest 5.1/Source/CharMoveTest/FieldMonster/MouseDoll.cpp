@@ -49,6 +49,8 @@ void AMouseDoll::BeginPlay()
 	MyAreaLocation = MyArea->GetActorLocation();
 
 	AnimInstance->OnAttackHitCheck.AddUObject(this, &AMouseDoll::AttackCheck);
+
+	MouseDollSpawnParticle();
 }
 
 void AMouseDoll::PostInitializeComponents()

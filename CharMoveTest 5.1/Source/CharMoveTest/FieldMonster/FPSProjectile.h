@@ -38,6 +38,10 @@ public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite ,Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;
 
+	//충돌 시
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FarmannequinProjectileHitSound();
+
 	// 발사체의 속도를 발사 방향으로 초기화시킵니다.
 	void FireInDirection(const FVector& ShootDirection);
 

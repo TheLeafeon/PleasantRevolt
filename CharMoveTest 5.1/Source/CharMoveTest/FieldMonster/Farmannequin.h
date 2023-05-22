@@ -34,6 +34,23 @@ public:
 	//죽고 사라지는 시간
 	void DeathTimer();
 
+	//스폰 시 파티클 출력 함수 BP에서 정의
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FarmannequinSpawnParticle();
+
+	//죽을때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FarmannequinDeathSound();
+
+	//맞을때 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FarmannequinHitSound();
+
+	//공격시 나는 소리
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FarmannequinAttackSound();
+
+
 	FOnAttackEndDelegate FarmannequinOnAttackEnd;
 
 	// 스폰시킬 프로젝타일 클래스 AFPSProjectile를 투사체 추가 후 변경
