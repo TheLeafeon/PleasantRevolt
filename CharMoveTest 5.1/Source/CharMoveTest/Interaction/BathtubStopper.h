@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "CharMoveTest/Player/InteractionInterface.h"
-#include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "Components/WidgetComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "GameFramework/Actor.h"
