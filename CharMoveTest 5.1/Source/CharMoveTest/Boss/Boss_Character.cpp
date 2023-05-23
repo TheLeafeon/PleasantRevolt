@@ -100,6 +100,11 @@ void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, 
 	GetMesh()->SetSimulatePhysics(true);
 	SpawnDanger->Destroy();
 	GetController()->Destroy();
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			UGameplayStatics::OpenLevel(this, FName("stage2_start_cinematic"));
+		}), 3.0f, false);
 }
 
 void ABoss_Character::HPHalf()

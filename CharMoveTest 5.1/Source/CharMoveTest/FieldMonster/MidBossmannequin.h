@@ -115,7 +115,15 @@ public:
 
 	//죽고 사라지는 시간
 	void DeathTimer();
+
+	//죽고 나서 키 소환
+	UFUNCTION(BlueprintCallable)
+	void GetKey(AActor* Key);
+	void SpawnKey();
+
 private:
+	AActor* SaveKey;
+
 	UMidBossmannequinAnimInstance* AnimInstance;
 
 

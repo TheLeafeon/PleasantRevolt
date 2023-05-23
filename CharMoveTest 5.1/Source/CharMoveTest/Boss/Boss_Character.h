@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Engine/Public/TimerManager.h"
 #include "Sound/SoundBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -36,6 +37,7 @@ private:
 	float BossHP;
 	UPROPERTY(EditAnywhere, Category = "Status")
 	float MaxBossHP;
+	FTimerHandle TimerHandle;
 
 public:
 	UFUNCTION(BlueprintCallable)

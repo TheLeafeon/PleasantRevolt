@@ -82,4 +82,10 @@ void APD_Body_Character::Die(float KillingDamage, FDamageEvent const& DamageEven
 
 	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
 	GetMesh()->SetSimulatePhysics(true);
+	GetController()->Destroy();
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
+		{
+			UGameplayStatics::OpenLevel(this, FName("stage2_boss_cinematic"));
+		}), 3.0f, false);
 }

@@ -298,6 +298,9 @@ void AMidBossmannequin::Die(float KillingDamage, FDamageEvent const& DamageEvent
 
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
 
+	//Å° ¼ÒÈ¯
+	SpawnKey();
+
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 
 	FTimerHandle DeathTimerHandle;
@@ -320,3 +323,12 @@ void AMidBossmannequin::DeathTimer()
 	}
 }
 
+void AMidBossmannequin::GetKey(AActor* Key)
+{
+	SaveKey = Key;
+}
+
+void AMidBossmannequin::SpawnKey()
+{
+	SaveKey->SetActorLocation(GetActorLocation());
+}
