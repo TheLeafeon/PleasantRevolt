@@ -30,7 +30,7 @@ void AIKey::InteractWithMe()
 	if (!IsGet)
 	{
 		IsGet = true;
-		CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+		CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 
 		HideInteractionWidget();
 	}

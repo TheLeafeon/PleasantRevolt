@@ -43,6 +43,7 @@ void AHandUP::InteractWithMe()
 {
 	if (PlayerCharacter->IsHandUp && IsHandUp /* && PlayerCharacter->HandUpObj == this*/)
 	{
+		DestroyMirrorHandUp();
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("down"));
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
@@ -130,6 +131,7 @@ void AHandUP::Drop()
 {
 	if (IsHandUp)
 	{
+		DestroyMirrorHandUp();
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
@@ -175,6 +177,7 @@ void AHandUP::BackDrop()
 {
 	if (IsHandUp)
 	{
+		DestroyMirrorHandUp();
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
