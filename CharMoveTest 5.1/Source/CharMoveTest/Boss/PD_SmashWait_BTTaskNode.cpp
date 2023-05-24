@@ -43,10 +43,9 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey2::randomArm, RandomValue);
 
 	//빨간원 생성하기
-	FRotator Rotator;
 	FVector SpawnLocation = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 
-	APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PD_FallDecal, SpawnLocation, Rotator);
+	APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PD_FallDecal, SpawnLocation, FRotator(0.0f, 90.0f, 0.0f));
 
 	if (RandomValue <= 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) != nullptr)
 	{
