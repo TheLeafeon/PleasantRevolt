@@ -28,10 +28,26 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	UPrimitiveComponent* CollisionComponent;
 	UPROPERTY(BlueprintReadWrite)
+	UPrimitiveComponent* RootPhysicsComponent;
+	UPROPERTY(BlueprintReadWrite)
 	UWidgetComponent* InteractionWidget;
 
 	UPROPERTY(BlueprintReadWrite)
 	bool IsGet;
+
+	void MidKey();
+	UPROPERTY(BlueprintReadWrite)
+	AActor* MidKeyActor;
+	float MidKeyPos;
+	bool IsMidKey;
+
+	float TotalTime;
+	float CurrentTime;
+	float StartTime;
+	float Alpha;
+	FVector NewLocation;
+	FVector TargetLocation;
+	FVector StartLocation;
 
 private:
 	virtual void InteractWithMe() override;

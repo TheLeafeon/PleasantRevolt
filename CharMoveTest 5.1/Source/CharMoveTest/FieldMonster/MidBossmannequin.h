@@ -6,6 +6,8 @@
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
 #include "CharMoveTest/FieldMonster/MidBossmannequinAnimInstance.h"
 #include "CharMoveTest/FieldMonster/FieldArea.h"
+#include "CharMoveTest/Interaction/IKey.h"
+#include "CharMoveTest/Interaction/Door.h"
 #include "MidBossmannequin.generated.h"
 
 /**
@@ -116,13 +118,11 @@ public:
 	//죽고 사라지는 시간
 	void DeathTimer();
 
-	//죽고 나서 키 소환
-	UFUNCTION(BlueprintCallable)
-	void GetKey(AActor* Key);
-	void SpawnKey();
-
 private:
-	AActor* SaveKey;
+	//죽고 나서 키 소환
+	void SpawnKey();
+	//문 막음
+	void SetDoor(bool value);
 
 	UMidBossmannequinAnimInstance* AnimInstance;
 

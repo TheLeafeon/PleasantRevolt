@@ -37,6 +37,10 @@ public:
 	void KeyCheck();
 	UFUNCTION(BlueprintImplementableEvent)
 	void Down();
+	UFUNCTION(BlueprintImplementableEvent)
+	void MidDown();
+
+	void SetIsKeyDoor(bool value);
 
 private:
 	virtual void InteractWithMe() override;

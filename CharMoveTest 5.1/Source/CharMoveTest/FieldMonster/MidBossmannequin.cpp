@@ -298,8 +298,17 @@ void AMidBossmannequin::Die(float KillingDamage, FDamageEvent const& DamageEvent
 
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
 
-	//키 소환
-	SpawnKey();
+	if (isMirror)
+	{
+		//키 소환
+		SpawnKey();
+		SetDoor(false);
+	}
+	else
+	{
+		//문 막은거 풀림
+		SetDoor(true);
+	}
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 
@@ -323,12 +332,45 @@ void AMidBossmannequin::DeathTimer()
 	}
 }
 
-void AMidBossmannequin::GetKey(AActor* Key)
-{
-	SaveKey = Key;
-}
-
 void AMidBossmannequin::SpawnKey()
 {
-	SaveKey->SetActorLocation(GetActorLocation());
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Mid"), FoundActors);
+
+	//찾은 액터 반복
+	for (AActor* Actor : FoundActors)
+	{
+		//특정 클래스의 액터인지 검사
+		AIKey* Key = Cast<AIKey>(Actor);
+		if (Key)
+		{
+			Key->MidKey();
+		}
+		ADoor* Door = Cast<ADoor>(Actor);
+		if (Door)
+		{
+			Door->MidDown();
+		}
+
+		if (Key && Door)
+		{
+			break;
+		}
+	}
+}
+
+void AMidBossmannequin::SetDoor(bool value)
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Mid2"), FoundActors);
+
+	for (AActor* Actor : FoundActors)
+	{
+		ADoor* Door = Cast<ADoor>(Actor);
+		if (Door)
+		{
+			Door->SetIsKeyDoor(value);
+			break;
+		}
+	}
 }

@@ -58,3 +58,8 @@ void ADoor::HideInteractionWidget()
 		InteractionWidget->SetVisibility(false);
 	}
 }
+
+void ADoor::SetIsKeyDoor(bool value)
+{
+	IsKeyDoor = value;
+}
