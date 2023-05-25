@@ -24,7 +24,7 @@ void AHandUP::BeginPlay()
 	ExistingLocation = GetActorLocation();
 	BlockCollisionComponent->OnComponentHit.AddDynamic(this, &AHandUP::OnAttackHit);
 	BlockCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AHandUP::OnOverlapBegin);
-	BlockCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &AHandUP::OnOverlapEnd);
+	//BlockCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &AHandUP::OnOverlapEnd);
 }
 
 // Called every frame
