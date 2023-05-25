@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CharMoveTest/Player/InteractionInterface.h"
 #include "CharMoveTest/Interaction/BigDoll.h"
+#include "Components/WidgetComponent.h"
 #include "Stand.generated.h"
 
 UCLASS()
@@ -43,4 +44,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	UPROPERTY(EditAnywhere)
+	UWidgetComponent* InteractionWidget;
+
+	virtual void HideInteractionWidget() override;
 };

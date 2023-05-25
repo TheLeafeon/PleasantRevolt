@@ -16,6 +16,9 @@ APowerButton::APowerButton()
 	InteractionSampleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SampleMesh"));
 	InteractionSampleMesh->SetupAttachment(RootComponent);
 
+	InteractionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Interaction Widget"));
+	InteractionWidget->SetupAttachment(RootComponent);
+
 	PowerOn = false;
 }
 
@@ -30,6 +33,15 @@ void APowerButton::InteractWithMe()
 
 void APowerButton::ShowInteractionWidget()
 {
+	if (!PowerOn)
+	{
+		InteractionWidget->SetVisibility(true);
+	}	
+}
+
+void APowerButton::HideInteractionWidget()
+{
+	InteractionWidget->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned
@@ -45,4 +57,3 @@ void APowerButton::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-

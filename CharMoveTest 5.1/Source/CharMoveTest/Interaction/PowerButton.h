@@ -6,6 +6,7 @@
 #include "CharMoveTest/Player/InteractionInterface.h"
 #include "GameFramework/Actor.h"
 #include "Engine/DirectionalLight.h"
+#include "Components/WidgetComponent.h"
 #include "CharMoveTest/FieldMonster/MonsterSpawnActor.h"
 #include "PowerButton.generated.h"
 
@@ -44,5 +45,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	UPROPERTY(EditAnywhere)
+	UWidgetComponent* InteractionWidget;
+
+	virtual void HideInteractionWidget() override;
 
 };

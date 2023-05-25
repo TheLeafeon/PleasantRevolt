@@ -21,6 +21,10 @@ void AHandUP::BeginPlay()
 		AnimInstance = Cast<UPlayerAnimInstnce>(PlayerCharacter->GetMesh()->GetAnimInstance());
 	}
 
+	ExistingLocation = GetActorLocation();
+	BlockCollisionComponent->OnComponentHit.AddDynamic(this, &AHandUP::OnAttackHit);
+	BlockCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AHandUP::OnOverlapBegin);
+	//BlockCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &AHandUP::OnOverlapEnd);
 }
 
 // Called every frame
@@ -28,7 +32,7 @@ void AHandUP::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsDown)
+	if (IsDown && IsOverlap)
 	{
 		if (FMath::IsNearlyEqual(GetActorRotation().Roll, 0.0f, 5.0f) && FMath::IsNearlyEqual(GetActorRotation().Pitch, 0.0f, 5.0f))
 		{
@@ -155,7 +159,7 @@ void AHandUP::Drop()
 				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
-						CollisionComponent->SetSimulatePhysics(false);
+						IsDown = true;
 						
 						if (IsMirror)
 						{
@@ -201,7 +205,7 @@ void AHandUP::BackDrop()
 				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
 					{
-						CollisionComponent->SetSimulatePhysics(false);
+						IsDown = true;
 						
 						if (IsMirror)
 						{
@@ -217,4 +221,25 @@ void AHandUP::BackDrop()
 		IsHandUp = false;
 		PlayerCharacter->IsHandUp = false;
 	}
+}
+
+void AHandUP::OnOverlapBegin(class UPrimitiveComponent* selfComp, class AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	ARespawnZone* Respawn = Cast<ARespawnZone>(otherActor);
+	if (Respawn)
+	{
+		SetActorLocation(ExistingLocation);
+	}
+
+	//IsOverlap = true;
+}
+
+void AHandUP::OnOverlapEnd(class UPrimitiveComponent* selfComp, class AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	IsOverlap = false;
+}
+
+void AHandUP::OnAttackHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	IsOverlap = true;
 }

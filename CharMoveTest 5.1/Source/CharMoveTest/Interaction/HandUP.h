@@ -12,6 +12,7 @@
 #include "CharMoveTest/Player/PlayerAnimInstnce.h"
 #include "Components/WidgetComponent.h"
 #include "Components/PrimitiveComponent.h"
+#include "CharMoveTest/Interaction/RespawnZone.h"
 #include "HandUP.generated.h"
 
 UCLASS()
@@ -47,6 +48,16 @@ private:
 	virtual void InteractWithMe() override;
 	virtual void ShowInteractionWidget() override;
 	virtual void HideInteractionWidget() override;
+
+	UFUNCTION()
+	void OnOverlapBegin(class UPrimitiveComponent* selfComp, class AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnOverlapEnd(class UPrimitiveComponent* selfComp, class AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	bool IsOverlap;
+	UFUNCTION()
+	void OnAttackHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	FVector ExistingLocation;
 
 	void SetFalsePhysics();
 

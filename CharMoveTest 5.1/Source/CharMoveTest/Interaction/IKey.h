@@ -28,8 +28,6 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	UPrimitiveComponent* CollisionComponent;
 	UPROPERTY(BlueprintReadWrite)
-	UPrimitiveComponent* RootPhysicsComponent;
-	UPROPERTY(BlueprintReadWrite)
 	UWidgetComponent* InteractionWidget;
 
 	UPROPERTY(BlueprintReadWrite)

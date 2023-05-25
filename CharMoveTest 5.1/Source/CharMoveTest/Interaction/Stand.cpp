@@ -15,6 +15,9 @@ AStand::AStand()
 	InteractionSampleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SampleMesh"));
 	InteractionSampleMesh->SetupAttachment(RootComponent);
 
+	InteractionWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Interaction Widget"));
+	InteractionWidget->SetupAttachment(RootComponent);
+
 	StandMove = false;
 }
 
@@ -30,7 +33,17 @@ void AStand::InteractWithMe()
 
 void AStand::ShowInteractionWidget()
 {
+	if (!StandMove)
+	{
+		InteractionWidget->SetVisibility(true);
+	}
 }
+
+void AStand::HideInteractionWidget()
+{
+	InteractionWidget->SetVisibility(false);
+}
+
 
 // Called when the game starts or when spawned
 void AStand::BeginPlay()
