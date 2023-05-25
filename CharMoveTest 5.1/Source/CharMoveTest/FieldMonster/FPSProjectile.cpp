@@ -17,7 +17,7 @@ AFPSProjectile::AFPSProjectile()
 
 
     // 구체의 콜리전 반경을 설정합니다.
-    CollisionComponent->InitSphereRadius(15.0f);
+    //CollisionComponent->InitSphereRadius(15.0f);
     // 루트 컴포넌트를 콜리전 컴포넌트로 설정합니다.
     RootComponent = CollisionComponent;
 
