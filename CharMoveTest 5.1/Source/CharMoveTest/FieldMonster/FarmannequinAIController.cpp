@@ -15,6 +15,7 @@ const FName AFarmannequinAIController::HomePosKey(TEXT("HomePos"));
 const FName AFarmannequinAIController::TargetKey(TEXT("Target"));
 const FName AFarmannequinAIController::AreaPosKey(TEXT("AreaPos"));
 const FName AFarmannequinAIController::AreaSizeKey(TEXT("AreaSize"));
+const FName AFarmannequinAIController::IsDieKey(TEXT("IsDie"));
 
 AFarmannequinAIController::AFarmannequinAIController()
 {

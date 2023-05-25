@@ -3,6 +3,7 @@
 
 #include "CharMoveTest/FieldMonster/BTService_MouseDollDetect.h"
 #include "CharMoveTest/FieldMonster/MouseDollAIController.h"
+#include "CharMoveTest/FieldMonster/MouseDoll.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
@@ -46,9 +47,11 @@ void UBTService_MouseDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 		for (auto const& OverlapResult : OverlapResults)
 		{
 			APlayerableCharacter* PlayerableCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor());
+			AMouseDoll* MyMouseDoll = Cast<AMouseDoll>(ControllingPawn);
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AMouseDollAIController::TargetKey, PlayerableCharacter);
+				OwnerComp.GetBlackboardComponent()->SetValueAsBool(AMouseDollAIController::IsDieKey, MyMouseDoll->isDie);
 
 				return;
 			}

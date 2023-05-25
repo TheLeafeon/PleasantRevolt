@@ -15,6 +15,7 @@ const FName AMouseDollAIController::HomePosKey(TEXT("HomePos"));
 const FName AMouseDollAIController::TargetKey(TEXT("Target"));
 const FName AMouseDollAIController::AreaPosKey(TEXT("AreaPos"));
 const FName AMouseDollAIController::AreaSizeKey(TEXT("AreaSize"));
+const FName AMouseDollAIController::IsDieKey(TEXT("IsDie"));
 
 AMouseDollAIController::AMouseDollAIController()
 {

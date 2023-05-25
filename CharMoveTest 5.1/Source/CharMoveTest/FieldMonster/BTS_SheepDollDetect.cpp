@@ -3,6 +3,7 @@
 
 #include "CharMoveTest/FieldMonster/BTS_SheepDollDetect.h"
 #include "CharMoveTest/FieldMonster/SheepDollAIController.h"
+#include "CharMoveTest/FieldMonster/SheepDoll.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
@@ -45,9 +46,11 @@ void UBTS_SheepDollDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 		for (auto const& OverlapResult : OverlapResults)
 		{
 			APlayerableCharacter* PlayerableCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor());
+			ASheepDoll* MySheepDoll = Cast<ASheepDoll>(ControllingPawn);
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ASheepDollAIController::TargetKey, PlayerableCharacter);
+				OwnerComp.GetBlackboardComponent()->SetValueAsBool(ASheepDollAIController::IsDieKey, MySheepDoll->isDie);
 
 
 				//DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);

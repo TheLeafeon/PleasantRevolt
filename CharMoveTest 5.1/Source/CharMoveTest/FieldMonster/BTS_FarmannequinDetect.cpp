@@ -4,6 +4,7 @@
 #include "CharMoveTest/FieldMonster/BTS_FarmannequinDetect.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "CharMoveTest/FieldMonster/FarmannequinAIController.h"
+#include "CharMoveTest/FieldMonster/Farmannequin.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 
@@ -42,9 +43,11 @@ void UBTS_FarmannequinDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 		for (auto const& OverlapResult : OverlapResults)
 		{
 			APlayerableCharacter* PlayerableCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor());
+			AFarmannequin* MyFarmannequin = Cast<AFarmannequin>(ControllingPawn);
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(AFarmannequinAIController::TargetKey, PlayerableCharacter);
+				OwnerComp.GetBlackboardComponent()->SetValueAsBool(AFarmannequinAIController::IsDieKey, MyFarmannequin->isDie);
 
 				return;
 			}

@@ -3,6 +3,7 @@
 
 #include "CharMoveTest/FieldMonster/BTS_NearmannequinDetect.h"
 #include "CharMoveTest/FieldMonster/NearmannequinAIController.h"
+#include "CharMoveTest/FieldMonster/Nearmannequin.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
@@ -45,9 +46,11 @@ void UBTS_NearmannequinDetect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		for (auto const& OverlapResult : OverlapResults)
 		{
 			APlayerableCharacter* PlayerableCharacter = Cast<APlayerableCharacter>(OverlapResult.GetActor());
+			ANearmannequin* MyNearmannequin = Cast<ANearmannequin>(ControllingPawn);
 			if (PlayerableCharacter && PlayerableCharacter->GetController()->IsPlayerController())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ANearmannequinAIController::TargetKey, PlayerableCharacter);
+				OwnerComp.GetBlackboardComponent()->SetValueAsBool(ANearmannequinAIController::IsDieKey, MyNearmannequin->isDie);
 
 
 				//DrawDebugPoint(World, PlayerableCharacter->GetActorLocation(), 10.0f, FColor::Blue, false, 0.2f);
