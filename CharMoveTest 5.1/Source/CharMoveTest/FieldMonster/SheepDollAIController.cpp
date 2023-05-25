@@ -19,6 +19,7 @@ const FName ASheepDollAIController::TargetLocationKey(TEXT("TargetLocation"));
 const FName ASheepDollAIController::SeeKey(TEXT("See"));
 const FName ASheepDollAIController::TrueKey(TEXT("True"));
 const FName ASheepDollAIController::StunKey(TEXT("Stun"));
+const FName ASheepDollAIController::IsDieKey(TEXT("IsDie"));
 
 ASheepDollAIController::ASheepDollAIController() : BlackboardComp(Blackboard)
 {

@@ -15,6 +15,7 @@ const FName ANearmannequinAIController::HomePosKey(TEXT("HomePos"));
 const FName ANearmannequinAIController::TargetKey(TEXT("Target"));
 const FName ANearmannequinAIController::AreaPosKey(TEXT("AreaPos"));
 const FName ANearmannequinAIController::AreaSizeKey(TEXT("AreaSize"));
+const FName ANearmannequinAIController::IsDieKey(TEXT("IsDie"));
 
 ANearmannequinAIController::ANearmannequinAIController()
 {

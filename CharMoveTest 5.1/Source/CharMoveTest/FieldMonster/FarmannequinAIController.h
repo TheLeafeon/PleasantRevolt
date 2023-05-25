@@ -25,6 +25,7 @@ public:
 	static const FName TargetKey;
 	static const FName AreaPosKey;
 	static const FName AreaSizeKey;
+	static const FName IsDieKey;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI")
 	AFarmannequin* MyFarmannequin;

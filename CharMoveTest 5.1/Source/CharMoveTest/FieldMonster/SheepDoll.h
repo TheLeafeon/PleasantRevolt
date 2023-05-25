@@ -109,12 +109,12 @@ public:
 	//액터의 파티클 시스템 컴포넌트에 대한 참조 얻기
 	TArray<UParticleSystemComponent*> SheepDollParticleSystemComponents;
 
-	
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = Die, Meta = (AllowPrivateAccess = true))
+		bool isDie;
 
 private:
 
-	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = Die, Meta = (AllowPrivateAccess = true))
-	bool isDie;
+
 
 
 

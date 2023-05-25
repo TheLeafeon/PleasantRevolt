@@ -29,6 +29,7 @@ public:
 	static const FName SeeKey;
 	static const FName TrueKey;
 	static const FName StunKey;
+	static const FName IsDieKey;
 
 	UPROPERTY()
 	UBlackboardComponent* BlackboardComp;

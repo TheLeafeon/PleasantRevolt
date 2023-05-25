@@ -114,20 +114,11 @@ void ANearmannequin::AttackCheck()
 	NearmannequinAttackParticle();
 	NearmannequinAttackSound();
 
-	FHitResult HitResult;
 	TArray<FHitResult>HitResultArray;
 
 	FCollisionQueryParams Params(NAME_None, false, this);
-	bool bResult = GetWorld()->SweepSingleByChannel(
-		HitResult,
-		GetActorLocation(),
-		GetActorLocation() + GetActorForwardVector() * AttackRange,
-		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel3,
-		FCollisionShape::MakeSphere(AttackRadius),
-		Params);
 
-	GetWorld()->SweepMultiByChannel(HitResultArray, GetActorLocation(),
+	bool bResult = GetWorld()->SweepMultiByChannel(HitResultArray, GetActorLocation(),
 		GetActorLocation() + GetActorForwardVector() * AttackRange,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel3,
@@ -157,13 +148,16 @@ void ANearmannequin::AttackCheck()
 	{
 		for (const FHitResult& HitResults : HitResultArray)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("%d"), HitResultArray.Num()));
+
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Hit Result: %s"), *HitResults.GetActor()->GetName()));
+
 			AActor* HitActor = HitResults.GetActor();
 			if (HitActor->IsA(APlayerableCharacter::StaticClass()))
 			{
-				APlayerableCharacter* OtherActor = Cast<APlayerableCharacter>(HitResult.GetActor());
+				APlayerableCharacter* OtherActor = Cast<APlayerableCharacter>(HitActor);
 				if (OtherActor)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, TEXT("Nearmannequin Attack Hit"));
 					
 					NearmannequinApplyDamageEvent();
 				}
@@ -172,8 +166,6 @@ void ANearmannequin::AttackCheck()
 	}
 
 }
-
-
 
 
 void ANearmannequin::AttackTimer()
