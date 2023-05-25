@@ -523,6 +523,11 @@ void APlayerableCharacter::ThirdMeleeWeapon()
 //===============  Player Melee Attack =============== //
 void APlayerableCharacter::Attack_Melee()
 {
+	if (isLadder)
+	{
+		return;
+	}
+
 	if (CurrentWeapon == NULL)
 		return;
 
@@ -595,6 +600,11 @@ void APlayerableCharacter::EnableInputAfterRoll()
 
 void APlayerableCharacter::Rolling()
 {
+	if (isLadder)
+	{
+		return;
+	}
+
 	if (bIsRolling || (GetCharacterMovement()->IsFalling()))
 	{
 		return;
