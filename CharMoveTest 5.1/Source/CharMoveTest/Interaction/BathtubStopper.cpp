@@ -38,6 +38,8 @@ void ABathtubStopper::InteractWithMe()
 
 void ABathtubStopper::ShowInteractionWidget()
 {
+	if (isLaunch)
+		return;
 	InteractionWidget->SetVisibility(true);
 }
 
@@ -56,6 +58,9 @@ void ABathtubStopper::LaunchActor()
 
 	FVector LaunchVelocity = LaunchDirection * LaunchForce;
 	BathtubStopperMesh->AddImpulse(LaunchVelocity, NAME_None, true);
+
+	isLaunch = true;
+	HideInteractionWidget();
 }
 
 void ABathtubStopper::DeleteTarget()
