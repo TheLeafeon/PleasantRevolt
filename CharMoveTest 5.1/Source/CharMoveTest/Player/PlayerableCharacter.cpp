@@ -61,6 +61,7 @@ APlayerableCharacter::APlayerableCharacter()
 
 	// Player Status
 	Player_HP = 4.0f;
+	Player_MaxHP = 4.0f;
 	Player_Roll_Time = 600.0f;
 
 	// Player Dodge
@@ -295,6 +296,11 @@ void APlayerableCharacter::Tick(float DeltaTime)
 float APlayerableCharacter::Get_Player_HP()
 {
 	return Player_HP;
+}
+
+float APlayerableCharacter::Get_Player_MaxHP()
+{
+	return Player_MaxHP;
 }
 
 void APlayerableCharacter::Increase_Player_HP(float val)
