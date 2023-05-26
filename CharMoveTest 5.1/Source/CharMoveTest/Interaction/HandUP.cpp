@@ -22,8 +22,8 @@ void AHandUP::BeginPlay()
 	}
 
 	ExistingLocation = GetActorLocation();
-	BlockCollisionComponent->OnComponentHit.AddDynamic(this, &AHandUP::OnAttackHit);
-	BlockCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AHandUP::OnOverlapBegin);
+	//BlockCollisionComponent->OnComponentHit.AddDynamic(this, &AHandUP::OnAttackHit);
+	//BlockCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AHandUP::OnOverlapBegin);
 	//BlockCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &AHandUP::OnOverlapEnd);
 }
 
@@ -221,25 +221,4 @@ void AHandUP::BackDrop()
 		IsHandUp = false;
 		PlayerCharacter->IsHandUp = false;
 	}
-}
-
-void AHandUP::OnOverlapBegin(class UPrimitiveComponent* selfComp, class AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	ARespawnZone* Respawn = Cast<ARespawnZone>(otherActor);
-	if (Respawn)
-	{
-		SetActorLocation(ExistingLocation);
-	}
-
-	//IsOverlap = true;
-}
-
-void AHandUP::OnOverlapEnd(class UPrimitiveComponent* selfComp, class AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	IsOverlap = false;
-}
-
-void AHandUP::OnAttackHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	IsOverlap = true;
 }
