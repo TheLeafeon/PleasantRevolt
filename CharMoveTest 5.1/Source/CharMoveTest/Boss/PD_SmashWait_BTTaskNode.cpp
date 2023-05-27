@@ -7,16 +7,15 @@
 UPD_SmashWait_BTTaskNode::UPD_SmashWait_BTTaskNode()
 {
 	NodeName = TEXT("SmashWait");
-
-	static ConstructorHelpers::FObjectFinder<UBlueprint> BPD_FallDecal(TEXT("/Game/Boss/2Stage/PD_FallDecal.PD_FallDecal"));
-	if (BPD_FallDecal.Object)
-	{
-		PD_FallDecal = (UClass*)BPD_FallDecal.Object->GeneratedClass;
-	}
 }
 
 EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+	if (!PD_FallDecal)
+	{
+		return;
+	}
+
 	if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
 	{
 		//3페로 넘어가기
