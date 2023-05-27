@@ -22,9 +22,6 @@ void AHandUP::BeginPlay()
 	}
 
 	ExistingLocation = GetActorLocation();
-	//BlockCollisionComponent->OnComponentHit.AddDynamic(this, &AHandUP::OnAttackHit);
-	//BlockCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AHandUP::OnOverlapBegin);
-	//BlockCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &AHandUP::OnOverlapEnd);
 }
 
 // Called every frame
@@ -51,43 +48,8 @@ void AHandUP::InteractWithMe()
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("down"));
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-			{	
-				//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
-				BlockCollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
-
-				const FRotator Rotation = PlayerCharacter->GetActorRotation();
-				const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-				// get forward vector
-				const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 150;
-				
-				SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
-				SetActorRotation(/*FRotator(0, 0, GetActorRotation().Pitch)*/ PlayerCharacter->GetActorRotation());
-
-				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-					{
-						CollisionComponent->SetSimulatePhysics(true);
-
-						CollisionComponent->AddImpulse(GetActorForwardVector() * 300, "None", true);
-
-						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-						GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-							{
-								//CollisionComponent->SetSimulatePhysics(false);
-								IsDown = true;
-
-								if (IsMirror)
-								{
-									SetMirrorHandUp();
-								}
-
-								GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-							}), 1.5f, false);
-					}), 0.15f, false);
-					
-			}), 0.65f, false);
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AHandUP::Down1, 0.65f, false);
 			
 		HandUpAni(false);
 
@@ -150,25 +112,8 @@ void AHandUP::Drop()
 		SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
 		SetActorRotation(FRotator(0, 0, GetActorRotation().Yaw));
 
-
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-			{
-				CollisionComponent->SetSimulatePhysics(true);
-
-				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-					{
-						IsDown = true;
-						
-						if (IsMirror)
-						{
-							SetMirrorHandUp();
-						}
-
-						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-					}), 1.5f, false);
-			}), 0.2f, false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AHandUP::Down2, 0.15f, false);
 
 		HandUpAni(false);
 
@@ -196,29 +141,60 @@ void AHandUP::BackDrop()
 		SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
 		SetActorRotation(FRotator(0, 0, GetActorRotation().Yaw));
 
-
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-			{
-				CollisionComponent->SetSimulatePhysics(true);
-
-				GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-				GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-					{
-						IsDown = true;
-						
-						if (IsMirror)
-						{
-							SetMirrorHandUp();
-						}
-
-						GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-					}), 1.5f, false);
-			}), 0.2f, false);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AHandUP::BackDown, 0.15f, false);
 
 		HandUpAni(false);
 
 		IsHandUp = false;
 		PlayerCharacter->IsHandUp = false;
 	}
+}
+
+void AHandUP::Down1()
+{
+	BlockCollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
+
+	const FRotator Rotation = PlayerCharacter->GetActorRotation();
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	// get forward vector
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 150;
+
+	SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
+	SetActorRotation(PlayerCharacter->GetActorRotation());
+
+
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AHandUP::Down2, 0.15f, false);
+}
+
+void AHandUP::Down2()
+{
+	CollisionComponent->SetSimulatePhysics(true);
+	CollisionComponent->AddImpulse(GetActorForwardVector() * 300, "None", true);
+
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AHandUP::Down3, 1.5f, false);
+}
+
+void AHandUP::Down3()
+{
+	IsDown = true;
+	
+	if (IsMirror)
+	{
+		SetMirrorHandUp();
+	}
+
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+}
+
+void AHandUP::BackDown()
+{
+	CollisionComponent->SetSimulatePhysics(true);
+	CollisionComponent->AddImpulse(GetActorForwardVector() * -100, "None", true);
+
+	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AHandUP::Down3, 1.5f, false);
 }

@@ -56,6 +56,11 @@ private:
 
 	bool IsDown;
 
+	void Down1();
+	void Down2();
+	void Down3();
+	void BackDown();
+
 public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
 	void HandUpAni(bool value);
