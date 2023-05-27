@@ -43,6 +43,10 @@ public:
 
 
 	UFUNCTION(BlueprintCallable)
+		void Wave1Spawn();
+
+
+	UFUNCTION(BlueprintCallable)
 		void Wave2Spawn();
 
 	UFUNCTION(BlueprintCallable)
