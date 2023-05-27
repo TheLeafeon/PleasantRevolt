@@ -73,6 +73,6 @@ void AFPSProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 
 void AFPSProjectile::OnCollision(const FHitResult& HitResult)
 {
-    Destroy();
+    //Destroy();
 }
 

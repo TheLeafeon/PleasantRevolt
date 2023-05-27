@@ -59,7 +59,7 @@ public:
 	//Wave3가 시작되었는지
 	bool Wave3Start;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	bool AreaClear;
 
 	//Area의 Wave 수 설정
@@ -68,6 +68,7 @@ public:
 
 private:
 
+	UPROPERTY(VisibleAnywhere)
 	bool firstIn;
 
 	float currentTime;

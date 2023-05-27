@@ -12,7 +12,7 @@ AMovingBasket::AMovingBasket()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	InterpSpeed = 5.0f;
+	InterpSpeed = 500.0f;
 
 	BasketComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Basket"));
 	BasketComp->SetupAttachment(RootComponent);
@@ -98,6 +98,11 @@ void AMovingBasket::Tick(float DeltaTime)
 
 void AMovingBasket::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+}
+
+void AMovingBasket::BasketMove()
+{//로프 끊어지는 부분까지 이동
+	
 }
 
 

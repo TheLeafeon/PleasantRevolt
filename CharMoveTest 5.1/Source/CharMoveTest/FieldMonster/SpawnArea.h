@@ -26,11 +26,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = "SpawnMonster")
 		TArray<AMonsterSpawnActor*> AreaSpawnMonsterArray;
 
-	UPROPERTY(EditAnywhere, Category = "FieldArea")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "FieldArea")
 	AFieldArea* MyFieldArea;
 
-	UPROPERTY(EditAnywhere, Category = "When Spawn?")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "When Spawn?")
 		bool isBeginOverlapMonsterSpawn;
+
+
+	UFUNCTION(BlueprintCallable)
+	void MonsterSpawn();
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+		bool myAreaClear;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool firstIn;
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,8 +51,6 @@ public:
 
 private:
 
-
-	bool firstIn;
 
 	float currentTime;
 

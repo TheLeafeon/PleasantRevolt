@@ -46,6 +46,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Basket")
 	UStaticMeshComponent* BasketComp;
 
+	UFUNCTION(BlueprintCallable)
+		void BasketMove();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void GoToStudioLevel();
