@@ -295,4 +295,5 @@ public:
 	//Boss°ü·Ã
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boss")
 	int32 WeaponNumber;
+	bool IsStop;
 };

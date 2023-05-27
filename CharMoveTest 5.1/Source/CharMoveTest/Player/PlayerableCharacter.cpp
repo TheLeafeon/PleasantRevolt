@@ -14,7 +14,7 @@
 
 // Sets default values
 APlayerableCharacter::APlayerableCharacter()
-	: LadderMoveSpeed(5.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false), WeaponNumber(0)
+	: LadderMoveSpeed(5.0f), SaveZLocation(0.0f), StopLadderMove(false), LadderStart(false), WeaponNumber(0), IsStop(false)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -131,6 +131,11 @@ void APlayerableCharacter::LookUpAtRate(float Rate)
 
 void APlayerableCharacter::MoveForward(float Value)
 {
+	if (IsStop)
+	{
+		return;
+	}
+
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
 		if (LadderStart == false)
@@ -155,6 +160,11 @@ void APlayerableCharacter::MoveForward(float Value)
 
 void APlayerableCharacter::MoveRight(float Value)
 {
+	if (IsStop)
+	{
+		return;
+	}
+
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
 		if (LadderStart == false)
@@ -523,6 +533,11 @@ void APlayerableCharacter::ThirdMeleeWeapon()
 //===============  Player Melee Attack =============== //
 void APlayerableCharacter::Attack_Melee()
 {
+	if (IsStop)
+	{
+		return;
+	}
+
 	if (isLadder)
 	{
 		return;
@@ -600,6 +615,11 @@ void APlayerableCharacter::EnableInputAfterRoll()
 
 void APlayerableCharacter::Rolling()
 {
+	if (IsStop)
+	{
+		return;
+	}
+
 	if (isLadder)
 	{
 		return;
