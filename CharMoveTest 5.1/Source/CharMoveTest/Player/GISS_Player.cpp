@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "GISS_Player.h"
 #include "PlayerableCharacter.h"
 #include "PlayerTestMapGM.h"
-#include "GISS_Player.h"
 
 UGISS_Player::UGISS_Player()
 {

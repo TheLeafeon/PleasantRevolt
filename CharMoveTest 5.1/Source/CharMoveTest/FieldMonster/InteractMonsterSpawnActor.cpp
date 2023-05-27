@@ -36,6 +36,9 @@ void AInteractMonsterSpawnActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	if (MyArea == nullptr)
+		return;
+
 	numberOfMonstersDefeafed = MyArea->numberOfMonstersDefeafed;
 	if (numberOfMonstersDefeafed != 0 && numberOfMonstersDefeafed == SpawnMonsterArray.Num() && AreaClear == false)
 	{
@@ -48,7 +51,14 @@ void AInteractMonsterSpawnActor::Tick(float DeltaTime)
 
 void AInteractMonsterSpawnActor::InteractWithMe()
 {
-	
+	if (Weapon != nullptr)
+	{
+		giveWeaponToPlayer();
+	}
+
+	if (MyArea == nullptr)
+		return;
+
 	if (!bIsMonsterSpawned)
 	{
 		bIsMonsterSpawned = true;
@@ -62,11 +72,6 @@ void AInteractMonsterSpawnActor::InteractWithMe()
 		for (int ArrayCount = 0; ArrayCount < SpawnMonsterArray.Num(); ArrayCount++)
 		{
 			SpawnMonsterArray[ArrayCount]->MonsterSpawn();
-		}
-
-		if (Weapon != nullptr)
-		{
-			giveWeaponToPlayer();
 		}
 
 		BattleStart();

@@ -79,7 +79,10 @@ private :
 //****************************************************//
 
 private :
+	UGameViewportClient* ViewportClient;
+
 	void LookMousePosition();
+	FVector ConvertMouseLocationToWorld(const FVector2D& MousePosition);
 
 private :
 	// 플레이어의 애니메이션을 저장해둔 것
@@ -122,7 +125,9 @@ public :
 /* Player Status */
 private :
 	UPROPERTY(EditAnywhere, Category = "Status")
-		float Player_HP;
+		float Player_HP; 
+	UPROPERTY(EditAnywhere,Category = "Status")
+		float Player_MaxHP;
 	UPROPERTY(EditAnywhere, Category = "Status")
 		float Player_Roll_Time;
 
@@ -148,6 +153,8 @@ public :
 	// 플레이어의 체력을 밖으로 보내기 위위해서 작성
 	UFUNCTION(BlueprintCallable, Category = "Status")
 		float Get_Player_HP();
+	UFUNCTION(BlueprintCallable, Category = "Status")
+		float Get_Player_MaxHP();
 	// 플레이어의 체력이 증가하는지 확인
 	UFUNCTION(BlueprintCallable, Category = "Status")
 		void Increase_Player_HP(float val);
