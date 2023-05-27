@@ -29,5 +29,7 @@ private:
 	APD_LeftArm* LArm;
 	APD_RightArm* RArm;
 
+public:
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<class APawn> PD_FallDecal;
 };
