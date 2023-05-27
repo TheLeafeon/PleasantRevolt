@@ -34,6 +34,7 @@ ANearmannequin::ANearmannequin()
 
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
+
 }
 
 void ANearmannequin::BeginPlay()
