@@ -79,7 +79,10 @@ private :
 //****************************************************//
 
 private :
+	UGameViewportClient* ViewportClient;
+
 	void LookMousePosition();
+	FVector ConvertMouseLocationToWorld(const FVector2D& MousePosition);
 
 private :
 	// 플레이어의 애니메이션을 저장해둔 것

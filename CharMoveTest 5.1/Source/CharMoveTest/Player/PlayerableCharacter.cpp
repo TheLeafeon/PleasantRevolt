@@ -2,6 +2,7 @@
 
 #include "PlayerableCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/GameViewportClient.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -190,44 +191,14 @@ bool APlayerableCharacter::bCanAction()
 	return result;
 }
 
-void APlayerableCharacter::LookMousePosition()
-{
-	FHitResult HitResult;
-	bool isHitResult = PlayerController->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true, HitResult);
-
-	if (isHitResult)
-	{
-		FVector MouseLocation = HitResult.Location;
-		MouseLocation *= FVector(1.0f, 1.0f, 0.0f);
-		FVector ActorLocation = GetActorLocation();
-		ActorLocation *= FVector(1.0f, 1.0f, 0.0f);
-
-		FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(ActorLocation, MouseLocation);
-
-		SetActorRotation(Rotator);
-	}
-}
-
-void APlayerableCharacter::TimelineProgress(float Value)
-{
-	// Interpolate between the start and end rotations based on the current value of the timeline
-	FRotator NewRotation = FMath::Lerp(StartRotation, EndRotation, Value);
-
-	if (Value >= 1.0f)
-	{
-		bIsRolling = false;
-	}
-
-	// Set the rotation of your character to the interpolated value
-	SetActorRotation(NewRotation);
-}
-
 void APlayerableCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	PlayerController->bShowMouseCursor = true;
+
+	ViewportClient = GetWorld()->GetGameViewport();
 
 	AnimInstance = Cast<UPlayerAnimInstnce>(GetMesh()->GetAnimInstance());
 	if (nullptr == AnimInstance)
@@ -253,6 +224,38 @@ void APlayerableCharacter::BeginPlay()
 	InteractionBox->OnComponentEndOverlap.AddDynamic(this, &APlayerableCharacter::OnBoxEndOverlap);
 }
 
+void APlayerableCharacter::LookMousePosition()
+{
+	FVector2D ViewportSize = FVector2D(0.0f, 0.0f);
+	ViewportClient->GetViewportSize(ViewportSize);
+
+	FVector2D ScreenCenter = ViewportSize / 2.0f;
+	FVector2D MousePosition = FVector2D(0.0f, 0.0f);
+	ViewportClient->GetMousePosition(MousePosition);
+
+	FVector2D MouseDirection = MousePosition - ScreenCenter;
+	MouseDirection.Normalize();
+	FVector Direction = FVector(MouseDirection.X, MouseDirection.Y, 0.0f);
+
+	FRotator PlayerRotation = Direction.Rotation();
+	PlayerRotation.Yaw += 90.0f;
+	SetActorRotation(PlayerRotation);
+}
+
+void APlayerableCharacter::TimelineProgress(float Value)
+{
+	// Interpolate between the start and end rotations based on the current value of the timeline
+	FRotator NewRotation = FMath::Lerp(StartRotation, EndRotation, Value);
+
+	if (Value >= 1.0f)
+	{
+		bIsRolling = false;
+	}
+
+	// Set the rotation of your character to the interpolated value
+	SetActorRotation(NewRotation);
+}
+
 void APlayerableCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -260,7 +263,6 @@ void APlayerableCharacter::Tick(float DeltaTime)
 	if (GetWorld()->GetTimerManager().IsTimerActive(RollTimerHandle))
 	{
 		RemainingTime = GetWorld()->GetTimerManager().GetTimerRemaining(RollTimerHandle);
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Debug : %f"), RemainingTime));
 		if (RemainingTime <= 0.0f)
 		{
 			EnableInputAfterRoll();
@@ -492,8 +494,6 @@ void APlayerableCharacter::SwapWeapon()
 	if (!bCanAction() && CurrentWeapon == NULL)
 		return;
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf(TEXT("Debug : %f"),
-		MeleeWeaponsArray.Num()));
 	if (MeleeWeaponsArray.Num() == 1)
 		return;
 
@@ -628,8 +628,6 @@ void APlayerableCharacter::Rolling()
 
 	Crouch();
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString::Printf( TEXT("Debug : %f"), timer ));
-
 	GetWorld()->GetTimerManager().SetTimer(RollTimerHandle, this, &APlayerableCharacter::EnableInputAfterRoll, timer, false);
 	DodgeStart(timer);
 }
@@ -639,7 +637,6 @@ void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp
 	//항상 첫번째로 들어온 상호작용만 반응하게
 	if (!Interface)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, OtherActor->GetName());
 		Interface = Cast<IInteractionInterface>(OtherActor);
 	}
 
@@ -657,7 +654,6 @@ void APlayerableCharacter::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, 
 		if (!IsHandUp)
 		{
 			Interface = nullptr;
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, OtherActor->GetName());
 		}
 	}
 }
