@@ -2,7 +2,6 @@
 
 #include "PlayerableCharacter.h"
 #include "Kismet/GameplayStatics.h"
-#include "Engine/GameViewportClient.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"

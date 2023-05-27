@@ -6,6 +6,7 @@
 #include "PlayerAnimInstnce.h"
 #include "InteractionInterface.h"
 #include "WeaponInterface.h"
+#include "Engine/GameViewportClient.h"
 #include "WeaponBase.h"
 #include "GISS_Player.h"
 #include "Components/BoxComponent.h"
