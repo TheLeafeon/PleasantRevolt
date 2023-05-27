@@ -10,6 +10,7 @@
 #include "Sound/SoundBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "CharMoveTest/Player/PlayerableCharacter.h"
 #include "Boss_Character.generated.h"
 
 UCLASS()
@@ -38,6 +39,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Status")
 	float MaxBossHP;
 	FTimerHandle TimerHandle;
+	FTimerHandle TimerHandle2;
+
+	void SpawnArm();
+	void GoNextLevel();
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -56,9 +61,14 @@ private:
 	//액터의 파티클 시스템 컴포넌트에 대한 참조 얻기
 	TArray<UParticleSystemComponent*> ParticleSystemComponents;
 
+	APlayerableCharacter* Player;
+
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void HitEffect();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AActor> FallObj_Spawn_Blueprint;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> Arm_Blueprint;
 };

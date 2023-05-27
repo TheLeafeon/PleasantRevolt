@@ -14,7 +14,8 @@ ABoss_Character::ABoss_Character() : BossHP(20.0f), MaxBossHP(20.0f), isSpawn(fa
 void ABoss_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Player = Cast<APlayerableCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 // Called every frame
@@ -77,7 +78,7 @@ void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, 
 
 void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
-	//ABossAIController::PauseBehaviorTree();
+	Player->IsStop = true;
 	SetActorTickEnabled(false); //비헤이비어 트리를 중지
 
 	//파티클 삭제
@@ -95,10 +96,8 @@ void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, 
 	SpawnDanger->Destroy();
 	GetController()->Destroy();
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-		{
-			UGameplayStatics::OpenLevel(this, FName("stage2_start_cinematic"));
-		}), 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &ABoss_Character::SpawnArm, 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Character::GoNextLevel, 5.5f, false);
 }
 
 void ABoss_Character::HPHalf()
@@ -117,4 +116,19 @@ void ABoss_Character::HPHalf()
 			SpawnDanger = world->SpawnActor<AActor>(FallObj_Spawn_Blueprint, SpawnLocation, rotator, SpawnParams);
 		}
 	}
+}
+
+void ABoss_Character::SpawnArm()
+{
+	UWorld* world = GetWorld();
+	if (world)
+	{
+		world->SpawnActor<AActor>(Arm_Blueprint, FVector(9428.0f, 12150.0f, -5950.0f), FRotator(0.0f, 215.0f, 0.0f));
+	}
+}
+
+void ABoss_Character::GoNextLevel()
+{
+	Player->IsStop = false;
+	UGameplayStatics::OpenLevel(this, FName("stage2_start_cinematic"));
 }
