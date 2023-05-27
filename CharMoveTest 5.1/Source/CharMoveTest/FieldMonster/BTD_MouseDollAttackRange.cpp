@@ -26,6 +26,11 @@ bool UBTD_MouseDollAttackRange::CalculateRawConditionValue(UBehaviorTreeComponen
 	if (nullptr == Target)
 		return false;
 
-	bResult = (Target->GetDistanceTo(ControllingPawn) <= 300.0f);
+
+	FVector PawnForwardVector = ControllingPawn->GetActorForwardVector();
+	FVector DirectionToTarget = Target->GetActorLocation() - ControllingPawn->GetActorLocation();
+	float DotProduct = FVector::DotProduct(PawnForwardVector, DirectionToTarget);
+	bResult = (DotProduct > 0.0f && Target->GetDistanceTo(ControllingPawn) <= 300.0f);
+
 	return bResult;
 }
