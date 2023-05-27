@@ -164,7 +164,6 @@ void AHandUP::Down1()
 	SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
 	SetActorRotation(PlayerCharacter->GetActorRotation());
 
-
 	GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AHandUP::Down2, 0.15f, false);
 }
