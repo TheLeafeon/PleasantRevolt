@@ -71,9 +71,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsMirror;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "HandUp")
 	void SetMirrorHandUp();
-	UFUNCTION(BlueprintImplementableEvent, Category = "HandUp")
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "HandUp")
 	void DestroyMirrorHandUp();
 
 	UPROPERTY(BlueprintReadWrite)
