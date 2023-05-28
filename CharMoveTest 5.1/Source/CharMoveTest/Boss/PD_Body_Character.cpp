@@ -84,8 +84,10 @@ void APD_Body_Character::Die(float KillingDamage, FDamageEvent const& DamageEven
 	GetMesh()->SetSimulatePhysics(true);
 	GetController()->Destroy();
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([&]()
-		{
-			UGameplayStatics::OpenLevel(this, FName("stage2_boss_cinematic"));
-		}), 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APD_Body_Character::GoNextLevel, 3.0f, false);
+}
+
+void APD_Body_Character::GoNextLevel()
+{
+	NextLevelBP();
 }

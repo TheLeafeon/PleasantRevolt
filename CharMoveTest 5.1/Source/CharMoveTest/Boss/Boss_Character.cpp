@@ -130,5 +130,6 @@ void ABoss_Character::SpawnArm()
 void ABoss_Character::GoNextLevel()
 {
 	Player->IsStop = false;
-	UGameplayStatics::OpenLevel(this, FName("stage2_start_cinematic"));
+	//UGameplayStatics::OpenLevel(this, FName("stage2_start_cinematic"));
+	NextLevelBP();
 }
