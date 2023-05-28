@@ -304,11 +304,9 @@ void AMidBossmannequin::Die(float KillingDamage, FDamageEvent const& DamageEvent
 		SpawnKey();
 		SetDoor(false);
 	}
-	else
-	{
-		//문 막은거 풀림
-		SetDoor(true);
-	}
+
+	//문 막은거 풀림
+	SetDoor(true);
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 
