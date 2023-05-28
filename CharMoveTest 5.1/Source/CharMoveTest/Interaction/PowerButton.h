@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CharMoveTest/Player/InteractionInterface.h"
 #include "GameFramework/Actor.h"
+#include "CharMoveTest/Interaction/Stand.h"
 #include "Engine/DirectionalLight.h"
 #include "Components/WidgetComponent.h"
 #include "CharMoveTest/FieldMonster/MonsterSpawnActor.h"
@@ -29,8 +30,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	USceneComponent* _RootComponent;
 
-	UPROPERTY(EditAnywhere , BlueprintReadOnly)
-	ADirectionalLight* LinkDirectionalLight;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	AStand* LinkStand;
+
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void PowerButtonInteraction();
