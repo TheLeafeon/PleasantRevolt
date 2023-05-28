@@ -28,6 +28,8 @@ void AStand::InteractWithMe()
 		StandMove = true;
 		StandRotation();
 		DuckDoll->FallDoll();
+
+		HideInteractionWidget();
 	}
 }
 
