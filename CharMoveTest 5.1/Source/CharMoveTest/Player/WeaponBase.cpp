@@ -38,12 +38,12 @@ AWeaponBase::AWeaponBase()
 	WeaponName = "";
 	isAttacking = false;
 
-	TraceInterval = 0.02f;
+	TraceInterval = 0.01f;
 	TraceLastTime = TraceInterval;
 
 	MyPawn = Cast<APlayerableCharacter>(StaticClass());
 
-	TraceRadius = 60.0f;
+	TraceRadius = 80.0f;
 
 	CollisionParams.bTraceComplex = true;
 	CollisionParams.bReturnPhysicalMaterial = false;
@@ -91,7 +91,7 @@ void AWeaponBase::WeaponTrace()
 	TArray<FHitResult> HitResults;
 	FVector StartLocation = NearWeaponMesh->GetSocketLocation("StartSocket");
 	FVector EndLocation = NearWeaponMesh->GetSocketLocation("EndSocket");
-
+	EndLocation *= 3.0f;
 	bool isHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Camera, FCollisionShape::MakeSphere(TraceRadius), CollisionParams);
 
 	if (isHit)
