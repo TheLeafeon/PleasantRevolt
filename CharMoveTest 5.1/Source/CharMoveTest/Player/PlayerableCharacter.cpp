@@ -397,6 +397,7 @@ void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEv
 	bisDie = true;
 
 	HitDrop();
+	PlaySoundDie();
 
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
 
@@ -425,6 +426,17 @@ void APlayerableCharacter::Die(float KillingDamage, FDamageEvent const& DamageEv
 	float DeathAnimDuration = AnimInstance->Death_AnimMontage->GetPlayLength();
 
 	GetWorldTimerManager().SetTimer(DeathTimerHandle, this, &APlayerableCharacter::DeathEnd, DeathAnimDuration, false);
+}
+
+void APlayerableCharacter::PlaySoundDie()
+{
+	USoundBase* SoundResource = LoadObject<USoundBase>(nullptr, TEXT("/Game/PlayerTest/Player/Sounds/PC_Death"));
+
+	if (SoundResource)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
+		UGameplayStatics::PlaySound2D(GetWorld(), SoundResource);
+	}
 }
 
 void APlayerableCharacter::DeathEnd()
@@ -532,6 +544,16 @@ void APlayerableCharacter::UnEquipSubWeapon()
 	CurrentSubWeapon->GetWeponMesh()->SetHiddenInGame(true);
 }
 
+void APlayerableCharacter::PlaySoundAttack()
+{
+	USoundBase* SoundResource = LoadObject<USoundBase>(nullptr, TEXT("/Game/PlayerTest/Player/Sounds/PC_Attack"));
+
+	if (SoundResource)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), SoundResource);
+	}
+}
+
 void APlayerableCharacter::FirstMeleeWeapon()
 {
 	//SwitchWeapon(FIRST_WEAPON);
@@ -567,6 +589,7 @@ void APlayerableCharacter::Attack_Melee()
 		if (currentCombo < maxCombo)
 		{
 			LookMousePosition();
+			PlaySoundAttack();
 			FString PlayerSection = "Attack_" + FString::FromInt(currentCombo);
 			PlayAnimMontage(CurrentWeaponComboAnim, 1.0f, FName(*PlayerSection));
 			currentCombo++;
@@ -683,7 +706,6 @@ void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp
 	//항상 첫번째로 들어온 상호작용만 반응하게
 	if (!Interface)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, OtherActor->GetName());
 		Interface = Cast<IInteractionInterface>(OtherActor);
 	}
 

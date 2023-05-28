@@ -83,8 +83,6 @@ private :
 	UGameViewportClient* ViewportClient;
 
 	void LookMousePosition();
-	FVector ConvertMouseLocationToWorld(const FVector2D& MousePosition);
-
 private :
 	// 플레이어의 애니메이션을 저장해둔 것
 	UPlayerAnimInstnce* AnimInstance;
@@ -166,6 +164,7 @@ public :
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	// 플레이어 사망
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
+	void PlaySoundDie();
 	// 플레이어 사망 애니메이션 종료 시 발생하는 함수
 	void DeathEnd();
 	//플레이어 사망 애니메이션 이후 레벨 재시작 하는 함수
@@ -234,6 +233,7 @@ private :
 	void ThirdMeleeWeapon();
 	void EquipSubWeapon();
 	void UnEquipSubWeapon();
+	void PlaySoundAttack();
 	int32 maxCombo;
 	FTimerHandle NextComboTimerHandle;
 
