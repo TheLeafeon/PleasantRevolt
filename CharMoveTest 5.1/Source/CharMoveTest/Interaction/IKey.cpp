@@ -48,6 +48,7 @@ void AIKey::InteractWithMe()
 	{
 		IsGet = true;
 		CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+		CollisionComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 
 		HideInteractionWidget();
 	}

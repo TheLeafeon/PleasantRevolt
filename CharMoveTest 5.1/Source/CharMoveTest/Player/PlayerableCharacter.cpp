@@ -656,6 +656,7 @@ void APlayerableCharacter::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp
 	//항상 첫번째로 들어온 상호작용만 반응하게
 	if (!Interface)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, OtherActor->GetName());
 		Interface = Cast<IInteractionInterface>(OtherActor);
 	}
 
