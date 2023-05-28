@@ -21,12 +21,17 @@ public:
 	/* Interaction Interface 속 함수 재정의  */
 	virtual void InteractWithMe() override;
 	virtual void ShowInteractionWidget() override;
+	virtual void HideInteractionWidget() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* InteractionSampleMesh;
 
 	UPROPERTY(EditAnywhere)
 		USceneComponent* _RootComponent;
+
+
+	UPROPERTY(EditAnywhere)
+		UWidgetComponent* InteractionWidget;
 
 	UPROPERTY(EditAnywhere, Category = "DuckDoll")
 	class ABigDoll* DuckDoll;
@@ -45,8 +50,4 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(EditAnywhere)
-	UWidgetComponent* InteractionWidget;
-
-	virtual void HideInteractionWidget() override;
 };

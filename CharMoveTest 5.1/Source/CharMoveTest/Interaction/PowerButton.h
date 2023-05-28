@@ -23,6 +23,7 @@ public:
 	/* Interaction Interface 속 함수 재정의  */
 	virtual void InteractWithMe() override;
 	virtual void ShowInteractionWidget() override;
+	virtual void HideInteractionWidget() override;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	UStaticMeshComponent* InteractionSampleMesh;
@@ -32,6 +33,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	AStand* LinkStand;
+
+	UPROPERTY(EditAnywhere)
+		UWidgetComponent* InteractionWidget;
 
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
@@ -49,9 +53,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(EditAnywhere)
-	UWidgetComponent* InteractionWidget;
-
-	virtual void HideInteractionWidget() override;
 
 };
