@@ -86,6 +86,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void MidBossmannequinHitmaterial();
 
+	//피격시 머터리얼 변경
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MidBossmannequinBGMOff();
+
 	void OutRangeAttackEnd();
 
 

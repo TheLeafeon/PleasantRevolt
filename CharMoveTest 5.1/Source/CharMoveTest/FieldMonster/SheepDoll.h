@@ -88,6 +88,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SheepDollRushParticle();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SheepDollHitSound();
+
 	//ÇÇ°Ý ½Ã ±ôºýÀÓ
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SheepDollHitMaterial();
