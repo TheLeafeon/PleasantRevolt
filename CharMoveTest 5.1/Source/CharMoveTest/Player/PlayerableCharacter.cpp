@@ -84,6 +84,7 @@ APlayerableCharacter::APlayerableCharacter()
 
 	Interface = nullptr;
 	WeaponInterface = nullptr;
+	SubWeaponInterface = nullptr;
 }
 
 // Called to bind functionality to input
@@ -204,7 +205,7 @@ void APlayerableCharacter::BeginPlay()
 	if (nullptr == AnimInstance)
 		return;
 
-	SpawnParams.Owner = this;
+	//SpawnParams.Owner = this;
 
 	MeleeWeaponsArray.Empty();
 
@@ -214,6 +215,13 @@ void APlayerableCharacter::BeginPlay()
 	MeleeWeaponsArray = gissPlayer->WeaponActors;
 
 	AddWeapons();
+
+	//FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	CurrentSubWeapon = GetWorld()->SpawnActor<AWeaponBase>(SubWeapon, SpawnParams);
+	CurrentSubWeapon->GetWeponMesh()->SetHiddenInGame(true);
+	CurrentSubWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponSocket_l"));
 
 	// initialize the timeline and the curve float
 	RollTimeline.SetLooping(false);
@@ -464,10 +472,13 @@ void APlayerableCharacter::SwitchWeapon(int32 WeaponIndex)
 		CurrentWeapon = NextWeapon;
 		CurrentWeapon->GetWeponMesh()->SetHiddenInGame(false);
 
-		//if (WeaponIndex == THIRD_WEAPON)
-		//	EquipSubWeapon();
-		//else
-		//	UnEquipSubWeapon();
+		if (CurrentSubWeapon != nullptr)
+		{
+			if (WeaponIndex == THIRD_WEAPON)
+				EquipSubWeapon();
+			else
+				UnEquipSubWeapon();
+		}
 
 		if (WeaponIndex == FIRST_WEAPON)
 		{
@@ -558,21 +569,37 @@ void APlayerableCharacter::Attack_Melee()
 
 void APlayerableCharacter::Enable_Attack_Enemy()
 {
-	WeaponInterface = Cast<IWeaponInterface>(CurrentWeapon);
+	if (CurrentWeapon == nullptr)
+		return;
 
+	WeaponInterface = Cast<IWeaponInterface>(CurrentWeapon);
 	if (WeaponInterface)
 	{
 		WeaponInterface->Enable_Attack_Enemy();
+	}
+
+	SubWeaponInterface = Cast<IWeaponInterface>(CurrentSubWeapon);
+	if (SubWeaponInterface)
+	{
+		SubWeaponInterface->Enable_Attack_Enemy();
 	}
 }
 
 void APlayerableCharacter::Disable_Attack_Enemy()
 {
-	WeaponInterface = Cast<IWeaponInterface>(CurrentWeapon);
+	if (CurrentWeapon == nullptr)
+		return;
 
+	WeaponInterface = Cast<IWeaponInterface>(CurrentWeapon);
 	if (WeaponInterface)
 	{
 		WeaponInterface->Disable_Attack_Enemy();
+	}
+
+	SubWeaponInterface = Cast<IWeaponInterface>(CurrentSubWeapon);
+	if (SubWeaponInterface)
+	{
+		SubWeaponInterface->Disable_Attack_Enemy();
 	}
 }
 

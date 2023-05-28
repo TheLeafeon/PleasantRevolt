@@ -192,6 +192,7 @@ public :
 private :
 	// Weapon관련 interface
 	IWeaponInterface* WeaponInterface;
+	IWeaponInterface* SubWeaponInterface;
 
 	// Weapon 객체 보관 배열
 	UPROPERTY(EditAnywhere, Category = "Weapons")
