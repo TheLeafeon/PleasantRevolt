@@ -50,6 +50,7 @@ void AStand::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	InteractionWidget->SetVisibility(false);
 }
 
 // Called every frame
