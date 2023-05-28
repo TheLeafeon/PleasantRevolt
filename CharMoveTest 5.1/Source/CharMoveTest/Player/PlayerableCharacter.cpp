@@ -144,7 +144,14 @@ void APlayerableCharacter::MoveForward(float Value)
 		{
 			if (isLadder)
 			{
-				LadderMove(Value);
+				if (GetCharacterMovement()->MovementMode == EMovementMode::MOVE_Flying)
+				{
+					LadderMove(Value);
+				}
+				else
+				{
+					SetLadderMoveFalse();
+				}
 			}
 			else
 			{
