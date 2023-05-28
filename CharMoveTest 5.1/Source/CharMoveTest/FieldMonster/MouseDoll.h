@@ -59,6 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void MouseDollDeathKnockBack();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MouseDollHitSound();
+
 	//ÇÇ°Ý ½Ã ±ôºýÀÓ
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void MouseDollHitMaterial();

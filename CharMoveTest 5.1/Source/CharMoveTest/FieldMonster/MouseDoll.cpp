@@ -239,6 +239,7 @@ float AMouseDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 		}
 		else
 		{
+			MouseDollHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}

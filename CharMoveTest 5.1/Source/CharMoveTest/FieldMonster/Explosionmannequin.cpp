@@ -91,8 +91,9 @@ void AExplosionmannequin::DeathTimer()
 
 void AExplosionmannequin::ExplosionReady()
 {
+	
 	ExplosionReadyMaterial();
-
+	ExplosionReadyMaterialChange();
 	FTimerHandle ExplosionTimerHandle;
 	FTimerDelegate ExplosionTimerDelegate = FTimerDelegate::CreateUObject(this, &AExplosionmannequin::Explosion);
 	GetWorldTimerManager().SetTimer(ExplosionTimerHandle, ExplosionTimerDelegate, 3.0f, false);
@@ -159,12 +160,14 @@ float AExplosionmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEv
 			//기본으로 제공해주는 Ragdoll용 CollisionProfile로 설정
 			GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
 			GetMesh()->SetSimulatePhysics(true);
+
+			isDie = true;
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
 		}
 		else
 		{
 			ExplosionmannequinHitSound();
-			ExplosionmannequinHitmaterial();
+			
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}
@@ -176,7 +179,7 @@ void AExplosionmannequin::OnHit(float DamageTaken, FDamageEvent const& DamageEve
 {
 	if (DamageTaken > 0.0f)
 	{
-
+		ExplosionmannequinHitmaterial();
 		ApplyDamageMomentum(DamageTaken, DamageEvent, PawnInstigator, DamageCauser);
 	}
 }
@@ -184,12 +187,18 @@ void AExplosionmannequin::OnHit(float DamageTaken, FDamageEvent const& DamageEve
 void AExplosionmannequin::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
 	Monster_HP = FMath::Min(0.0f, Monster_HP);
-	isDie = true;
+	
 
 	UDamageType const* const DamageType = DamageEvent.DamageTypeClass ? Cast<const UDamageType>(DamageEvent.DamageTypeClass->GetDefaultObject()) : GetDefault<UDamageType>();
 
 	GetWorldTimerManager().ClearAllTimersForObject(this);
-	ExplosionReady();
+	
+
+
+	FTimerHandle ExplosionReadyTimerHandle;
+	FTimerDelegate ExplosionReadyTimerDelegate = FTimerDelegate::CreateUObject(this, &AExplosionmannequin::ExplosionReady);
+	GetWorldTimerManager().SetTimer(ExplosionReadyTimerHandle, ExplosionReadyTimerDelegate, 1.0f, false);
+	//ExplosionReady();
 
 	
 }

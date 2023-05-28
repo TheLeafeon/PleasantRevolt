@@ -269,6 +269,7 @@ float AMidBossmannequin::TakeDamage(float Damage, FDamageEvent const& DamageEven
 			GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
 			GetMesh()->SetSimulatePhysics(true);
 			MidBossmannequinDeathSound();
+			MidBossmannequinBGMOff();
 			Die(getDamage, DamageEvent, EventInstigator, DamageCauser);
 		}
 		else

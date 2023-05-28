@@ -37,6 +37,10 @@ public:
 
 	//터지기 전 머터리얼 변경
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ExplosionReadyMaterialChange();
+
+	//터지면서 파티클 추가
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ExplosionParticle();
 
 	//데미지 주는 함수 BP에서 정의

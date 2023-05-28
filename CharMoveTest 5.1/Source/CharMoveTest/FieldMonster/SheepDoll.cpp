@@ -171,6 +171,7 @@ float ASheepDoll::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACon
 		}
 		else
 		{
+			SheepDollHitSound();
 			OnHit(getDamage, DamageEvent, EventInstigator ? EventInstigator->GetPawn() : NULL, DamageCauser);
 		}
 	}
