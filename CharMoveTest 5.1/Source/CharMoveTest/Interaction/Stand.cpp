@@ -28,6 +28,8 @@ void AStand::InteractWithMe()
 		StandMove = true;
 		StandRotation();
 		DuckDoll->FallDoll();
+
+		HideInteractionWidget();
 	}
 }
 
@@ -50,6 +52,7 @@ void AStand::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	InteractionWidget->SetVisibility(false);
 }
 
 // Called every frame

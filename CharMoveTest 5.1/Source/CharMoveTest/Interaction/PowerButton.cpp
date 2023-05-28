@@ -48,7 +48,7 @@ void APowerButton::HideInteractionWidget()
 void APowerButton::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	InteractionWidget->SetVisibility(false);
 }
 
 // Called every frame
