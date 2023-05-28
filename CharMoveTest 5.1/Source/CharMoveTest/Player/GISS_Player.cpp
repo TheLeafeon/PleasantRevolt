@@ -9,6 +9,11 @@ UGISS_Player::UGISS_Player()
 	WeaponInventory.Empty();
 	//weaponInterface = nullptr;
 	player = Cast<APlayerableCharacter>(StaticClass());
+	static ConstructorHelpers::FClassFinder<UUserWidget> LoadingWidgetClassFinder(TEXT("/Game/Cinematic/Loading/UMG_Loading"));
+	if (LoadingWidgetClassFinder.Succeeded())
+	{
+		LoadingWidgetClass = LoadingWidgetClassFinder.Class;
+	}
 }
 
 void UGISS_Player::GetWeapon(TSubclassOf<class AWeaponBase> weapon)
@@ -37,4 +42,16 @@ void UGISS_Player::ResetWeaponActors()
 		element->Destroy();
 	}
 	WeaponActors.Empty();
+}
+
+void UGISS_Player::ShowLoadingScreen()
+{
+	if (LoadingWidgetClass)
+	{
+		UUserWidget* WidgetInstance = CreateWidget<UUserWidget>(GetWorld(), LoadingWidgetClass);
+		if (WidgetInstance)
+		{
+			WidgetInstance->AddToViewport();
+		}
+	}
 }

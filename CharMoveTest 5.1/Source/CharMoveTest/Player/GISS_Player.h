@@ -28,7 +28,12 @@ public :
 		TArray<TSubclassOf<class AWeaponBase>> WeaponInventory;
 	UPROPERTY(EditAnywhere, Category = "Weapons")
 		TArray<class AWeaponBase*> WeaponActors;
+
+	UFUNCTION(BlueprintCallable, Category = "Loading")
+		void ShowLoadingScreen();
 private :
 	IWeaponInterface* weaponInterface;
 	class APlayerableCharacter* player;
+
+	TSubclassOf<UUserWidget> LoadingWidgetClass;
 };
