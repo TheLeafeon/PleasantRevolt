@@ -615,6 +615,9 @@ void APlayerableCharacter::Enable_Attack_Enemy()
 		WeaponInterface->Enable_Attack_Enemy();
 	}
 
+	if (currentWeaponIndex != THIRD_WEAPON)
+		return;
+
 	SubWeaponInterface = Cast<IWeaponInterface>(CurrentSubWeapon);
 	if (SubWeaponInterface)
 	{
@@ -632,6 +635,9 @@ void APlayerableCharacter::Disable_Attack_Enemy()
 	{
 		WeaponInterface->Disable_Attack_Enemy();
 	}
+
+	if (currentWeaponIndex != THIRD_WEAPON)
+		return;
 
 	SubWeaponInterface = Cast<IWeaponInterface>(CurrentSubWeapon);
 	if (SubWeaponInterface)

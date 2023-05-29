@@ -47,11 +47,11 @@ protected :
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
 		UNiagaraSystem* AttackEnemyParticle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* NearWeaponMesh;
 private :
 	UPROPERTY(EditAnywhere)
 		USceneComponent* _RootComponent;
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* NearWeaponMesh;
 	
 	bool isAttacking;
 
@@ -69,6 +69,8 @@ private :
 	void DuplicationEnemy(ACharacter* Enemy);
 	void DuplicationEnemy(APawn* Enemy);
 
+	//UFUNCTION(BlueprintImplementableEvent)
+	//	void SpawnEffect();
 public :
 	class UStaticMeshComponent* GetWeponMesh() { return NearWeaponMesh; }
 	int32 GetMaxCombo() { return WeaponMaxCombo; }
