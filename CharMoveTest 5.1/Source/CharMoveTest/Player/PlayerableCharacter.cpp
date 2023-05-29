@@ -355,6 +355,10 @@ void APlayerableCharacter::OnHit(float DamageTaken, FDamageEvent const& DamgaeEv
 	{
 		ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
 		HitDrop();
+		if (isLadder)
+		{
+			SetLadderMoveFalse();
+		}
 	}
 }
 
@@ -812,4 +816,5 @@ void APlayerableCharacter::SetLadderMoveFalse()
 	AnimInstance->StopLadderMoveMontage();
 	isLadder = false;
 	StopLadderMove = false;
+	LadderStart = false;
 }
