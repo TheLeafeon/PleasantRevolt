@@ -91,7 +91,7 @@ void AWeaponBase::WeaponTrace()
 	TArray<FHitResult> HitResults;
 	FVector StartLocation = NearWeaponMesh->GetSocketLocation("StartSocket");
 	FVector EndLocation = NearWeaponMesh->GetSocketLocation("EndSocket");
-	EndLocation *= 3.0f;
+	EndLocation *= 2.0f;
 	bool isHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Camera, FCollisionShape::MakeSphere(TraceRadius), CollisionParams);
 
 	if (isHit)
