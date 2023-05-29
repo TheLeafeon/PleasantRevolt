@@ -7,7 +7,7 @@ ANearWeapon3::ANearWeapon3()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	PlayerAttackPower = 2.0f;
+	PlayerAttackPower = 3.0f;
 	WeaponMaxCombo = 5;
 	WeaponAttackNearDistance = 1.0f;
 	WeaponAttackTime = 1.0f;
