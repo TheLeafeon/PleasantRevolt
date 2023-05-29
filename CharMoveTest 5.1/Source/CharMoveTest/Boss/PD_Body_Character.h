@@ -49,4 +49,6 @@ public:
 	void HitEffect();
 	UFUNCTION(BlueprintImplementableEvent)
 	void NextLevelBP();
+	UPROPERTY(BlueprintReadWrite)
+	bool IsHitOk;
 };

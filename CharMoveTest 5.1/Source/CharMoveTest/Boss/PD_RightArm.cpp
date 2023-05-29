@@ -4,7 +4,7 @@
 #include "CharMoveTest/Boss/PD_RightArm.h"
 
 // Sets default values
-APD_RightArm::APD_RightArm() : Smash_TotalTime(0.5f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0), RightArmHP(10.0f), IsAttack(false)
+APD_RightArm::APD_RightArm() : Smash_TotalTime(0.5f), IsSmash(false), Restoration_TotalTime(3.0f), Restoration(false), CurrentTime(0.0f), Alpha(0.0f), NewLocation(0), RightArmHP(10.0f), IsAttack(false), IsHitOk(false)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -68,6 +68,7 @@ void APD_RightArm::Tick(float DeltaTime)
 			{
 				Restoration = false;
 				CollisionComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+				IsHitOk = false;
 			}
 		}
 	}
@@ -76,6 +77,7 @@ void APD_RightArm::Tick(float DeltaTime)
 
 void APD_RightArm::Smash()
 {
+	IsHitOk = true;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Right"));
 
 	StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, 1600.0f);
@@ -119,6 +121,11 @@ void APD_RightArm::SetFallDecalPawn(APawn* Pawn)
 float APD_RightArm::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float getDamage = Super::TakeDamage(Damage, DamgaeEvent, EventInstigator, DamageCauser);
+
+	if (!IsHitOk)
+	{
+		return 0.0f;
+	}
 
 	if (RightArmHP <= 0.0f)
 	{

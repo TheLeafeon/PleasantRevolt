@@ -59,6 +59,7 @@ private:
 
 	APawn* Player;
 	bool IsAttack;
+	bool IsHitOk;
 
 	TArray<UParticleSystemComponent*> ParticleSystemComponents;
 

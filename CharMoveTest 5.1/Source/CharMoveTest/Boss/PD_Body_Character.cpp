@@ -4,7 +4,7 @@
 #include "CharMoveTest/Boss/PD_Body_Character.h"
 
 // Sets default values
-APD_Body_Character::APD_Body_Character() : BodyHP(10.0f)
+APD_Body_Character::APD_Body_Character() : BodyHP(10.0f), IsHitOk(false)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -34,6 +34,11 @@ void APD_Body_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 float APD_Body_Character::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float getDamage = Super::TakeDamage(Damage, DamgaeEvent, EventInstigator, DamageCauser);
+
+	if (!IsHitOk)
+	{
+		return 0.0f;
+	}
 
 	if (BodyHP <= 0.0f)
 	{
