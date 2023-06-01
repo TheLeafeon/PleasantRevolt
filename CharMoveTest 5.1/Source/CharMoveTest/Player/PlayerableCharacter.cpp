@@ -760,7 +760,7 @@ void APlayerableCharacter::PlayerHandUp(AActor* OtherActor)
 
 		IsHandUp = true;
 
-		//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("PlayerHandUp"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, OtherActor->GetFName().ToString());
 	}
 }
 

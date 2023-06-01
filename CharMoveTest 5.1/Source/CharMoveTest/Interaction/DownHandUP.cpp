@@ -48,7 +48,6 @@ void ADownHandUP::InteractWithMe()
 	if (PlayerCharacter->IsHandUp && IsHandUp)
 	{
 		DestroyMirrorHandUp();
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("down"));
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
@@ -149,7 +148,7 @@ void ADownHandUP::BackDown()
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * -250;
 
 	SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
-	SetActorRotation(FRotator(0, 0, GetActorRotation().Yaw));
+	SetActorRotation(PlayerCharacter->GetActorRotation());
 
 	IsDown = true;
 	PlayerCharacter->IsHandUp = false;
