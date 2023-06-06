@@ -77,6 +77,7 @@ APlayerableCharacter::APlayerableCharacter()
 	currentCombo = 0;
 	maxCombo = 0;
 	comboCoolTime = 5.0f;
+	IsSwap = false;
 	// Interaction System
 	InteractionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Interaction box"));
 	InteractionBox->SetupAttachment(RootComponent);
@@ -528,6 +529,9 @@ void APlayerableCharacter::SwapWeapon()
 	actions.push_back(bisHit);
 
 	if (!bCanAction() && CurrentWeapon == NULL)
+		return;
+
+	if (IsSwap)
 		return;
 
 	if (MeleeWeaponsArray.Num() == 1)

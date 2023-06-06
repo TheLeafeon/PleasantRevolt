@@ -70,6 +70,8 @@ private :
 public :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MeleeAttack")
 		bool bisAttack;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerUI")
+		bool IsSwap;
 //****************************************************//
 private :
 	UGISS_Player* gissPlayer;
