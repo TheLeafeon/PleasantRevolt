@@ -16,6 +16,7 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 		return EBTNodeResult::Failed;
 	}
 
+	//팔 상태 확인
 	if (OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) == nullptr && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::rightArm) == nullptr)
 	{
 		//3페로 넘어가기
@@ -37,15 +38,14 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 	{
 		RandomValue = FMath::RandRange(0.0f, 1.0f);
 	}
-
-	//다음 테스크를 위해 랜덤값 저장
+	//다음 테스크를 위해 위의 랜덤값 저장
 	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey2::randomArm, RandomValue);
 
-	//빨간원 생성하기
+	//플레이어 추격 오브제 생성하기
 	FVector SpawnLocation = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
-
 	APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PD_FallDecal, SpawnLocation, FRotator(0.0f, 90.0f, 0.0f));
 
+	//랜덤값에 따라 LeftArm, RightArm 둘 중 하나만 움직이도록 함
 	if (RandomValue <= 0.5 && OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm) != nullptr)
 	{
 		LArm = Cast<APD_LeftArm>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(bossKey2::leftArm));

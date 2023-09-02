@@ -84,7 +84,6 @@ void APD_LeftArm::Smash()
 	EndLocation = GetActorLocation();
 	TargetLocation = FallDecalPawn->GetFallDecalPos() + FVector(1050.0f, 550.0f, 620.0f);
 	StartTime = GetWorld()->GetTimeSeconds();
-	//StartRotator = GetActorRotation();
 
 	IsSmash = true;
 	

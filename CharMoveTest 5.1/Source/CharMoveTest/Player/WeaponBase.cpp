@@ -6,7 +6,7 @@
 #include "SampleEnemy.h"
 #include "NiagaraFunctionLibrary.h"
 #include "CharMoveTest/FieldMonster/MonsterBase.h"
-#include "CharMoveTest/Boss/Boss_Character.h"
+#include "CharMoveTest/Boss/BD_Boss_Character.h"
 #include "CharMoveTest/Boss/PD_LeftArm.h"
 #include "CharMoveTest/Boss/PD_RightArm.h"
 #include "CharMoveTest/Boss/PD_Body_Character.h"
@@ -100,7 +100,7 @@ void AWeaponBase::WeaponTrace()
 		{
 			UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 			AMonsterBase* HitMonster = nullptr;
-			ABoss_Character* HitBoss = nullptr;
+			ABD_Boss_Character* HitBoss = nullptr;
 			APD_LeftArm* HitBoss2_LeftArm = nullptr;
 			APD_RightArm* HitBoss2_RightArm = nullptr;
 			APD_Body_Character* HitBoss2_Body = nullptr;
@@ -109,7 +109,7 @@ void AWeaponBase::WeaponTrace()
 			if (HitComponent)
 			{
 				HitMonster = Cast<AMonsterBase>(HitComponent->GetOwner());
-				HitBoss = Cast<ABoss_Character>(HitComponent->GetOwner());
+				HitBoss = Cast<ABD_Boss_Character>(HitComponent->GetOwner());
 				HitBoss2_LeftArm = Cast<APD_LeftArm>(HitComponent->GetOwner());
 				HitBoss2_RightArm = Cast<APD_RightArm>(HitComponent->GetOwner());
 				HitBoss2_Body = Cast<APD_Body_Character>(HitComponent->GetOwner());

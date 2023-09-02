@@ -22,14 +22,12 @@ class CHARMOVETEST_API UPD_SmashWait_BTTaskNode : public UBTTaskNode
 private:
 	UPD_SmashWait_BTTaskNode();
 
-	float RandomValue;
-
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
+	float RandomValue; //이 값에 따라 어떤 팔이 명령을 받는지 결정됨
 	APD_LeftArm* LArm;
 	APD_RightArm* RArm;
-
 public:
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class APawn> PD_FallDecal;
+	TSubclassOf<class APawn> PD_FallDecal; //플레이어 추격 오브제
 };

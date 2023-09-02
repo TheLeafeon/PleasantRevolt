@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharMoveTest/Boss/Boss_Character.h"
+#include "CharMoveTest/Boss/BD_Boss_Character.h"
 
 // Sets default values
-ABoss_Character::ABoss_Character() : BossHP(20.0f), MaxBossHP(20.0f), isSpawn(false)
+ABD_Boss_Character::ABD_Boss_Character() : BossHP(20.0f), MaxBossHP(20.0f), isSpawn(false)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
 // Called when the game starts or when spawned
-void ABoss_Character::BeginPlay()
+void ABD_Boss_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -19,20 +19,20 @@ void ABoss_Character::BeginPlay()
 }
 
 // Called every frame
-void ABoss_Character::Tick(float DeltaTime)
+void ABD_Boss_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void ABoss_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ABD_Boss_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
 
-float ABoss_Character::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser)
+float ABD_Boss_Character::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float getDamage = Super::TakeDamage(Damage, DamgaeEvent, EventInstigator, DamageCauser);
 
@@ -58,7 +58,7 @@ float ABoss_Character::TakeDamage(float Damage, FDamageEvent const& DamgaeEvent,
 	return getDamage;
 }
 
-void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APawn* PawnInstigator, AActor* DamageCauser)
+void ABD_Boss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, APawn* PawnInstigator, AActor* DamageCauser)
 {
 	if (DamageTaken > 0.0f)
 	{
@@ -76,7 +76,7 @@ void ABoss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEvent, 
 	}
 }
 
-void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
+void ABD_Boss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
 {
 	Player->IsStop = true;
 	SetActorTickEnabled(false); //비헤이비어 트리를 중지
@@ -96,11 +96,11 @@ void ABoss_Character::Die(float KillingDamage, FDamageEvent const& DamageEvent, 
 	SpawnDanger->Destroy();
 	GetController()->Destroy();
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &ABoss_Character::SpawnArm, 3.0f, false);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Character::GoNextLevel, 5.5f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &ABD_Boss_Character::SpawnArm, 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABD_Boss_Character::GoNextLevel, 5.5f, false);
 }
 
-void ABoss_Character::HPHalf()
+void ABD_Boss_Character::HPHalf()
 {
 	//충돌체 스폰기 스폰
 	if (FallObj_Spawn_Blueprint)
@@ -118,7 +118,7 @@ void ABoss_Character::HPHalf()
 	}
 }
 
-void ABoss_Character::SpawnArm()
+void ABD_Boss_Character::SpawnArm()
 {
 	UWorld* world = GetWorld();
 	if (world)
@@ -127,7 +127,7 @@ void ABoss_Character::SpawnArm()
 	}
 }
 
-void ABoss_Character::GoNextLevel()
+void ABD_Boss_Character::GoNextLevel()
 {
 	Player->IsStop = false;
 	//UGameplayStatics::OpenLevel(this, FName("stage2_start_cinematic"));

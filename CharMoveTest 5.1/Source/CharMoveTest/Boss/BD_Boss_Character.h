@@ -11,16 +11,16 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
-#include "Boss_Character.generated.h"
+#include "BD_Boss_Character.generated.h"
 
 UCLASS()
-class CHARMOVETEST_API ABoss_Character : public ACharacter
+class CHARMOVETEST_API ABD_Boss_Character : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ABoss_Character();
+	ABD_Boss_Character();
 
 protected:
 	// Called when the game starts or when spawned
