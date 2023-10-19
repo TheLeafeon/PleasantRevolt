@@ -18,33 +18,33 @@ private:
 	UBossAI_GameInstanceSubsystem();
 
 public:
-	//BearDoll AI
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Detect_BTService")
+	//BearDoll
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll")
 	float Control_DetectRadius; //범위 반지름
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll")
 	float BearDoll_RushSpeed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll")
 	float RotationSpeed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll")
 	float Rush_Delay;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll")
 	float Rotation_Delay;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll")
 	float Follow_Speed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll")
 	float Follow_Time;
 
 	//BearDoll FallObj
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
 	float Fall_Speed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
 	float Fall_Acceleration; //가속도
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
 	float Fall_time; //충돌 오브젝트 공격 범위가 생성되는 주기
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
 	float Fall_Delay; //충돌 오브젝트가 생성되기까지 딜레이
 
-	//PD
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float PD_Hit_Delay; //빨간원 쫓아가다가 멈출때까지의 딜레이 
+	//PlasticDoll
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlasticDoll")
+	float PD_Hit_Delay; //플레이어 추격 Obj가 가다가 멈출때까지의 딜레이 
 };

@@ -16,7 +16,6 @@ void APD_LeftArm::BeginPlay()
 	Super::BeginPlay();
 
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
-	//CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &APD_LeftArm::OnOverlapBegin);
 }
 
 // Called every frame
@@ -26,19 +25,14 @@ void APD_LeftArm::Tick(float DeltaTime)
 
 	if (IsSmash)
 	{
-		// 현재 시간을 계산합니다.
+		//보간 위치 계산
 		CurrentTime = GetWorld()->GetTimeSeconds() - StartTime;
 
-		// 보간 계산을 위한 알파 값을 계산합니다.
 		Alpha = FMath::Clamp(CurrentTime / Smash_TotalTime, 0.0f, 1.0f);
 
-		// 보간된 위치를 계산합니다.
 		NewLocation = FMath::Lerp(StartLocation, TargetLocation, Alpha);
-		//NewRotator = FMath::Lerp(StartRotator, FRotator(0.0f, 90.0f, 105.0f), Alpha);
 
-		// 액터의 위치를 업데이트합니다.
 		SetActorLocation(NewLocation);
-		//SetActorRotation(NewRotator);
 
 		if (GetActorLocation().Equals(TargetLocation, 0.1))
 		{
@@ -50,19 +44,13 @@ void APD_LeftArm::Tick(float DeltaTime)
 	{
 		if (Restoration)
 		{
-			// 현재 시간을 계산합니다.
 			CurrentTime = GetWorld()->GetTimeSeconds() - StartTime;
 
-			// 보간 계산을 위한 알파 값을 계산합니다.
 			Alpha = FMath::Clamp(CurrentTime / Restoration_TotalTime, 0.0f, 1.0f);
 
-			// 보간된 위치를 계산합니다.
 			NewLocation = FMath::Lerp(TargetLocation, EndLocation, Alpha);
-			//NewRotator = FMath::Lerp(FRotator(0.0f, 90.0f, 105.0f), StartRotator, Alpha);
 
-			// 액터의 위치를 업데이트합니다.
 			SetActorLocation(NewLocation);
-			//SetActorRotation(NewRotator);
 
 			if (GetActorLocation().Equals(EndLocation, 0.1))
 			{
@@ -101,7 +89,6 @@ void APD_LeftArm::SmashWait()
 void APD_LeftArm::BackSmash()
 {
 	//다시 원상태로 돌리는 애니메이션
-
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Left BackSmash"));
 
 	//다시 StartLocation로 되돌려야함

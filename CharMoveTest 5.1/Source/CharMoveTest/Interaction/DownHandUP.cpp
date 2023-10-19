@@ -60,7 +60,6 @@ void ADownHandUP::InteractWithMe()
 	else if (PlayerCharacter->IsHandUp == false && !IsHandUp)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("up"));
-		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_O"));
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("OverlapAll"));
 		CollisionComponent->SetSimulatePhysics(false);
 		PlayerCharacter->PlayerHandUp(this);
@@ -126,7 +125,7 @@ void ADownHandUP::Down()
 	const FRotator Rotation = PlayerCharacter->GetActorRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-	// get forward vector
+	//forward vector
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 250;
 
 	SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
@@ -144,7 +143,7 @@ void ADownHandUP::BackDown()
 	const FRotator Rotation = PlayerCharacter->GetActorRotation();
 	const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-	// get forward vector
+	//forward vector
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * -250;
 
 	SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);

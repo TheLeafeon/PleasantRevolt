@@ -41,7 +41,7 @@ EBTNodeResult::Type UPD_SmashWait_BTTaskNode::ExecuteTask(UBehaviorTreeComponent
 	//다음 테스크를 위해 위의 랜덤값 저장
 	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey2::randomArm, RandomValue);
 
-	//플레이어 추격 오브제 생성하기
+	//플레이어 추격 Obj 생성하기
 	FVector SpawnLocation = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 	APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PD_FallDecal, SpawnLocation, FRotator(0.0f, 90.0f, 0.0f));
 

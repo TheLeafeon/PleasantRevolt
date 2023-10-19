@@ -100,13 +100,12 @@ void AHandUP::Drop()
 		DestroyMirrorHandUp();
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
 
 		const FRotator Rotation = PlayerCharacter->GetActorRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
+		//forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * 150;
 
 		SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
@@ -129,13 +128,12 @@ void AHandUP::BackDrop()
 		DestroyMirrorHandUp();
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-		//CollisionComponent->SetCollisionProfileName(TEXT("InteractionObj_B"));
 		BlockCollisionComponent->SetCollisionProfileName(TEXT("BlockAll"));
 
 		const FRotator Rotation = PlayerCharacter->GetActorRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
+		//forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X) * -150;
 
 		SetActorLocation(PlayerCharacter->GetActorLocation() + Direction);
