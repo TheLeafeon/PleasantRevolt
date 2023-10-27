@@ -20,6 +20,15 @@ void UGISS_Player::GetWeapon(TSubclassOf<class AWeaponBase> weapon)
 {
 	if (!weapon)
 		return;
+
+	for (const auto& weaponClass  : WeaponInventory)
+	{
+		if (weaponClass == weapon)
+		{
+			return;
+		}
+	}
+
 	WeaponInventory.Add(weapon);
 
 	APlayerTestMapGM* playerGM = GetWorld()->GetAuthGameMode<APlayerTestMapGM>();
