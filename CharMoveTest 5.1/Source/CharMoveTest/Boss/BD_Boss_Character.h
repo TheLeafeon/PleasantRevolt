@@ -11,6 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "CharMoveTest/Player/PlayerableCharacter.h"
+#include "CharMoveTest/Boss/Boss_Struct.h"
+
 #include "BD_Boss_Character.generated.h"
 
 UCLASS()
@@ -33,11 +35,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FBossInfo BossIfo;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FBearDollInfo BearDollInfo;
+
 private:
-	UPROPERTY(EditAnywhere, Category = "Status")
-	float BossHP;
-	UPROPERTY(EditAnywhere, Category = "Status")
-	float MaxBossHP;
+	//UPROPERTY(EditAnywhere, Category = "Status")
+	//float BossHP;
+	//UPROPERTY(EditAnywhere, Category = "Status")
+	//float MaxBossHP;
 	FTimerHandle TimerHandle;
 	FTimerHandle TimerHandle2;
 

@@ -4,7 +4,7 @@
 #include "CharMoveTest/Boss/BD_Boss_Character.h"
 
 // Sets default values
-ABD_Boss_Character::ABD_Boss_Character() : BossHP(20.0f), MaxBossHP(20.0f), isSpawn(false)
+ABD_Boss_Character::ABD_Boss_Character() : /*BossHP(20.0f), MaxBossHP(20.0f), */isSpawn(false)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -36,17 +36,17 @@ float ABD_Boss_Character::TakeDamage(float Damage, FDamageEvent const& DamgaeEve
 {
 	const float getDamage = Super::TakeDamage(Damage, DamgaeEvent, EventInstigator, DamageCauser);
 
-	if (BossHP <= 0.0f)
+	if (BossIfo.BossHP <= 0.0f)
 	{
 		return 0.0f;
 	}		
 
 	if (getDamage > 0.0f)
 	{
-		BossHP -= getDamage;
+		BossIfo.BossHP -= getDamage;
 	}
 
-	if (BossHP <= 0)
+	if (BossIfo.BossHP <= 0)
 	{
 		Die(getDamage, DamgaeEvent, EventInstigator, DamageCauser);
 	}
@@ -68,7 +68,7 @@ void ABD_Boss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEven
 		HitEffect();
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("!"));
 
-		if ((BossHP <= MaxBossHP / 2) && isSpawn == false)
+		if ((BossIfo.BossHP <= BossIfo.MaxBossHP / 2) && isSpawn == false)
 		{
 			HPHalf();
 			isSpawn = true;
