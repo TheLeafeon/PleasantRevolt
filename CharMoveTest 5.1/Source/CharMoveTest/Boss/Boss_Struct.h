@@ -50,13 +50,13 @@ struct FBearDollFallObjInfo
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
-	float Fall_Speed;
+	float Fall_Speed = 1.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
-	float Fall_Acceleration; //가속도
+	float Fall_Acceleration = 1.4f; //가속도
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
-	float Fall_time; //충돌 오브젝트 공격 범위가 생성되는 주기
+	float Fall_time = 1.0f; //충돌 오브젝트 공격 범위가 생성되는 주기
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
-	float Fall_Delay; //충돌 오브젝트가 생성되기까지 딜레이
+	float Fall_Delay = 1.5f; //충돌 오브젝트가 생성되기까지 딜레이
 };
 
 USTRUCT(Atomic, BlueprintType)

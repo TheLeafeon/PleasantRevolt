@@ -4,10 +4,16 @@
 #include "CharMoveTest/Boss/BD_Boss_Character.h"
 
 // Sets default values
-ABD_Boss_Character::ABD_Boss_Character() : /*BossHP(20.0f), MaxBossHP(20.0f), */isSpawn(false)
+ABD_Boss_Character::ABD_Boss_Character() : isSpawn(false)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	BearDollInfo.Control_DetectRadius = 800.0f;
+	BearDollInfo.BearDoll_RushSpeed = 2.0f;
+	BearDollInfo.RotationSpeed = 3.0f;
+	BearDollInfo.Follow_Speed = 400.0f;
+	BearDollInfo.Follow_Time = 3.0f;
 }
 
 // Called when the game starts or when spawned
@@ -116,6 +122,11 @@ void ABD_Boss_Character::HPHalf()
 			SpawnDanger = world->SpawnActor<AActor>(FallObj_Spawn_Blueprint, SpawnLocation, rotator, SpawnParams);
 		}
 	}
+}
+
+float ABD_Boss_Character::GetControl_DetectRadius()
+{
+	return BearDollInfo.Control_DetectRadius;
 }
 
 void ABD_Boss_Character::SpawnArm()

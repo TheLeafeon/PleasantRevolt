@@ -2,6 +2,7 @@
 
 
 #include "CharMoveTest/Boss/SetControlKey_BTTaskNode.h"
+#include "AIController.h"
 #include "Kismet/GameplayStatics.h"
 
 USetControlKey_BTTaskNode::USetControlKey_BTTaskNode()
@@ -12,9 +13,17 @@ USetControlKey_BTTaskNode::USetControlKey_BTTaskNode()
 EBTNodeResult::Type USetControlKey_BTTaskNode::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey::enemyActor, PlayerPawn);
-	BossAIGISS = UGameInstance::GetSubsystem<UBossAI_GameInstanceSubsystem>(GetWorld()->GetGameInstance());
-	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey::detectRadius, BossAIGISS->Control_DetectRadius);
+	if (PlayerPawn != nullptr)
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(bossKey::enemyActor, PlayerPawn);
+	}
+
+	ABD_Boss_Character* OwnerActor = Cast<ABD_Boss_Character>(OwnerComp.GetAIOwner()->GetPawn());
+	if (OwnerActor != nullptr)
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey::detectRadius, OwnerActor->GetControl_DetectRadius());
+	}
+
 	//OwnerComp.GetBlackboardComponent()->SetValueAsFloat(bossKey::rushSpeed, BossAIGISS->BearDoll_RushSpeed);
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::setting, false);
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(bossKey::keyTrue, true);

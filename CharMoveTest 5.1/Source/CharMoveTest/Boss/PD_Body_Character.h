@@ -7,6 +7,8 @@
 #include "Engine/Public/TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
+#include "CharMoveTest/Boss/Boss_Struct.h"
+
 #include "PD_Body_Character.generated.h"
 
 UCLASS()
@@ -29,9 +31,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FBossInfo BossIfo;
+
 private:
-	UPROPERTY(EditAnywhere, Category = "Status")
-	float BodyHP;
+	//UPROPERTY(EditAnywhere, Category = "Status")
+	//float BodyHP;
 
 	virtual void Die(float KillingDamage, struct FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser);
 	virtual void OnHit(float DamageTaken, struct FDamageEvent const& DamgaeEvent, class APawn* PawnInstigator, class AActor* DamageCauser);

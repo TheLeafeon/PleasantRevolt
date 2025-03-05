@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "CharMoveTest/Boss/Boss_Struct.h"
 #include "PD_FallDecal_Pawn.generated.h"
 
 UCLASS()
@@ -18,6 +19,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FPlasticDollInfo PlasticDollInfo;
 
 public:	
 	// Called every frame

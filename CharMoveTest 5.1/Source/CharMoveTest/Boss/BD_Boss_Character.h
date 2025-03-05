@@ -40,12 +40,11 @@ protected:
 	FBossInfo BossIfo;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FBearDollInfo BearDollInfo;
+public:
+	UFUNCTION()
+	float GetControl_DetectRadius();
 
 private:
-	//UPROPERTY(EditAnywhere, Category = "Status")
-	//float BossHP;
-	//UPROPERTY(EditAnywhere, Category = "Status")
-	//float MaxBossHP;
 	FTimerHandle TimerHandle;
 	FTimerHandle TimerHandle2;
 

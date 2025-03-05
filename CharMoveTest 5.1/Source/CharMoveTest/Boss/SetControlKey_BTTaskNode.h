@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
-//#include "CharMoveTest/Boss/BossAI_NumericalControl.h"
-#include "CharMoveTest/Boss/BossAI_GameInstanceSubsystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "CharMoveTest/Boss/BD_Boss_Character.h"
 #include "SetControlKey_BTTaskNode.generated.h"
 
 /**
  * 
  */
+
 UCLASS()
 class CHARMOVETEST_API USetControlKey_BTTaskNode : public UBTTaskNode
 {
@@ -20,10 +20,6 @@ class CHARMOVETEST_API USetControlKey_BTTaskNode : public UBTTaskNode
 
 private:
 	USetControlKey_BTTaskNode();
-
-	//ABossAI_NumericalControl* Numericalcontrol;
-	UPROPERTY()
-	UBossAI_GameInstanceSubsystem* BossAIGISS;
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };
