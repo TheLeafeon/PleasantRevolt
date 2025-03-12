@@ -9,11 +9,8 @@ ABD_Boss_Character::ABD_Boss_Character() : isSpawn(false)
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	BearDollInfo.Control_DetectRadius = 800.0f;
-	BearDollInfo.BearDoll_RushSpeed = 2.0f;
-	BearDollInfo.RotationSpeed = 3.0f;
-	BearDollInfo.Follow_Speed = 400.0f;
-	BearDollInfo.Follow_Time = 3.0f;
+	BossIfo.BossHP = 20.f;
+	BossIfo.MaxBossHP = 20.f;
 }
 
 // Called when the game starts or when spawned
@@ -72,7 +69,7 @@ void ABD_Boss_Character::OnHit(float DamageTaken, FDamageEvent const& DamgaeEven
 		//ApplyDamageMomentum(DamageTaken, DamgaeEvent, PawnInstigator, DamageCauser);
 
 		HitEffect();
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, TEXT("!"));
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("HP : %d"), BossIfo.BossHP));
 
 		if ((BossIfo.BossHP <= BossIfo.MaxBossHP / 2) && isSpawn == false)
 		{
@@ -122,11 +119,6 @@ void ABD_Boss_Character::HPHalf()
 			SpawnDanger = world->SpawnActor<AActor>(FallObj_Spawn_Blueprint, SpawnLocation, rotator, SpawnParams);
 		}
 	}
-}
-
-float ABD_Boss_Character::GetControl_DetectRadius()
-{
-	return BearDollInfo.Control_DetectRadius;
 }
 
 void ABD_Boss_Character::SpawnArm()

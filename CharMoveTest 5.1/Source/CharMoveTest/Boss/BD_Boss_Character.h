@@ -38,11 +38,6 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FBossInfo BossIfo;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FBearDollInfo BearDollInfo;
-public:
-	UFUNCTION()
-	float GetControl_DetectRadius();
 
 private:
 	FTimerHandle TimerHandle;

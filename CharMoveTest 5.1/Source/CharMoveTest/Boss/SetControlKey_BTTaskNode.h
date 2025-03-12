@@ -6,7 +6,6 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "CharMoveTest/Boss/Boss_BlackBoardKey.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "CharMoveTest/Boss/BD_Boss_Character.h"
 #include "SetControlKey_BTTaskNode.generated.h"
 
 /**
@@ -22,4 +21,7 @@ private:
 	USetControlKey_BTTaskNode();
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+private:
+	AActor* BearDollInfo;
 };

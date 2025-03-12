@@ -3,19 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "Boss_Struct.generated.h"
 
-class CHARMOVETEST_API Boss_Struct
-{
-public:	
-	Boss_Struct();
-	~Boss_Struct();
-};
 
-USTRUCT(Atomic, BlueprintType)
+USTRUCT(BlueprintType)
 struct FBossInfo
 {
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category = "BossInfo")
 	float BossHP;
@@ -23,10 +18,10 @@ struct FBossInfo
 	float MaxBossHP;
 };
 
-USTRUCT(Atomic, BlueprintType)
+USTRUCT(BlueprintType)
 struct FBearDollInfo
 {
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll")
 	float Control_DetectRadius = 500.f; //범위 반지름
@@ -44,10 +39,10 @@ struct FBearDollInfo
 	float Follow_Time = 3.f;
 };
 
-USTRUCT(Atomic, BlueprintType)
+USTRUCT(BlueprintType)
 struct FBearDollFallObjInfo
 {
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BearDoll FallObj")
 	float Fall_Speed = 1.0f;
@@ -59,11 +54,38 @@ struct FBearDollFallObjInfo
 	float Fall_Delay = 1.5f; //충돌 오브젝트가 생성되기까지 딜레이
 };
 
-USTRUCT(Atomic, BlueprintType)
+USTRUCT(BlueprintType)
 struct FPlasticDollInfo
 {
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlasticDoll")
 	float PD_Hit_Delay; //플레이어 추격 Obj가 가다가 멈출때까지의 딜레이 
+};
+
+UCLASS()
+class CHARMOVETEST_API ABoss_Struct : public AActor
+{
+	GENERATED_BODY()
+
+public:	
+	ABoss_Struct();
+
+private:
+	UPROPERTY()
+	FBearDollInfo BearDollInfo;
+	UPROPERTY()
+	FBearDollFallObjInfo BearDollFallObjInfo;
+	UPROPERTY()
+	FPlasticDollInfo PlasticDollInfo;
+
+public:
+	UFUNCTION()
+	float GetDetectRadius();
+	UFUNCTION(BlueprintCallable)
+	FBearDollInfo GetBearDollInfo() const;
+	UFUNCTION(BlueprintCallable)
+	FBearDollFallObjInfo GetBearDollFallObjInfo() const;
+	UFUNCTION(BlueprintCallable)
+	FPlasticDollInfo GetPlasticDollInfo() const;
 };

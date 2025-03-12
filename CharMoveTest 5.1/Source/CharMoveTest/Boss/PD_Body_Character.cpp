@@ -10,6 +10,7 @@ APD_Body_Character::APD_Body_Character() : IsHitOk(false)
 	PrimaryActorTick.bCanEverTick = true;
 
 	BossIfo.BossHP = 10.0f;
+	BossIfo.MaxBossHP = 10.f;
 }
 
 // Called when the game starts or when spawned
